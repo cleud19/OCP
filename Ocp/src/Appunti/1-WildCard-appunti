@@ -1,0 +1,40 @@
+Problema dei generics: 
+
+Se ho un Array dichiarato in questo modo 
+
+public void print(ArrayList al){
+	Iterator i = al.iterator();
+	while(i.hasnext()){
+		Object o = i.next();
+		Syso.out.println(o);
+	}
+}
+
+Con questo esempio ho  dichiarato l'array alla vecchia maniera senza i generics e java 8 continua a supportarlo 
+poiche java è un linguaggio il piu possibile retrocompatibile. 
+
+Usando i generics diventa: 
+
+public void print(ArrayList<Object> al){
+	Iterator<Object> i = al.iterator();
+	while(i.hasnext()){
+		Object o = i.next();
+		Syso.out.println(o);
+	}
+}
+
+Ora pero il nostro  intento di generalizzare le cose è andato vanificato poiche possiamo soltanto usare gli object e non possiamo usare il metodo per altro. 
+
+Per questo esistono le WildCard
+
+public void print(ArrayList<?> al){
+	Iterator<?> i = al.iterator();
+	while(i.hasnext()){
+		Object o = i.next();
+		Syso.out.println(o);
+	}
+}
+
+Il nostro metodo ora accetterà qualsiasi tipo passato , ma effettivamente non sapendo cosa gli passi non ti lascia ne aggiungere ne modificare l'array 
+quindi con questa wildcard unbounded il nostro array diventerà di sola lettura. 
+
