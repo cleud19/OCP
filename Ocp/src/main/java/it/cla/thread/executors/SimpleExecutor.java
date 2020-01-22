@@ -1,5 +1,8 @@
 package it.cla.thread.executors;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,7 +20,8 @@ public class SimpleExecutor {
 	
 	public static void main(String[] args) {
 		//simpleExecutorTest();
-		futureTest();
+		//futureTest();
+		invokeAllTest();
 
 	}
 
@@ -67,5 +71,34 @@ public class SimpleExecutor {
 		System.out.println("future done? " + future.isDone());
 		System.out.println("result: " + result);
 	}
-	
+
+	public static void invokeAllTest(){
+		ExecutorService executor = Executors.newWorkStealingPool();
+
+		List<Callable<String>> callables = Arrays.asList(
+		        () -> "task1",
+		        () -> "task2",
+		        () -> "task3");
+
+		try {
+			/**
+			 * This method accepts a collection of callables and returns a list of futures.
+			 */
+			executor.invokeAll(callables)
+			    .stream()
+			    .map(future -> {
+			        try {
+			            return future.get();
+			        }
+			        catch (Exception e) {
+			            throw new IllegalStateException(e);
+			        }
+			    })
+			    .forEach(System.out::println);
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
