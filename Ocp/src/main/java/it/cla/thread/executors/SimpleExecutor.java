@@ -61,7 +61,7 @@ public class SimpleExecutor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (TimeoutException e) {
-			System.out.println("TimeoutException lanciata");
+			System.out.println("TimeoutException lanciata il get è andato in errore dopo aver aspettato 1 secondo. Il thread andrà avanti.");
 		}
 
 		System.out.println("future done? " + future.isDone());
