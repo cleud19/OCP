@@ -1,0 +1,7 @@
+Executors
+
+Fonti:
+ https://winterbe.com/posts/2015/04/07/java8-concurrency-tutorial-thread-executor-examples/
+
+
+This monitor is bound to an object, e.g. when using synchronized methods each method share the same monitor of the corresponding object.
