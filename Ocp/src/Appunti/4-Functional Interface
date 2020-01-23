@@ -1,0 +1,23 @@
+Funcyional Interface 
+
+Predicate 
+Boolean test(T t);
+
+Consumer 
+void accept(T t);
+
+Supplier
+T get();
+
+Function
+R apply (T t)
+
+BiFuction 
+R apply(T t , U u)
+
+Unary Operator 
+T apply(T t)
+
+Binary Operator 
+t apply(T t , U u
+)
