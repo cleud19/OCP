@@ -1,0 +1,20 @@
+NIO 2 
+
+https://ocpj8.javastudyguide.com/ch24.html
+
+
+path.toUri()
+
+Converts a path to a URI object
+
+path.resolve(Path)
+
+Combines two paths together
+
+path.relativize(Path)
+
+Constructs a path from one location to another
+
+path.compareTo(Path)
+
+Compares two paths against each other
