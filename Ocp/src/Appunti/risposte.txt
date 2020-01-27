@@ -1,8 +1,20 @@
-7.C
-8.ABD
-9.ABC
-10.D
-11.D
-12.E
-13.AE
-14.
+1.H   ->H
+2.D	  ->D
+3.E   ->DE    X
+4.E   ->E
+5.B   ->F     X
+6.EF  ->BCF   X
+7.C   ->A     X
+8.ABD ->ABD   
+9.ABC ->AC    X
+10.D  ->F     X
+11.D  ->BF    X
+12.E  ->D     X
+13.AE ->BD    X
+14.C  ->D     X
+15.A  ->A    
+16.E  ->A     X
+17.G  ->BCE   X
+18.ABD->CD    X
+19.BE
+20.B
