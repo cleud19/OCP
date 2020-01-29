@@ -43,7 +43,9 @@
 20.B  ->C     X
 
 
-CaPITOLO 1 
+CAPITOLO 1 
+------tentativo 1
+----- 22 domande 11V e 10X
 1.B		->A   X
 2.D		->A   X
 3.D		->C   X
@@ -65,3 +67,51 @@ CaPITOLO 1
 19.AC	->AC
 20.C	->C
 21.EF	->ACE X
+
+--------- tentativo 2
+
+1.A
+2.A
+3.C
+4.A
+5.AD
+6.B
+7.E
+8.C
+9.B
+10.C
+11.D
+12.E
+13.B
+14.E
+15.BE
+16.E
+17.BC
+18.G
+19.AC
+20.C
+21.ACE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
