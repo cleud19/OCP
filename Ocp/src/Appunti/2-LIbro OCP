@@ -19,3 +19,8 @@ uun enum puo essere instanziata anche da una stringa ma deve essere esatta
 The code will not compile with a public constructor. 
 
 interfaces require public methods. 
+
+VARIE 
+String s1 = "Canada"; String s2 = new String(s1); 
+s1 points to the string pool 
+s2 points to an object on the heap, since it is created at runtime
