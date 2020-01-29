@@ -70,27 +70,27 @@ CAPITOLO 1
 
 --------- tentativo 2
 
-1.A
-2.A
-3.C
-4.A
-5.AD
-6.B
-7.E
-8.C
-9.B
-10.C
-11.D
-12.E
-13.B
-14.E
-15.BE
-16.E
-17.BC
-18.G
-19.AC
-20.C
-21.ACE
+1.A		->A
+2.A		->A
+3.C		->C
+4.A		->C   X
+5.AD	->AD
+6.B		->B
+7.E		->E
+8.C		->C
+9.B		->B
+10.C	->C
+11.D	->D
+12.E	->E
+13.B	->B
+14.E	->E
+15.BE	->BE
+16.E	->E
+17.BC	->BC
+18.G	->G
+19.AC	->AC
+20.C	->C
+21.ACE	->ACE
 
 
 
