@@ -43,20 +43,75 @@
 20.B  ->C     X
 
 
-CaPITOLO 1 
-1.B
-2.D
-3.D
-4.B
-5.AD
-6.B
-7.E
-8.C
-9.D
-10.C
-11.B
-12.C
-13.B
-14.EF
-15.BE
-16.E
+CAPITOLO 1 
+------tentativo 1
+----- 22 domande 11V e 10X
+1.B		->A   X
+2.D		->A   X
+3.D		->C   X
+4.B		->C   X
+5.AD	->AD
+6.B		->B
+7.E		->E
+8.C		->C
+9.D		->B   X
+10.C	->C
+11.B	->D   X
+12.C	->E   X
+13.B	->B
+14.EF	->E   X
+15.BE	->BE
+16.E	->E
+17.B	->BC  X
+18.G	->G
+19.AC	->AC
+20.C	->C
+21.EF	->ACE X
+
+--------- tentativo 2
+
+1.A		->A
+2.A		->A
+3.C		->C
+4.A		->C   X
+5.AD	->AD
+6.B		->B
+7.E		->E
+8.C		->C
+9.B		->B
+10.C	->C
+11.D	->D
+12.E	->E
+13.B	->B
+14.E	->E
+15.BE	->BE
+16.E	->E
+17.BC	->BC
+18.G	->G
+19.AC	->AC
+20.C	->C
+21.ACE	->ACE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
