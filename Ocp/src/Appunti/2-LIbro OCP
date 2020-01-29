@@ -20,11 +20,6 @@ The code will not compile with a public constructor.
 
 interfaces require public methods. 
 
-############################## CAPITOLO 2 ##########################################
-Una functional interface è una interfaccia con un solo metodo abstract quindi se ce ne sono altri di tipo
-default oppure static la nostra interfaccia rimane functional.
-
-
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
 s1 points to the string pool 
