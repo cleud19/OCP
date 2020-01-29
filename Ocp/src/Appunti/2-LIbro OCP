@@ -1,4 +1,21 @@
 Appunti Libro OCP 
 
-DOMANDE INIZIALI 
-1. 
+DOMANDE INIZIALI  Suoerate in File Apppostito 
+
+############################## CAPITOLO 1 ##########################################
+
+OVVERRIDE
+Quando utilizziamo la @override stiamo dicendo al compilatore che abbiamo l'intenzione di fare override di un metodo 
+se per caso il metodo è scritto male e invece di un override stiamo facendo un overloading di un metodo allora 
+il codice NON COMPILA 
+stai attento all'esame che quando c'è una @override stiamo veramente facendo override cosi da trovare errori di compilazione
+
+ENUM
+Season s1 = Season.valueOf("SUMMER"); // SUMMER
+Season s2 = Season.valueOf("summer"); // exception
+uun enum puo essere instanziata anche da una stringa ma deve essere esatta
+
+ The constructor is private because it can only be called from within the enum .
+The code will not compile with a public constructor. 
+
+interfaces require public methods. 
