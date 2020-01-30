@@ -9,7 +9,8 @@ import java.util.stream.Stream;
 public class Main {
 
 	public static void main(String[] args) {
-		peekTest();
+		//peekTest();
+		metodoTestInterfaccia((e) -> { String e = ""; return "Poof"; });
 	}
 
 	static public void peekTest() {
@@ -24,4 +25,11 @@ public class Main {
 		System.out.println(d + " " + p);
 	}
 
+	public interface Secret {
+		 String magic(double d);
+	}
+	
+	public static void metodoTestInterfaccia(Secret s){
+		System.out.println(s.magic(5));
+	}
 }

@@ -95,27 +95,27 @@ CAPITOLO 1
 
 CAPITOLO 2
 ------tentativo 1
------
-1.ACE
-2.E
-3.ACD
-4.ADF
-5.BEF
-6.A
-7.CEGH
-8.CF
-9.DEF
-10.D
-11.AF
-12.C
-13.BCE
-14.BADE
-15.BC
-16.F
-17.BCF
-18.A
-19.BE
-20.A
+-----errate 6 giuste 14
+1.ACE	->CE   X
+2.E		->E
+3.ACD	->AD   X
+4.ADF	->AD   X
+5.BEF	->BEF
+6.A		->A
+7.CEGH	->CEGH
+8.CF	->CF
+9.DEF	->DF   X
+10.D	->D
+11.AF	->AF
+12.C	->C
+13.BCE	->BCE
+14.BADE	->BADE
+15.BC	->BC
+16.F	->F
+17.BCF	->BCF
+18.A	->ABE   X
+19.BE	->BDE   X
+20.A	->A
 
 
 
