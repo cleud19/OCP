@@ -93,7 +93,29 @@ CAPITOLO 1
 21.ACE	->ACE
 
 
-
+CAPITOLO 2
+------tentativo 1
+-----
+1.ACE
+2.E
+3.ACD
+4.ADF
+5.BEF
+6.A
+7.CEGH
+8.CF
+9.DEF
+10.D
+11.AF
+12.C
+13.BCE
+14.BADE
+15.BC
+16.F
+17.BCF
+18.A
+19.BE
+20.A
 
 
 
