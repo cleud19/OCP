@@ -23,7 +23,50 @@ interfaces require public methods.
 ############################## CAPITOLO 2 ##########################################
 Una functional interface è una interfaccia con un solo metodo abstract quindi se ce ne sono altri di tipo
 default oppure static la nostra interfaccia rimane functional.
+LAMBDA
+() -> new Duck()   //ci vanno le parentesi poiche non ci sono parametri
+d -> {return d.quack();}
+(Duck d) -> d.quack()  //le parentesi ci vanno poiche specificato il tipo
+(Animal a, Duck d) -> d.quack()   //le parentesi vanno messe poiche i parametri sono2
 
+. When using {} in the body of the
+lambda expression, you must use the return statement if the functional interface method
+that lambda implements returns a value. Alternatively, a return statement is optional when
+the return type of the method is void.
+
+a, b -> a.startsWith("test") // DOES NOT COMPILE
+c -> return 10; // DOES NOT COMPILE
+a -> { return a.startsWith("test") } // DOES NOT COMPILE
+
+(a, b) -> a.startsWith("test")  //esempi coretti rispetto a quelli su
+c -> { return 10; }
+a -> { return a.startsWith("test"); }
+
+(int y, z) -> {int x=1; return y+10; } // DOES NOT COMPILE   una volta specificato il tipo di un parametro devo specificarla di tutti
+(a, b) -> { int a = 0; return 5;} // DOES NOT COMPILE non si puo assegnare un nuovo calore ad un parametro
+
+CASTING 
+public class Bird {}
+public class Fish {
+ public static void main(String[] args) {
+ Fish fish = new Fish();
+ Bird bird = (Fish)bird; // DOES NOT COMPILE
+ }
+}
+
+non si puo fare il cast di due oggetti che non sono relazionati tra di loro in nessun modo , non compila
+INMUTYABILE CLASS
+
+1.per settare le proprieta usa sempre il costruttore, se una delle proprieta è u oggetto copialo instanziane uno uguale 
+ma non asegnare il parametro dato al costruttore direttamente alla tua proprietà o dall'esterno chi ti ha passato il 
+parametro avrà ancora un puntatore al oggetto che corrisponde alla tua proprietà
+
+ 2. Mark all of the instance variables private and final .
+ 3. Don’t define any setter methods.
+ 4. Don’t allow referenced mutable objects to be modified or accessed directly.
+ 5. Prevent methods from being overridden. Cioe metti la classe come final 
+ 
+ 
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
 s1 points to the string pool 
