@@ -3,14 +3,16 @@ package it.cla.test.alvolo;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 public class Main {
 
 	public static void main(String[] args) {
-		//peekTest();
-		metodoTestInterfaccia((e) -> { String e = ""; return "Poof"; });
+		// peekTest();
+		testCollection();
 	}
 
 	static public void peekTest() {
@@ -26,10 +28,36 @@ public class Main {
 	}
 
 	public interface Secret {
-		 String magic(double d);
+		String magic(double d);
+	}
+
+	public static void testCollection() {
+		String[] array = { "gerbil", "mouse" }; // [gerbil, mouse]
+		printelements(array) ;
+		List<String> list = Arrays.asList(array); // returns fixed size list
+		printelements(array) ;
+		System.out.println(list +" list") ;
+		list.set(1, "test"); // [gerbil, test]
+		printelements(array) ;
+		System.out.println(list +" list") ;
+		array[0] = "new"; // [new, test]
+		printelements(array) ;
+		System.out.println(list +" list") ;
+		String[] array2 = (String[]) list.toArray(); // [new, test]
+		printelements(array) ;;
+		System.out.println(list +" list") ;
+		list.remove(1);
+		printelements(array) ;
+		System.out.println(list +" list") ;
+
 	}
 	
-	public static void metodoTestInterfaccia(Secret s){
-		System.out.println(s.magic(5));
+	static void printelements(String[] array){
+		System.out.print("[");
+		for(String s : array){
+			System.out.print(s+", ");
+		}
+		System.out.print("] array");
+		System.out.println("");
 	}
 }

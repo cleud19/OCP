@@ -67,6 +67,70 @@ parametro avrà ancora un puntatore al oggetto che corrisponde alla tua proprietà
  5. Prevent methods from being overridden. Cioe metti la classe come final 
  
  
+ ############################## CAPITOLO 3 ##########################################
+ CPOLLECTIONS
+ 
+        String[] array = { "gerbil", "mouse" };      // [gerbil, mouse] 
+  5:    List<String> list = Arrays.asList(array);    // returns fixed size list 
+  6:    list.set(1, "test");                         // [gerbil, test] 
+  7:    array[0] = "new";                            // [new, test] 
+  8:    String[] array2 = (String[]) list.toArray(); // [new, test] 
+  9:    list.remove(1);                              // throws UnsupportedOperationException 
+ //  line 9 shows that list is not resizable because it is backed by the underlying array.
+ 
+ le due liste rimangono collegate!!  
+ ------------------------------------------------------------------
+ ci sono due versioni
+ list.remove(int index)
+ list.remove(Object obj)
+ --------------------------------------------------------------------
+ GENERICS 
+ 
+ Generics nei metodi va prima dichiarato il tipo
+ 3:    public static <T> void sink(T t) { } 
+ 4:    public static <T> T identity(T t) { return t; } 
+ 5:    public static T noGood(T t) { return t; }  // DOES NOT COMPILE 
+ 
+ Line 3 shows the formal parameter type immediately before the return type of void. 
+ Line 4 shows the return type being the formal parameter type. It looks weird, but it is correct. Line 5 omits the formal parameter type, 
+ and therefore it does not compile.
+ 
+  quando chiami un metodo che è stato dichiarato con un formal parameter type esiste anche la sintassi in cui dichiari esplicitamente che tipo di oggetto 
+  gli stai passando  --->   Box.<String>ship("package");
+  anche se non c'è bisogno di dicgiararlo in modo cosi esplicito bisogna sapere dell'esistenza anche di questa sintassi.  
+ -----------------------------------------------
+ 
+ in generale quando si usano dei generics java istanzia tutto a runtime come se fosse un object la cosa che fa automaticamente 
+ è aggiungerti dei cast che tu non vedi per operare con i vari tipi di classi che sostituiamo ai nostri generics. Questo per sopperire al fatto che prima non esistevano 
+ e quindi per mantenere il codice legacy valido anche i generics a runtime sono dei object come prima solo che vengono aggiunti dei casting automatici. 
+ In generale java ora se lavori con una classe senza generics ti avvisa con un warning per dirti di stare attento
+ 
+  1:	public class LegacyUnicorns { 
+  2:       public static void main(String[] args) { 
+  3:          java.util.List<Unicorn> unicorns = new java.util.ArrayList<>(); 
+  4:          addUnicorn(unicorns); 
+  5:          Unicorn unicorn = unicorns.get(0);    // ClassCastException 
+  6:       } 
+  7:       private static void addUnicorn(List unicorn) { 
+  8:          unicorn.add(new Dragon()); 
+  9:       } } 
+  
+  come puoi vedere l'errore non avviene alla riga 8 perche cmq lui sotto lavora con dei objects l'errore avviene alla riga 5 quando si aspetta si prendere un 
+  oggetto unicrn quindi efettua automaticamente un cast andando in errore
+  
+  1:    public class LegacyAutoboxing { 
+  2:       public static void main(String[] args) { 
+  3:          java.util.List numbers = new java.util.ArrayList(); 
+  4:          numbers.add(5); 
+  5:          int result = numbers.get(0);    // DOES NOT COMPILE 
+  6:       } 
+  7:   }
+  Qui vediamo che a riga 5 funziona perche java autoboxes in modo automatico l'int in Integer
+  Alla riga 6 però non usando i generics non sa che nella lista c'è un Integer e un Object non puo essere unboxed in un int quindi non compila!
+ ------------------------------------------------
+ 
+ 
+ 
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
 s1 points to the string pool 
