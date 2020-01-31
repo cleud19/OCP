@@ -94,6 +94,7 @@ CAPITOLO 1
 
 
 CAPITOLO 2
+
 ------tentativo 1
 -----errate 6 giuste 14
 1.ACE	->CE   X
@@ -117,10 +118,28 @@ CAPITOLO 2
 19.BE	->BDE   X
 20.A	->A
 
-
-
-
-
+------ tentativo2
+------
+1.CE	->CE
+2.E		->E
+3.AD	->ad
+4.AD	->AD
+5.BEF	->BEF
+6.A		->A
+7.CEGH	->CEGH
+8.CF	->CF
+9.DF	->DF
+10.D	->D
+11.AF	->AF   
+12.C	->C
+13.BCE	->BCE
+14.ABDE	->ABDE
+15.BC	->BC
+16.F	->F
+17.BCF	->BCF
+18.ABE	->ABE
+19.BDE	->BDE
+20.A	->A
 
 
 
