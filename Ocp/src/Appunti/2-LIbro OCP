@@ -128,7 +128,23 @@ parametro avrà ancora un puntatore al oggetto che corrisponde alla tua proprietà
   Qui vediamo che a riga 5 funziona perche java autoboxes in modo automatico l'int in Integer
   Alla riga 6 però non usando i generics non sa che nella lista c'è un Integer e un Object non puo essere unboxed in un int quindi non compila!
  ------------------------------------------------
- 
+ Technically, you can
+remove elements from the list, but the exam won't ask about this.
+2: static class Sparrow extends Bird { }
+3: static class Bird { }
+4:
+5: public static void main(String[] args) {
+6: List<? extends Bird> birds = new ArrayList<Bird>();
+7: birds.add(new Sparrow()); // DOES NOT COMPILE
+8: birds.add(new Bird()); // DOES NOT COMPILE
+9: }
+
+
+The problem stems from the fact that Java doesn’t know what type List<? extends
+Bird> really is. It could be List<Bird> or List<Sparrow> or some other generic type that
+hasn’t even been written yet. Line 7 doesn’t compile because we can’t add a Sparrow to
+List<Bird>, and line 8 doesn’t compile because we can’t add a Bird to List<Sparrow>.
+From Java’s point of view, both scenarios are equally possible so neither is allowed.
  
  
 VARIE 
