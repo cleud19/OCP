@@ -98,7 +98,7 @@ parametro avrà ancora un puntatore al oggetto che corrisponde alla tua proprietà
   quando chiami un metodo che è stato dichiarato con un formal parameter type esiste anche la sintassi in cui dichiari esplicitamente che tipo di oggetto 
   gli stai passando  --->   Box.<String>ship("package");
   anche se non c'è bisogno di dicgiararlo in modo cosi esplicito bisogna sapere dell'esistenza anche di questa sintassi.  
- -----------------------------------------------
+ ---------------------------------------------------
  
  in generale quando si usano dei generics java istanzia tutto a runtime come se fosse un object la cosa che fa automaticamente 
  è aggiungerti dei cast che tu non vedi per operare con i vari tipi di classi che sostituiamo ai nostri generics. Questo per sopperire al fatto che prima non esistevano 
@@ -127,7 +127,7 @@ parametro avrà ancora un puntatore al oggetto che corrisponde alla tua proprietà
   7:   }
   Qui vediamo che a riga 5 funziona perche java autoboxes in modo automatico l'int in Integer
   Alla riga 6 però non usando i generics non sa che nella lista c'è un Integer e un Object non puo essere unboxed in un int quindi non compila!
- ------------------------------------------------
+ ---------------------------------------------------
  Technically, you can
 remove elements from the list, but the exam won't ask about this.
 2: static class Sparrow extends Bird { }
@@ -145,7 +145,18 @@ Bird> really is. It could be List<Bird> or List<Sparrow> or some other generic t
 hasn’t even been written yet. Line 7 doesn’t compile because we can’t add a Sparrow to
 List<Bird>, and line 8 doesn’t compile because we can’t add a Bird to List<Sparrow>.
 From Java’s point of view, both scenarios are equally possible so neither is allowed.
+ --------------------------
+ GENERICS
  
+ class A {}
+class B extends A { }
+class C extends B { }
+
+ <B extends A> B method3(List<B> list) {
+ return new B(); // DOES NOT COMPILE
+}
+
+Io dichiaro B nel metodo come tipo di parametro
  
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
