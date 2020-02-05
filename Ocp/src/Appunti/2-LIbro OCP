@@ -148,7 +148,7 @@ From Java’s point of view, both scenarios are equally possible so neither is all
  --------------------------
  GENERICS
  
- class A {}
+class A {}
 class B extends A { }
 class C extends B { }
 
@@ -156,7 +156,39 @@ class C extends B { }
  return new B(); // DOES NOT COMPILE
 }
 
-Io dichiaro B nel metodo come tipo di parametro
+Io dichiaro B nel metodo come tipo di parametro generico che estende A. Ma ho anche una classe che si chiama B sopra
+ora nello scope del mio metodo B sarà questo parametro generico che estende A e quindi potrà essere  A,B o C.
+Quindi essendo un parametro generico non posso istanziarne un nuovo oggetto , non conoscendo che oggetto sia ne che costruttore abbia. 
+--------------------------------
+GENERICS e WILDCARD
+
+<X> void method5(List<X super B> list) { // DOES NOT COMPILE
+}
+scoppia perche cerco di mischiare la sintassi della wildcard con quella dei generics. Li ci va una ? e non una X: 
+
+------------------------------
+ NAVIGABLE  SET 
+ 
+E lower(E e) Returns greatest element that is < e, or null if no such element
+E floor(E e) Returns greatest element that is <= e, or null if no such element
+E ceiling(E e) Returns smallest element that is >= e, or null if no such element
+E higher(E e) Returns smallest element that is > e, or null if no such element
+--------------------------------
+QUEUE 
+
+ArrayDeque e LinkedList sono due esempi di Queue
+
+AGGIUNTA
+- boolean offer(E e){}  Aggiunge e torna true o null 
+- boolean add(E e){}   Aggiunge e torna true o eccezione
+
+RIMOZIONE
+- E remove(E e){}  Rimuove e torna prossimo elemento o eccezione se vuota
+- E poll(E e){}  Rimuove e torna prossimo elemento oppure null se vuota 
+
+ISPEZIONE
+- E peek(E e){}
+- E element(E e){}
  
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
