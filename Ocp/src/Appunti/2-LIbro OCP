@@ -189,7 +189,93 @@ RIMOZIONE
 ISPEZIONE
 - E peek(E e){}
 - E element(E e){}
+
+-----------------------------------------------------------------------------------------------------------------------
+COLLECTION
+
+System.out.println(map.contains("lion")); // DOES NOT COMPILE
+System.out.println(map.containsKey("lion")); // true
+
+In generale certe collection accettano i valori null e altre no.
+Partendo logicamente le prime che non dovrebbero accettare valori null sono le collection ordinate, poiche non 
+ha senso comparare "casa" con null. 
+
+This means that TreeSet cannot contain null elements. 
+It also means that TreeMap cannot contain null keys. Null values are OK.
  
+Un altra collection in cui non piu aggiungere null è ArrayDeque. 
+Questo perche se fai poll() per vedere se la collection è vuota ed è vuota ti torna null. ora noi se l'elemento 
+null ce lo mettiamo non sappiamo piu se la queue è vuota o meno quindi java non lo permette.
+
+Remember that numbers sort before letters and uppercase letters sort
+before lowercase letters. 
+
+-------------------------------------------------------------------------------------------------------------------------
+COMPARABLE
+Difference 						Comparable	     Comparator
+Package name 					java.lang 	     java.util
+
+Interface must be
+implemented by class 	 		   Yes 		        No
+comparing? 
+
+Method name in interface 		compareTo 	     compare
+Number of parameters 				1				 2
+Common to declare using a lambda    No 			    Yes
+
+Durante l'esame verranno spesso cambiate per farti sbagliare
+
+Se istanzio un TreeSet di oggetti che non implementano comparable allora la prima volta ache andrò ad aggingerli al mio TreeSet 
+Verrà lanciata un eccezione (ClassCastìException). Perche a RunTime essendo TreeSet ordinata secondo l'ordine naturale dei oggetti si accorge che 
+il mio oggetto non implementa comparable e va in errore. 
+
+Quando istanzio un TreeSet nel costruttore posso passargli un Comparator da usare per ordinare gli oggetti:
+--------------------------------------------------------------------------------------------------------------------------
+
+REFERENCE TO METHODS
+14: Consumer<List<Integer>> methodRef1 = Collections::sort;
+15: Consumer<List<Integer>> lambda1 = l -> Collections.sort(l); 
+
+REFERENCE ISTANCE METHOD ON A SPECIFIC INSTANCE:
+String str = "abc";
+17: Predicate<String> methodRef2 = str::startsWith;
+18: Predicate<String> lambda2 = s -> str.startsWith(s); 
+
+SEMPRE ISTANCE METHOD ma senza conoscerlo in anticipo
+19: Predicate<String> methodRef3 = String::isEmpty;   
+20: Predicate<String> lambda3 = s -> s.isEmpty();
+//infatti isEmpty non è un metodo statico quindi non è che lo chiamo dalla classe
+
+CONSTRUCTOR REFERENCE 
+21: Supplier<ArrayList> methodRef4 = ArrayList::new;
+22: Supplier<ArrayList> lambda4 = () -> new ArrayList();
+
+--------------------------------------------------------------------------------------------------------------------------------------
+.MERGE() on COLLECTION
+Funzione che modifica il valore di una chiave in una mappa o aggiunge una chiave con un valote nuovo in base ai casi 
+
+La logica con cui lo fa viene descritta dentro una BiFunction.
+
+11: BiFunction<String, String, String> mapper = (v1, v2)
+12: -> v1.length() > v2.length() ? v1: v2;
+13:
+14: Map<String, String> favorites = new HashMap<>();
+15: favorites.put("Jenny", "Bus Tour");
+16: favorites.put("Tom", "Tram");
+17:
+18: String jenny = favorites.merge("Jenny", "Skyride", mapper);
+19: String tom = favorites.merge("Tom", "Skyride", mapper);
+20:
+21: System.out.println(favorites); // {Tom=Skyride, Jenny=Bus Tour}
+22: System.out.println(jenny); // Bus Tour
+23: System.out.println(tom); // Skyride
+
+Quindi la funzione .merge() applica la BiFunction applicando come parametri il secondo parametro della funzione merge e la value della key rappresentata
+dal primo parametro di merge. 
+
+Da ricordare che se la key è null il merge con il corpo della bifunction non viene applicato ma viene direttamente inserito il nuovo campo 
+ 
+
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
 s1 points to the string pool 
