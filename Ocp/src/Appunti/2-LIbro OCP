@@ -188,6 +188,7 @@ RIMOZIONE
 - E poll(E e){}  Rimuove e torna prossimo elemento oppure null se vuota 
 
 ISPEZIONE
+
 - E peek(E e){}   Ritorna il primo elemento della queue null se fosse vuota 
 - E element(E e){}   Ritorna il primo elemento della queue eccexxione se fosse vuota 
  
@@ -275,7 +276,8 @@ Quindi la funzione .merge() applica la BiFunction applicando come parametri il s
 dal primo parametro di merge. 
 
 Da ricordare che se la key è null il merge con il corpo della bifunction non viene applicato ma viene direttamente inserito il nuovo campo 
- 
+
+
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
 s1 points to the string pool 
