@@ -79,11 +79,11 @@ parametro avrà ancora un puntatore al oggetto che corrisponde alla tua proprietà
  //  line 9 shows that list is not resizable because it is backed by the underlying array.
  
  le due liste rimangono collegate!!  
- ------------------------------------------------------------------
+ ----------------------------------------------------------------------------------------------------------------
  ci sono due versioni
  list.remove(int index)
  list.remove(Object obj)
- --------------------------------------------------------------------
+ -------------------------------------------------------------------------------------------------------------------------
  GENERICS 
  
  Generics nei metodi va prima dichiarato il tipo
@@ -98,7 +98,7 @@ parametro avrà ancora un puntatore al oggetto che corrisponde alla tua proprietà
   quando chiami un metodo che è stato dichiarato con un formal parameter type esiste anche la sintassi in cui dichiari esplicitamente che tipo di oggetto 
   gli stai passando  --->   Box.<String>ship("package");
   anche se non c'è bisogno di dicgiararlo in modo cosi esplicito bisogna sapere dell'esistenza anche di questa sintassi.  
- ---------------------------------------------------
+ ------------------------------------------------------------------------------------------------------------------------------
  
  in generale quando si usano dei generics java istanzia tutto a runtime come se fosse un object la cosa che fa automaticamente 
  è aggiungerti dei cast che tu non vedi per operare con i vari tipi di classi che sostituiamo ai nostri generics. Questo per sopperire al fatto che prima non esistevano 
@@ -127,7 +127,7 @@ parametro avrà ancora un puntatore al oggetto che corrisponde alla tua proprietà
   7:   }
   Qui vediamo che a riga 5 funziona perche java autoboxes in modo automatico l'int in Integer
   Alla riga 6 però non usando i generics non sa che nella lista c'è un Integer e un Object non puo essere unboxed in un int quindi non compila!
- ---------------------------------------------------
+ --------------------------------------------------------------------------------------------------------------------------------
  Technically, you can
 remove elements from the list, but the exam won't ask about this.
 2: static class Sparrow extends Bird { }
@@ -145,8 +145,8 @@ Bird> really is. It could be List<Bird> or List<Sparrow> or some other generic t
 hasn’t even been written yet. Line 7 doesn’t compile because we can’t add a Sparrow to
 List<Bird>, and line 8 doesn’t compile because we can’t add a Bird to List<Sparrow>.
 From Java’s point of view, both scenarios are equally possible so neither is allowed.
- --------------------------
- GENERICS
+ ------------------------------------------------------------------------------------------------------------------------------------------
+ GENERICS-
  
 class A {}
 class B extends A { }
@@ -159,21 +159,22 @@ class C extends B { }
 Io dichiaro B nel metodo come tipo di parametro generico che estende A. Ma ho anche una classe che si chiama B sopra
 ora nello scope del mio metodo B sarà questo parametro generico che estende A e quindi potrà essere  A,B o C.
 Quindi essendo un parametro generico non posso istanziarne un nuovo oggetto , non conoscendo che oggetto sia ne che costruttore abbia. 
---------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------
 GENERICS e WILDCARD
 
 <X> void method5(List<X super B> list) { // DOES NOT COMPILE
 }
 scoppia perche cerco di mischiare la sintassi della wildcard con quella dei generics. Li ci va una ? e non una X: 
 
-------------------------------
- NAVIGABLE  SET 
+---------------------------------------------------------------------------------------------------------------------------------------------
+NAVIGABLE  SET 
  
 E lower(E e) Returns greatest element that is < e, or null if no such element
 E floor(E e) Returns greatest element that is <= e, or null if no such element
 E ceiling(E e) Returns smallest element that is >= e, or null if no such element
 E higher(E e) Returns smallest element that is > e, or null if no such element
---------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------
 QUEUE 
 
 ArrayDeque e LinkedList sono due esempi di Queue
@@ -187,6 +188,7 @@ RIMOZIONE
 - E poll(E e){}  Rimuove e torna prossimo elemento oppure null se vuota 
 
 ISPEZIONE
+
 - E peek(E e){}   Ritorna il primo elemento della queue null se fosse vuota 
 - E element(E e){}   Ritorna il primo elemento della queue eccexxione se fosse vuota 
  
@@ -295,6 +297,7 @@ Quindi la funzione .merge() applica la BiFunction applicando come parametri il s
 dal primo parametro di merge. 
 
 Da ricordare che se la key è null il merge con il corpo della bifunction non viene applicato ma viene direttamente inserito il nuovo campo 
+
  ESEMPIO 2
 BiFunction<String, String, String> mapper = (v1, v2) -> null;
 Map<String, String> favorites = new HashMap<>();
@@ -303,11 +306,11 @@ favorites.put("Tom", "Bus Tour");
 favorites.merge("Jenny", "Skyride", mapper);
 favorites.merge("Sam", "Skyride", mapper);  //verrà aggiunto senza eseguire il mapper perche chiave non trovata
 System.out.println(favorites); // {Tom=Bus Tour, Sam=Skyride}
+=======
 
 SE il ritorno del merge è null allora viene rimossa la chiave
-
-
 computeIfPresent non si compota come merge se la chiave non la trova nella mappa non aggiunge il valore.
+
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
 s1 points to the string pool 
