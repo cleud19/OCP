@@ -145,27 +145,31 @@ CAPITOLO 3
 
 ------tentativo 1
 
-1.B
-2.C
-3.C
-4.E
-5.BCF
-6.C
-7.AB
-8.C
-9.D
-10.D
+1.B		->B
+2.C		->D   X
+3.C		->E   X
+4.E		->E
+5.BCF	->BCF
+6.C		->C
+7.AB	->AD  X
+8.C		->C
+9.D		->E   X
+10.D	->A   X
 11.A
 12.BDE
 13.BDE
-14E
-15B
-16BDF
-17BD
-18ABF
-19AC
-20F
-
+14.E
+15.B
+16.BDF
+17.BD
+18.ABF
+19.AC
+20.F
+2.1AF
+22.A
+23.BE
+24.BF
+25.G
 
 
 
