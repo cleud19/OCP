@@ -184,8 +184,9 @@ AGGIUNTA
 - boolean add(E e){}   Aggiunge e torna true o eccezione
 
 RIMOZIONE
-- E remove(E e){}  Rimuove e torna prossimo elemento o eccezione se vuota
 - E poll(E e){}  Rimuove e torna prossimo elemento oppure null se vuota 
+- E remove(E e){}  Rimuove e torna prossimo elemento o eccezione se vuota
+
 
 ISPEZIONE
 
