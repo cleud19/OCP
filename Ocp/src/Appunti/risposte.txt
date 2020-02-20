@@ -144,7 +144,7 @@ CAPITOLO 2
 CAPITOLO 3
 
 ------tentativo 1
-
+------errate 15 giuste 10
 1.B		->B
 2.C		->D   X
 3.C		->E   X
@@ -164,17 +164,45 @@ CAPITOLO 3
 17.BD	->BD
 18.ABF	->AB  X
 19.AC	->AD  X
-20.F
-2.1AF
-22.A
-23.BE
-24.BF
-25.G
+20.F	->E   X
+2.AF	->AF
+22.A	->B   X
+23.BE	->BE
+24.BF	->F   X
+25.G	->F   X
 
 
 
+CAPITOLO 3
 
+------tentativo 2
+------errate 15 giuste 10
 
+1.B		->B
+2.D		->D
+3.E		->E
+4.E		->E
+5.BCF	->BCF
+6.C		->C
+7.D		->AD   X
+8.C		->C
+9.E		->E
+10.B	->A    X
+11.A	->A
+12.ABD	->ABD
+13.BE	->BE
+14.C	->C
+15.D	->D
+16.BDF	->BDF
+17.BD	->BD
+18.AB	->AB
+19.AD	->AD
+20.E	->E
+21.AF	->AF
+22.B	->B
+23.BE	->BE
+24.F	->F
+25.F	->F
 
 
 

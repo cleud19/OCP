@@ -5,8 +5,10 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -15,7 +17,17 @@ public class Main {
 	public static void main(String[] args) {
 		// peekTest();
 		//testCollection();
-		robo();
+		//robo();
+		robo2();
+	}
+
+	private static void robo2() {
+		Set<String> s = new HashSet<>();
+		s.add("lion");
+		s.add("tiger");
+		s.add("bear");
+		//s.forEach(s -> System.out.println(s));
+
 	}
 
 	private static void robo() {

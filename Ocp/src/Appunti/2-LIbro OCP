@@ -313,7 +313,10 @@ System.out.println(favorites); // {Tom=Bus Tour, Sam=Skyride}
 
 SE il ritorno del merge è null allora viene rimossa la chiave
 computeIfPresent non si compota come merge se la chiave non la trova nella mappa non aggiunge il valore.
-
+-------------------------------------
+ricordati che le mappe non hanno il metodo .contains() 
+ma il containsValue() e containsKey()
+--------------------------------------
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
 s1 points to the string pool 
