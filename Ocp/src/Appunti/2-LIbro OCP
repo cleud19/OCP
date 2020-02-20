@@ -83,6 +83,8 @@ parametro avrà ancora un puntatore al oggetto che corrisponde alla tua proprietà
  ci sono due versioni
  list.remove(int index)
  list.remove(Object obj)
+ 
+ queue nn ha la rimozione per index ma solo per oggetto
  -------------------------------------------------------------------------------------------------------------------------
  GENERICS 
  

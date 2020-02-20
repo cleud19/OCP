@@ -155,15 +155,15 @@ CAPITOLO 3
 8.C		->C
 9.D		->E   X
 10.D	->A   X
-11.A
-12.BDE
-13.BDE
-14.E
-15.B
-16.BDF
-17.BD
-18.ABF
-19.AC
+11.A	->A
+12.BDE	->ABD X
+13.BDE	->BE  X
+14.E	->C   X
+15.B	->D   X
+16.BDF	->BDF
+17.BD	->BD
+18.ABF	->AB  X
+19.AC	->AD  X
 20.F
 2.1AF
 22.A
