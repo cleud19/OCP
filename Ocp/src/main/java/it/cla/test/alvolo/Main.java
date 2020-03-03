@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +19,16 @@ public class Main {
 		// peekTest();
 		//testCollection();
 		//robo();
-		robo2();
+		//robo2();
+		streamError();
+	}
+
+	private static void streamError() {
+		Stream<String> s = Stream.of("brown bear-", "grizzly-");
+		s.sorted(Comparator.reverseOrder()).forEach(System.out::print); // grizzly-brown
+																		// bear-
+		s.sorted(Comparator::reverseOrder); // DOES NOT COMPILE
+
 	}
 
 	private static void robo2() {

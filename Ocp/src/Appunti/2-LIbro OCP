@@ -316,6 +316,41 @@ computeIfPresent non si compota come merge se la chiave non la trova nella mappa
 -------------------------------------
 ricordati che le mappe non hanno il metodo .contains() 
 ma il containsValue() e containsKey()
+
+
+ ############################## CAPITOLO 4 ##########################################
+ USARE VARIABILI NEI LAMBDA 
+ Lambda expressions can access static variables, instance variables, effectively final
+method parameters, and effectively final local variables.
+-------------------------------------------------------------------
+INTERFACCIA        PARAMETRI   RETURN TYPE   METHOD
+Supplier<T>		       0           T         get
+Consumer<T> 	       1 (T)       void      accept
+BiConsumer<T, U> 	   2 (T, U)    void      accept
+Predicate<T>    	   1 (T)       boolean   test
+BiPredicate<T, U> 	   2 (T, U)    boolean   test
+Function<T, R>  	   1 (T)       R         apply
+BiFunction<T, U, R>	   2 (T, U)    R         apply
+UnaryOperator<T>       1 (T)       T         apply
+BinaryOperator<T>      2 (T, T)    T         apply
+--------------------------------------------------------------------
+ STREAMS
+  1 Stream<String> s = Stream.of("brown bear-", "grizzly-");
+  2 s.sorted(Comparator.reverseOrder()).forEach(System.out::print); // grizzly-brown bear-
+ 
+  3 s.sorted(Comparator::reverseOrder); // DOES NOT COMPILE 
+ 
+ Alla riga 2 va perche il sorted ha bisogno di un Comparator<T> e il comparator è un interfaccia funzionale che ha un metodo
+ int compare(T,T); Ora nella riga due utilizzo il metodo statico dell'interfaccia Comparator per tornare un oggetto Comparator 
+ cioe per tornare un implementazione del mio metodo compare.
+ 
+ Alla riga 3 sto effettuando un method reference , cioe cerco di assegnare al metodo compare(T,T) che vuole il mio sort
+ il metodo Comparator<T> reverseOrder() andando cosi in errore. 
+ 
+ 
+ 
+ 
+ 
 --------------------------------------
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
