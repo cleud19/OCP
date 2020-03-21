@@ -302,6 +302,7 @@ dal primo parametro di merge.
 Da ricordare che se la key è null il merge con il corpo della bifunction non viene applicato ma viene direttamente inserito il nuovo campo 
 
  ESEMPIO 2
+ 
 BiFunction<String, String, String> mapper = (v1, v2) -> null;
 Map<String, String> favorites = new HashMap<>();
 favorites.put("Jenny", "Bus Tour");
@@ -309,11 +310,14 @@ favorites.put("Tom", "Bus Tour");
 favorites.merge("Jenny", "Skyride", mapper);
 favorites.merge("Sam", "Skyride", mapper);  //verrà aggiunto senza eseguire il mapper perche chiave non trovata
 System.out.println(favorites); // {Tom=Bus Tour, Sam=Skyride}
+
 =======
 
 SE il ritorno del merge è null allora viene rimossa la chiave
 computeIfPresent non si compota come merge se la chiave non la trova nella mappa non aggiunge il valore.
+
 -------------------------------------
+
 ricordati che le mappe non hanno il metodo .contains() 
 ma il containsValue() e containsKey()
 
@@ -321,8 +325,9 @@ ma il containsValue() e containsKey()
  ############################## CAPITOLO 4 ##########################################
  USARE VARIABILI NEI LAMBDA 
  Lambda expressions can access static variables, instance variables, effectively final
-method parameters, and effectively final local variables.
+ method parameters, and effectively final local variables.
 -------------------------------------------------------------------
+
 INTERFACCIA        PARAMETRI   RETURN TYPE   METHOD
 Supplier<T>		       0           T         get
 Consumer<T> 	       1 (T)       void      accept
@@ -333,7 +338,9 @@ Function<T, R>  	   1 (T)       R         apply
 BiFunction<T, U, R>	   2 (T, U)    R         apply
 UnaryOperator<T>       1 (T)       T         apply
 BinaryOperator<T>      2 (T, T)    T         apply
+
 --------------------------------------------------------------------
+
  STREAMS
   1 Stream<String> s = Stream.of("brown bear-", "grizzly-");
   2 s.sorted(Comparator.reverseOrder()).forEach(System.out::print); // grizzly-brown bear-
