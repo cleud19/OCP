@@ -465,7 +465,7 @@ BinaryOperator<T>      2 (T, T)    T         apply
     Stream<Integer> s = Stream.iterate(1, n -> n + 1);
     s.skip(5).limit(2).forEach(System.out::print); // 67 
     
- 4.  map()   -    <R> Stream<R> map(Function<? super T, ? extends R> mapper) 
+ 4.  map()   -    <R> Stream<R> map(<? super T, ? extends R> mapper) 
     The map() method creates a one-to-one mapping from the elements in the stream to the elements of the next step in the stream.
     
 	Stream<String> s = Stream.of("monkey", "gorilla", "bonobo");
@@ -494,14 +494,50 @@ BinaryOperator<T>      2 (T, T)    T         apply
 	Java uses natural ordering unless we specify a comparator. The method signatures are
 
 7.  peek()   -     Stream<T> peek(Consumer<? super T> action)   
-	The peek() method is our fi nal intermediate operation. It is useful for debugging because it
+    It is useful for debugging because it
 	allows us to perform a stream operation without actually changing the stream. 
 	
 	 Stream<String> stream = Stream.of("black bear", "brown bear", "grizzly");
 	 long count = stream.filter(s -> s.startsWith("g"))
 	 .peek(System.out::println).count(); // grizzly 
 		
+---------------------------------------------------
 
+
+25: List<String> cats = new ArrayList<>();
+26: cats.add("Annie");
+27: cats.add("Ripley");
+28: Stream<String> stream = cats.stream();
+29: cats.add("KC");
+30: System.out.println(stream.count());
+// stampa 3 
+
+Vediamo che i streams sono lazily evaluated e quindi alla riga 28 lo stream non è veramente instaziato 
+ma viene creato un oggetto che sa dove guardare quando verrà chiamato lo stream. 
+Lo stream viene interpellato a riga 30 ed è solo allora che verra instanziato. 
+------------------------------------------------------------
+TOMAP
+Stream<String> ohMy = Stream.of("lions", "tigers", "bears");
+TreeMap<Integer, String> map = ohMy.collect(Collectors.toMap(
+String::length, k -> k, (s1, s2) -> s1 + "," + s2, TreeMap::new));
+System.out.println(map); // // {5=lions,bears, 6=tigers}
+System.out.println(map.getClass()); // class. java.util.TreeMap
+
+Qui con (s1, s2) -> s1 + "," + s2 specifico cosa fare nel caso di due chiavi identiche senza questo andrebbe in errore. 
+Sotto con il groupingBy ho una funzione che lo fa apposta. 
+
+GROUPINGBY
+Stream<String> ohMy = Stream.of("lions", "tigers", "bears");
+TreeMap<Integer, Set<String>> map = ohMy.collect(
+ Collectors.groupingBy(String::length, TreeMap::new, Collectors.toSet()));
+System.out.println(map); // {5=[lions, bears], 6=[tigers]}
+
+PARTITIONINGBY
+Il partitioning divide sempre per due gruppi true e false
+Stream<String> ohMy = Stream.of("lions", "tigers", "bears");
+Map<Boolean, Set<String>> map = ohMy.collect(
+Collectors.partitioningBy(s -> s.length() <= 7, Collectors.toSet()));
+System.out.println(map);// {false=[], true=[lions, tigers, bears]}
 --------------------------------------
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
