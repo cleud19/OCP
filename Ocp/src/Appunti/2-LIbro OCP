@@ -527,6 +527,7 @@ Qui con (s1, s2) -> s1 + "," + s2 specifico cosa fare nel caso di due chiavi ide
 Sotto con il groupingBy ho una funzione che lo fa apposta. 
 
 GROUPINGBY
+
 Stream<String> ohMy = Stream.of("lions", "tigers", "bears");
 TreeMap<Integer, Set<String>> map = ohMy.collect(
  Collectors.groupingBy(String::length, TreeMap::new, Collectors.toSet()));
@@ -534,11 +535,33 @@ System.out.println(map); // {5=[lions, bears], 6=[tigers]}
 
 PARTITIONINGBY
 Il partitioning divide sempre per due gruppi true e false
+
 Stream<String> ohMy = Stream.of("lions", "tigers", "bears");
 Map<Boolean, Set<String>> map = ohMy.collect(
 Collectors.partitioningBy(s -> s.length() <= 7, Collectors.toSet()));
 System.out.println(map);// {false=[], true=[lions, tigers, bears]}
+
+MAPPING
+Il mapping ci fa specificare ancora un sottolivello di collect
+
+Stream<String> ohMy = Stream.of("lions", "tigers", "bears");
+Map<Integer, Optional<Character>> map = ohMy.collect(
+ groupingBy(
+ String::length,
+ Collectors.mapping(s -> s.charAt(0),
+ minBy(Comparator.naturalOrder()))));
+System.out.println(map); // {5=Optional[b], 6=Optional[t]}
+
 --------------------------------------
+Recognize which operations cause a stream pipeline to execute. Intermediate operations
+do not run until the terminal operation is encountered. If no terminal operation is in the
+pipeline, a Stream is returned but not executed. Examples of terminal operations include
+collect(), forEach(), min(), and reduce().
+
+
+
+
+
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
 s1 points to the string pool 
