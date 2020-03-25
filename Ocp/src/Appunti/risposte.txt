@@ -232,30 +232,35 @@ CAPITOLO 4
 20.B	->B
 
 
-------tentativo 1
-------errate 12 giuste 8
+------tentativo 2
+------errate 1 giuste 19
 
-1.D
-2.F
-3.E
-4.AB
-5.AB
-6.F
-7.F
-8.DE
-9.BD
-10.F
-11.BCE
-12.AFG
-13.F
-14.D(?)
-15.DE
-16.C
-17.
-18.
-19.
-20.
+1.D		->D
+2.F		->F
+3.E		->E
+4.AB	->AB
+5.AB	->AB
+6.F		->A   X
+7.F		->F
+8.DE	->DE
+9.BD	->BD
+10.F	->F
+11.BCE	->BCE
+12.AFG	->AFG
+13.F	->F
+14.D(?)	->D
+15.DE	->DE
+16.C	->C
+17.E	->E
+18.D	->D
+19.ACE	->ACE
+20.B	->B
 
-
+Nei colloqui tecnici è importante fare domande aperte non chiuse 
+esempio usate mathlab? no 
+esempio quali software utilizzate? si 
+Questo per passare la palla del discorso a loro. E per capire bene il contesto in cui lavorano e sfruttare 
+quei input dopo per essere piu incisivi. 
+Fare sempre domande perche dimostra il nostro interesse e se facciamo domande sappiamo quello di cui stiamo parlando.
 
 
