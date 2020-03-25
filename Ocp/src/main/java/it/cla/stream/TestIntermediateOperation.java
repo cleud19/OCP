@@ -2,8 +2,8 @@ package it.cla.stream;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -24,13 +24,26 @@ public class TestIntermediateOperation {
 		System.out.println();
 		esempio5();
 		System.out.println();
+		/**
 		try {
-			esempio6();
+			//esempio6();
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Errore il path descritto non è stato trovato!");
 		}
+		**/
 		
+		esempio7();
+		
+	}
+
+	private static void esempio7() {
+		Stream<Integer> s = Stream.of(1);
+		IntStream is = s.mapToInt(x -> x);
+		DoubleStream ds = s.mapToDouble(x -> x);
+		IntStream s2 = ds.mapToInt(x -> (int)x);
+		s2.forEach(System.out::print);
+
 	}
 
 	private static void esempio6() throws IOException {

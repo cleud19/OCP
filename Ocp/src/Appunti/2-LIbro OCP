@@ -558,7 +558,10 @@ do not run until the terminal operation is encountered. If no terminal operation
 pipeline, a Stream is returned but not executed. Examples of terminal operations include
 collect(), forEach(), min(), and reduce().
 
-
+-----------------------------------------------------------------------------------------
+The average() method returns an OptionalDouble since averages of any type can
+result in a fraction.
+-----------------------------------------------------------------------------------------
 
 
 
