@@ -1,398 +1,3 @@
-Appunti Libro OCP 
-
-DOMANDE INIZIALI  Suoerate in File Apppostito 
-
-############################## CAPITOLO 1 ##########################################
-
-OVVERRIDE
-Quando utilizziamo la @override stiamo dicendo al compilatore che abbiamo l'intenzione di fare override di un metodo 
-se per caso il metodo è scritto male e invece di un override stiamo facendo un overloading di un metodo allora 
-il codice NON COMPILA 
-stai attento all'esame che quando c'è una @override stiamo veramente facendo override cosi da trovare errori di compilazione
-
-ENUM
-Season s1 = Season.valueOf("SUMMER"); // SUMMER
-Season s2 = Season.valueOf("summer"); // exception
-uun enum puo essere instanziata anche da una stringa ma deve essere esatta
-
- The constructor is private because it can only be called from within the enum .
-The code will not compile with a public constructor. 
-
-interfaces require public methods. 
-
-############################## CAPITOLO 2 ##########################################
-Una functional interface è una interfaccia con un solo metodo abstract quindi se ce ne sono altri di tipo
-default oppure static la nostra interfaccia rimane functional.
-LAMBDA
-() -> new Duck()   //ci vanno le parentesi poiche non ci sono parametri
-d -> {return d.quack();}
-(Duck d) -> d.quack()  //le parentesi ci vanno poiche specificato il tipo
-(Animal a, Duck d) -> d.quack()   //le parentesi vanno messe poiche i parametri sono2
-
-. When using {} in the body of the
-lambda expression, you must use the return statement if the functional interface method
-that lambda implements returns a value. Alternatively, a return statement is optional when
-the return type of the method is void.
-
-a, b -> a.startsWith("test") // DOES NOT COMPILE
-c -> return 10; // DOES NOT COMPILE
-a -> { return a.startsWith("test") } // DOES NOT COMPILE
-
-(a, b) -> a.startsWith("test")  //esempi coretti rispetto a quelli su
-c -> { return 10; }
-a -> { return a.startsWith("test"); }
-
-(int y, z) -> {int x=1; return y+10; } // DOES NOT COMPILE   una volta specificato il tipo di un parametro devo specificarla di tutti
-(a, b) -> { int a = 0; return 5;} // DOES NOT COMPILE non si puo assegnare un nuovo calore ad un parametro
-
-CASTING 
-public class Bird {}
-public class Fish {
- public static void main(String[] args) {
- Fish fish = new Fish();
- Bird bird = (Fish)bird; // DOES NOT COMPILE
- }
-}
-
-non si puo fare il cast di due oggetti che non sono relazionati tra di loro in nessun modo , non compila
-INMUTYABILE CLASS
-
-1.per settare le proprieta usa sempre il costruttore, se una delle proprieta è u oggetto copialo instanziane uno uguale 
-ma non asegnare il parametro dato al costruttore direttamente alla tua proprietà o dall'esterno chi ti ha passato il 
-parametro avrà ancora un puntatore al oggetto che corrisponde alla tua proprietà
-
- 2. Mark all of the instance variables private and final .
- 3. Don’t define any setter methods.
- 4. Don’t allow referenced mutable objects to be modified or accessed directly.
- 5. Prevent methods from being overridden. Cioe metti la classe come final 
- 
- 
- ############################## CAPITOLO 3 ##########################################
- CPOLLECTIONS
- 
-        String[] array = { "gerbil", "mouse" };      // [gerbil, mouse] 
-  5:    List<String> list = Arrays.asList(array);    // returns fixed size list 
-  6:    list.set(1, "test");                         // [gerbil, test] 
-  7:    array[0] = "new";                            // [new, test] 
-  8:    String[] array2 = (String[]) list.toArray(); // [new, test] 
-  9:    list.remove(1);                              // throws UnsupportedOperationException 
- //  line 9 shows that list is not resizable because it is backed by the underlying array.
- 
- le due liste rimangono collegate!!  
- ----------------------------------------------------------------------------------------------------------------
- ci sono due versioni
- list.remove(int index)
- list.remove(Object obj)
- 
- queue nn ha la rimozione per index ma solo per oggetto
- -------------------------------------------------------------------------------------------------------------------------
- GENERICS 
- 
- Generics nei metodi va prima dichiarato il tipo
- 3:    public static <T> void sink(T t) { } 
- 4:    public static <T> T identity(T t) { return t; } 
- 5:    public static T noGood(T t) { return t; }  // DOES NOT COMPILE 
- 
- Line 3 shows the formal parameter type immediately before the return type of void. 
- Line 4 shows the return type being the formal parameter type. It looks weird, but it is correct. Line 5 omits the formal parameter type, 
- and therefore it does not compile.
- 
-  quando chiami un metodo che è stato dichiarato con un formal parameter type esiste anche la sintassi in cui dichiari esplicitamente che tipo di oggetto 
-  gli stai passando  --->   Box.<String>ship("package");
-  anche se non c'è bisogno di dicgiararlo in modo cosi esplicito bisogna sapere dell'esistenza anche di questa sintassi.  
- ------------------------------------------------------------------------------------------------------------------------------
- 
- in generale quando si usano dei generics java istanzia tutto a runtime come se fosse un object la cosa che fa automaticamente 
- è aggiungerti dei cast che tu non vedi per operare con i vari tipi di classi che sostituiamo ai nostri generics. Questo per sopperire al fatto che prima non esistevano 
- e quindi per mantenere il codice legacy valido anche i generics a runtime sono dei object come prima solo che vengono aggiunti dei casting automatici. 
- In generale java ora se lavori con una classe senza generics ti avvisa con un warning per dirti di stare attento
- 
-  1:	public class LegacyUnicorns { 
-  2:       public static void main(String[] args) { 
-  3:          java.util.List<Unicorn> unicorns = new java.util.ArrayList<>(); 
-  4:          addUnicorn(unicorns); 
-  5:          Unicorn unicorn = unicorns.get(0);    // ClassCastException 
-  6:       } 
-  7:       private static void addUnicorn(List unicorn) { 
-  8:          unicorn.add(new Dragon()); 
-  9:       } } 
-  
-  come puoi vedere l'errore non avviene alla riga 8 perche cmq lui sotto lavora con dei objects l'errore avviene alla riga 5 quando si aspetta si prendere un 
-  oggetto unicrn quindi efettua automaticamente un cast andando in errore
-  
-  1:    public class LegacyAutoboxing { 
-  2:       public static void main(String[] args) { 
-  3:          java.util.List numbers = new java.util.ArrayList(); 
-  4:          numbers.add(5); 
-  5:          int result = numbers.get(0);    // DOES NOT COMPILE 
-  6:       } 
-  7:   }
-  Qui vediamo che a riga 5 funziona perche java autoboxes in modo automatico l'int in Integer
-  Alla riga 6 però non usando i generics non sa che nella lista c'è un Integer e un Object non puo essere unboxed in un int quindi non compila!
- --------------------------------------------------------------------------------------------------------------------------------
- Technically, you can
-remove elements from the list, but the exam won't ask about this.
-2: static class Sparrow extends Bird { }
-3: static class Bird { }
-4:
-5: public static void main(String[] args) {
-6: List<? extends Bird> birds = new ArrayList<Bird>();
-7: birds.add(new Sparrow()); // DOES NOT COMPILE
-8: birds.add(new Bird()); // DOES NOT COMPILE
-9: }
-
-
-The problem stems from the fact that Java doesn’t know what type List<? extends
-Bird> really is. It could be List<Bird> or List<Sparrow> or some other generic type that
-hasn’t even been written yet. Line 7 doesn’t compile because we can’t add a Sparrow to
-List<Bird>, and line 8 doesn’t compile because we can’t add a Bird to List<Sparrow>.
-From Java’s point of view, both scenarios are equally possible so neither is allowed.
- ------------------------------------------------------------------------------------------------------------------------------------------
- GENERICS-
- 
-class A {}
-class B extends A { }
-class C extends B { }
-
- <B extends A> B method3(List<B> list) {
- return new B(); // DOES NOT COMPILE
-}
-
-Io dichiaro B nel metodo come tipo di parametro generico che estende A. Ma ho anche una classe che si chiama B sopra
-ora nello scope del mio metodo B sarà questo parametro generico che estende A e quindi potrà essere  A,B o C.
-Quindi essendo un parametro generico non posso istanziarne un nuovo oggetto , non conoscendo che oggetto sia ne che costruttore abbia. 
---------------------------------------------------------------------------------------------------------------------------------------
-GENERICS e WILDCARD
-
-<X> void method5(List<X super B> list) { // DOES NOT COMPILE
-}
-scoppia perche cerco di mischiare la sintassi della wildcard con quella dei generics. Li ci va una ? e non una X: 
-
----------------------------------------------------------------------------------------------------------------------------------------------
-LIST INTERFACE 
-
-ARRAYLIST
-The main benefi t of an ArrayList is that you can look up any element in constant time.
-Adding or removing an element is slower than accessing an element. This makes an
-ArrayList a good choice when you are reading more often than (or the same amount
-as) writing to the ArrayList . 
-
-LINKEDLIST 
-A LinkedList is special because it implements both List and Queue. It has all of the
-methods of a List. It also has additional methods to facilitate adding or removing from the
-beginning and/or end of the list.
-The main benefits of a LinkedList are that you can access, add, and remove from the
-beginning and end of the list in constant time. The tradeoff is that dealing with an arbitrary index t
-
-STACK 
-A Stack is a data structure where you add and remove elements from the top of the
-stack. Think about a stack of paper as an example. Like Vector, Stack hasn’t been used
-for new code in ages. In fact, Stack extends Vector. If you need a stack, use an ArrayDeque
-instead. More on this when we get to the Queue section.
-----------------------------------------------------------------------------------------------------------------------------------------------
-SET INTERFACE
-You use a set when you don’t want to allow duplicate entries.
-
-HASHSET
-A HashSet stores its elements in a hash table. This means that it uses the hashCode()
-method of the objects to retrieve them more efficiently. If you forgot how hashCode()
-works, please review Chapter 1, “Advanced Class Design.”
-The main benefit is that adding elements and checking if an element is in the set both
-have constant time. The tradeoff is that you lose the order in which you inserted the
-elements. Most of the time, you aren’t concerned with this in a set anyway, making HashSet
-the most common set.
-
-TREESET 
-A TreeSet stores its elements in a sorted tree structure. The main benefit is that the set
-is always in sorted order. The tradeoff is that adding and checking if an element is present are both O(log n). TreeSet implements a special interface called NavigableSet, which
-lets you slice up the collection as you will see in the next sidebar, “The NavigableSet
-Interface”.
-
-TREESET implements the NAVIGABLESET interface. This interface provides some interesting methods. Their method signatures are as follows: 
-E lower(E e) Returns greatest element that is < e, or null if no such element
-E floor(E e) Returns greatest element that is <= e, or null if no such element
-E ceiling(E e) Returns smallest element that is >= e, or null if no such element
-E higher(E e) Returns smallest element that is > e, or null if no such element
-
----------------------------------------------------------------------------------------------------------------------------------------------
-QUEUE INTERFACE
-You use a queue when elements are added and removed in a specific order.
-
-LINKEDLIST
-You saw LinkedList earlier in the List section. In addition to being a list, it is a doubleended queue. A double-ended queue is different from a regular queue in that you can insert
-and remove elements from both the front and back of the queue. Think, “Mr. President,
-come right to the front. You are the only one who gets this special treatment. Everyone else
-will have to start at the back of the line.”
-The main benefit of a LinkedList is that it implements both the List and Queue
-interfaces. The tradeoff is that it isn’t as efficient as a “pure” queue.
-An ArrayDeque is a “pure” double-ended queue. It was introduced in 
-
-ARRAYDEQUE
-An ArrayDeque is a “pure” double-ended queue. It was introduced in Java 6, and it
-stores its elements in a resizable array. The main benefit of an ArrayDeque is that it is more
-efficient than a LinkedList
-
-
-ArrayDeque e LinkedList sono due esempi di Queue
-
-AGGIUNTA
-- boolean offer(E e){}  Aggiunge e torna true o null 
-- boolean add(E e){}   Aggiunge e torna true o eccezione
-
-RIMOZIONE
-- E poll(E e){}  Rimuove e torna prossimo elemento oppure null se vuota 
-- E remove(E e){}  Rimuove e torna prossimo elemento o eccezione se vuota
-
-
-ISPEZIONE
-
-- E peek(E e){}   Ritorna il primo elemento della queue null se fosse vuota 
-- E element(E e){}   Ritorna il primo elemento della queue eccexxione se fosse vuota 
- 
- 
- offer/poll/peek  QUEUE senza eccezzioni 
- push/poll/peek  STACK SENZA eccezioni
- 
- QUEUE
-  12:   Queue<Integer> queue = new ArrayDeque<>(); 
-  13:   System.out.println(queue.offer(10));  // true    10
-  14:   System.out.println(queue.offer(4));   // true    10|4
-  15:   System.out.println(queue.peek());     // 10 	 10|4
-  16:   System.out.println(queue.poll());     // 10 	 4
-  17:   System.out.println(queue.poll());     // 4        
-  18:   System.out.println(queue.peek());     // null 
- STACK
-  12:   ArrayDeque<Integer> stack = new ArrayDeque<>(); 
-  13:   stack.push(10); 								 10
-  14:   stack.push(4); 									 4|10
-  15:   System.out.println(stack.peek());     // 4 		 4|10
-  16:   System.out.println(stack.poll());     // 4 	     10
-  17:   System.out.println(stack.poll());     // 10 
-  18:   System.out.println(stack.peek());     // null
- 
--------------------------------------------------------------------------------------------------------------------------
-MAP INTERFACE
-You use a map when you want to identify values by a key.  
-
-HASHMAP  
-A HashMap stores the keys in a hash table. This means that it uses the hashCode() method
-of the keys to retrieve their values more efficiently.
-The main benefit is that adding elements and retrieving the element by key both have
-constant time. The tradeoff is that you lose the order in which you inserted the elements.
-Most of the time, you aren’t concerned with this in a map anyway. If you were, you could
-use LINKEDHASHMAP
-
-TREEMAP
-A TreeMap stores the keys in a sorted tree structure. The main benefit is that the keys are
-always in sorted order. The tradeoff is that adding and checking if a key is present are both
-O(log n).
- 
------------------------------------------------------------------------------------------------------------------------
-COLLECTION
-
-System.out.println(map.contains("lion")); // DOES NOT COMPILE
-System.out.println(map.containsKey("lion")); // true
-
-In generale certe collection accettano i valori null e altre no.
-Partendo logicamente le prime che non dovrebbero accettare valori null sono le collection ordinate, poiche non 
-ha senso comparare "casa" con null. 
-
-This means that TreeSet cannot contain null elements. 
-It also means that TreeMap cannot contain null keys. Null values are OK.
- 
-Un altra collection in cui non piu aggiungere null è ArrayDeque. 
-Questo perche se fai poll() per vedere se la collection è vuota ed è vuota ti torna null. ora noi se l'elemento 
-null ce lo mettiamo non sappiamo piu se la queue è vuota o meno quindi java non lo permette.
-
-Remember that numbers sort before letters and uppercase letters sort
-before lowercase letters. 
-
--------------------------------------------------------------------------------------------------------------------------
-COMPARABLE
-Difference 						Comparable	     Comparator
-Package name 					java.lang 	     java.util
-
-Interface must be
-implemented by class 	 		   Yes 		        No
-comparing? 
-
-Method name in interface 		compareTo 	     compare
-Number of parameters 				1				 2
-Common to declare using a lambda    No 			    Yes
-
-Durante l'esame verranno spesso cambiate per farti sbagliare
-
-Se istanzio un TreeSet di oggetti che non implementano comparable allora la prima volta ache andrò ad aggingerli al mio TreeSet 
-Verrà lanciata un eccezione (ClassCastìException). Perche a RunTime essendo TreeSet ordinata secondo l'ordine naturale dei oggetti si accorge che 
-il mio oggetto non implementa comparable e va in errore. 
-
-Quando istanzio un TreeSet nel costruttore posso passargli un Comparator da usare per ordinare gli oggetti:
---------------------------------------------------------------------------------------------------------------------------
-
-REFERENCE TO METHODS
-14: Consumer<List<Integer>> methodRef1 = Collections::sort;
-15: Consumer<List<Integer>> lambda1 = l -> Collections.sort(l); 
-
-REFERENCE ISTANCE METHOD ON A SPECIFIC INSTANCE:
-String str = "abc";
-17: Predicate<String> methodRef2 = str::startsWith;
-18: Predicate<String> lambda2 = s -> str.startsWith(s); 
-
-SEMPRE ISTANCE METHOD ma senza conoscerlo in anticipo
-19: Predicate<String> methodRef3 = String::isEmpty;   
-20: Predicate<String> lambda3 = s -> s.isEmpty();
-//infatti isEmpty non è un metodo statico quindi non è che lo chiamo dalla classe
-
-CONSTRUCTOR REFERENCE 
-21: Supplier<ArrayList> methodRef4 = ArrayList::new;
-22: Supplier<ArrayList> lambda4 = () -> new ArrayList();
-
---------------------------------------------------------------------------------------------------------------------------------------
-.MERGE() on COLLECTION
-Funzione che modifica il valore di una chiave in una mappa o aggiunge una chiave con un valore nuovo in base ai casi 
-
-La logica con cui lo fa viene descritta dentro una BiFunction.
-
-11: BiFunction<String, String, String> mapper = (v1, v2)
-12: -> v1.length() > v2.length() ? v1: v2;
-13:
-14: Map<String, String> favorites = new HashMap<>();
-15: favorites.put("Jenny", "Bus Tour");
-16: favorites.put("Tom", "Tram");
-17:
-18: String jenny = favorites.merge("Jenny", "Skyride", mapper);
-19: String tom = favorites.merge("Tom", "Skyride", mapper);
-20:
-21: System.out.println(favorites); // {Tom=Skyride, Jenny=Bus Tour}
-22: System.out.println(jenny); // Bus Tour
-23: System.out.println(tom); // Skyride
-
-Quindi la funzione .merge() applica la BiFunction applicando come parametri il secondo parametro della funzione merge e la value della key rappresentata
-dal primo parametro di merge. 
-
-Da ricordare che se la key è null il merge con il corpo della bifunction non viene applicato ma viene direttamente inserito il nuovo campo 
-
- ESEMPIO 2
- 
-BiFunction<String, String, String> mapper = (v1, v2) -> null;
-Map<String, String> favorites = new HashMap<>();
-favorites.put("Jenny", "Bus Tour");
-favorites.put("Tom", "Bus Tour");
-favorites.merge("Jenny", "Skyride", mapper);
-favorites.merge("Sam", "Skyride", mapper);  //verrà aggiunto senza eseguire il mapper perche chiave non trovata
-System.out.println(favorites); // {Tom=Bus Tour, Sam=Skyride}
-
-=======
-
-SE il ritorno del merge è null allora viene rimossa la chiave
-computeIfPresent non si compota come merge se la chiave non la trova nella mappa non aggiunge il valore.
-
--------------------------------------
-
-ricordati che le mappe non hanno il metodo .contains() 
-ma il containsValue() e containsKey()
-
-
  ############################## CAPITOLO 4 ##########################################
  USARE VARIABILI NEI LAMBDA 
  Lambda expressions can access 
@@ -850,7 +455,89 @@ La classe che rappresenterà la mia resourse boundle estenderà ListResourceBundle
 10:        System.out.println(rb.getObject("tax"));       //rb.getObject() perche non è una stringa
 11: }}
 
-VARIE 
-String s1 = "Canada"; String s2 = new String(s1); 
-s1 points to the string pool 
-s2 points to an object on the heap, since it is created at runtime
+--------------------------- DETERMINING WHICH RESOURCE BUNDLE TO USE   ---------------------------------------
+ResourceBundle.getBundle("name");
+ResourceBundle.getBundle("name", locale);
+
+
+1 Zoo_fr_FR.java    requested locale  
+2 Zoo_fr_FR.properties 
+3 Zoo_fr.java
+4 Zoo_fr.properties 
+5 Zoo_en_US.java The default locale
+6 Zoo_en_US.properties The default locale
+7 Zoo_en.java 
+8 Zoo_en.properties
+9 Zoo.java  default bundle
+10 Zoo.properties 
+11 throw MissingResourceException.
+
+Le cose da sapere sono che prima di tutto java andrà a cercare i .java 
+Poi partendo dallo piu specifico va sul generale, sul default locale e infine sul bundle di default senza locale specifiato se esiste. 
+
+Se carico il primo bundle 1 Zoo_fr_FR.java allora java andrà a cercarmi le vhiavi anche nei sotto bundle se esistenti: 
+
+  Zoo_fr_FR.java
+  Zoo_fr.java
+  Zoo.java
+
+
+-------------------- NUMBERFORMAT -----------------
+
+ 6: int attendeesPerYear = 3_200_000;
+ 7: int attendeesPerMonth = attendeesPerYear / 12;
+ 8: NumberFormat us = NumberFormat.getInstance(Locale.US);
+ 9: System.out.println(us.format(attendeesPerMonth)); //266,666 
+ 
+ 
+PARSE 
+The NumberFormat class defi nes a parse method for parsing a String into a number using a specific locale. 
+You can assume that exceptions are properly handled. If you see parsing logic inside a method, make sure that ParseException or Exception is
+handled or declared.
+
+NumberFormat en = NumberFormat.getInstance(Locale.US);
+NumberFormat fr = NumberFormat.getInstance(Locale.FRANCE);
+String s = "40.45";
+System.out.println(en.parse(s)); // 40.45
+System.out.println(fr.parse(s)); // 40
+
+String amt = "$92,807.99";
+NumberFormat cf = NumberFormat.getCurrencyInstance();  //default us_US
+double value = (Double) cf.parse(amt);   // THE RETURN VALUE OF PARSE IS A Number OBJECT. 
+System.out.println(value); // 92807.99
+
+---------------------------- DATETIMEFORMATTER -----------------------------
+
+date.format(DateTimeFormatter.ISO_LOCAL_DATE)); 2020–01–20
+time.format(DateTimeFormatter.ISO_LOCAL_TIME)); 11:12:34
+dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)); 2020–01–20T11:12:34
+
+DateTimeFormatter shortDateTime = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+System.out.println(shortDateTime.format(dateTime)); // 1/20/20
+System.out.println(dateTime.format(shortDateTime));
+
+System.out.println(shortDateTime.format(date)); // 1/20/20
+System.out.println(date.format(shortDateTime));
+
+shortF.format(dateTime)); // 1/20/20 11:12 AM FormatStyle.SHORT
+mediumF.format(dateTime)); // Jan 20, 2020 11:12:34 AM FormatStyle.MEDIUM
+
+Possiamo creare anche il nostro formatter: 
+DateTimeFormatter f = DateTimeFormatter.ofPattern("MMMM dd, yyyy, hh:mm");
+
+MMMM      M represents the month. The more Ms you have, the more verbose the Java output. For
+          example, M outputs 1, MM outputs 01, MMM outputs Jan, and MMMM outputs January.
+
+dd        d represents the day in the month. As with month, the more ds you have, the more verbose the Java output. 
+          dd means to include the leading zero for a single-digit day.
+
+,         Use , if you want to output a comma (this also appears after the year).
+
+yyyy      y represents the year. yy outputs a two-digit year and yyyy outputs a four-digit year.
+
+hh 	      h represents the hour. Use hh to include the leading zero if you’re outputting a single-digit hour.
+
+:         Use : if you want to output a colon.
+
+mm        m represents the minute omitting the leading zero if present. mm is more common and
+          represents the minutes using two digits.
