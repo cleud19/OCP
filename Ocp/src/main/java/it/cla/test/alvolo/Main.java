@@ -20,7 +20,7 @@ public class Main {
 		//testCollection();
 		//robo();
 		//robo2();
-		streamError();
+		//streamError();
 	}
 
 	private static void streamError() {

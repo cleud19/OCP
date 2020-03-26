@@ -169,15 +169,69 @@ GENERICS e WILDCARD
 scoppia perche cerco di mischiare la sintassi della wildcard con quella dei generics. Li ci va una ? e non una X: 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
-NAVIGABLE  SET 
- 
+LIST INTERFACE 
+
+ARRAYLIST
+The main benefi t of an ArrayList is that you can look up any element in constant time.
+Adding or removing an element is slower than accessing an element. This makes an
+ArrayList a good choice when you are reading more often than (or the same amount
+as) writing to the ArrayList . 
+
+LINKEDLIST 
+A LinkedList is special because it implements both List and Queue. It has all of the
+methods of a List. It also has additional methods to facilitate adding or removing from the
+beginning and/or end of the list.
+The main benefits of a LinkedList are that you can access, add, and remove from the
+beginning and end of the list in constant time. The tradeoff is that dealing with an arbitrary index t
+
+STACK 
+A Stack is a data structure where you add and remove elements from the top of the
+stack. Think about a stack of paper as an example. Like Vector, Stack hasn’t been used
+for new code in ages. In fact, Stack extends Vector. If you need a stack, use an ArrayDeque
+instead. More on this when we get to the Queue section.
+----------------------------------------------------------------------------------------------------------------------------------------------
+SET INTERFACE
+You use a set when you don’t want to allow duplicate entries.
+
+HASHSET
+A HashSet stores its elements in a hash table. This means that it uses the hashCode()
+method of the objects to retrieve them more efficiently. If you forgot how hashCode()
+works, please review Chapter 1, “Advanced Class Design.”
+The main benefit is that adding elements and checking if an element is in the set both
+have constant time. The tradeoff is that you lose the order in which you inserted the
+elements. Most of the time, you aren’t concerned with this in a set anyway, making HashSet
+the most common set.
+
+TREESET 
+A TreeSet stores its elements in a sorted tree structure. The main benefit is that the set
+is always in sorted order. The tradeoff is that adding and checking if an element is present are both O(log n). TreeSet implements a special interface called NavigableSet, which
+lets you slice up the collection as you will see in the next sidebar, “The NavigableSet
+Interface”.
+
+TREESET implements the NAVIGABLESET interface. This interface provides some interesting methods. Their method signatures are as follows: 
 E lower(E e) Returns greatest element that is < e, or null if no such element
 E floor(E e) Returns greatest element that is <= e, or null if no such element
 E ceiling(E e) Returns smallest element that is >= e, or null if no such element
 E higher(E e) Returns smallest element that is > e, or null if no such element
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
-QUEUE 
+QUEUE INTERFACE
+You use a queue when elements are added and removed in a specific order.
+
+LINKEDLIST
+You saw LinkedList earlier in the List section. In addition to being a list, it is a doubleended queue. A double-ended queue is different from a regular queue in that you can insert
+and remove elements from both the front and back of the queue. Think, “Mr. President,
+come right to the front. You are the only one who gets this special treatment. Everyone else
+will have to start at the back of the line.”
+The main benefit of a LinkedList is that it implements both the List and Queue
+interfaces. The tradeoff is that it isn’t as efficient as a “pure” queue.
+An ArrayDeque is a “pure” double-ended queue. It was introduced in 
+
+ARRAYDEQUE
+An ArrayDeque is a “pure” double-ended queue. It was introduced in Java 6, and it
+stores its elements in a resizable array. The main benefit of an ArrayDeque is that it is more
+efficient than a LinkedList
+
 
 ArrayDeque e LinkedList sono due esempi di Queue
 
@@ -215,6 +269,23 @@ ISPEZIONE
   16:   System.out.println(stack.poll());     // 4 	     10
   17:   System.out.println(stack.poll());     // 10 
   18:   System.out.println(stack.peek());     // null
+ 
+-------------------------------------------------------------------------------------------------------------------------
+MAP INTERFACE
+You use a map when you want to identify values by a key.  
+
+HASHMAP  
+A HashMap stores the keys in a hash table. This means that it uses the hashCode() method
+of the keys to retrieve their values more efficiently.
+The main benefit is that adding elements and retrieving the element by key both have
+constant time. The tradeoff is that you lose the order in which you inserted the elements.
+Most of the time, you aren’t concerned with this in a map anyway. If you were, you could
+use LINKEDHASHMAP
+
+TREEMAP
+A TreeMap stores the keys in a sorted tree structure. The main benefit is that the keys are
+always in sorted order. The tradeoff is that adding and checking if a key is present are both
+O(log n).
  
 -----------------------------------------------------------------------------------------------------------------------
 COLLECTION
@@ -549,8 +620,14 @@ Map<Integer, Optional<Character>> map = ohMy.collect(
  groupingBy(
  String::length,
  Collectors.mapping(s -> s.charAt(0),
- minBy(Comparator.naturalOrder()))));
+ Collectors.minBy(Comparator.naturalOrder()))));
 System.out.println(map); // {5=Optional[b], 6=Optional[t]}
+
+Il secondo parametro di Mapping ci dice come raggruppare i valori.
+maxBy(Comparator c)
+minBy(Comparator c)
+Finds the largest/smallest elements
+Optional<T>
 
 --------------------------------------
 Recognize which operations cause a stream pipeline to execute. Intermediate operations
@@ -618,7 +695,7 @@ Period annually = Period.ofYears(1); // every 1 year
 Period quarterly = Period.ofMonths(3); // every 3 months
 Period everyThreeWeeks = Period.ofWeeks(3); // every 3 weeks
 Period everyOtherDay = Period.ofDays(2); // every 2 days
-Period everyYearAndAWeek = Period.of(1, 0, 7); // every year and 7 days
+Period everyYearAndAWeek = Period.(1, 0, 7); // every year and 7 days
 
 Period wrong = Period.ofYears(1).ofWeeks(1); // every week 
 Questo perche i of...() sono metodi statici e quindi prende il valore dell'ultimo. 
@@ -667,6 +744,111 @@ Normal day   		1:00 am-1:59 am -> 2:00 am-3:00 am ->  3:00 am-4:00 am
 March changeover	1:00 am-1:59 am -> 3:00 am-4:00 am
 November changeover 1:00 am-1:59 am -> 1:00 am-1:59 am ->  3:00 am-4:00 am
 Ricorda che nel cambiare se ti stampi pure il ZoneDateTime vedrai il GMT cambiare anche perche effettivamente cambia di +/-1 ora
+
+
+-----------LOCALE AND LOCALIZATION -----------------------
+You can think of a LOCALE as being like a language and country pairing. 
+Localization includes translating strings to different languages. It also includes outputting dates and numbers in the correct format for that locale. 
+
+Se predniamo il nostro locale con Locale.getDefault(); e lo stampiamo avremo: 
+it_IT    dove it è la lingua e basta questo per definire un locale 
+e IT è il paese dove siamo non è obbligatorio per definire un locale.
+
+il linguaggio è obbligatorio eva scritto in minuscolo , se c'è il paese deve essere diviso da un  underscore e deve essere maiuscolo. 
+
+Locale.GERMAN; 	    // de
+Locale.GERMANY;     // de_DE:
+new Locale("fr");   // fr
+new Locale("hi", "IN"); // hi_IN 
+
+Using the builder design pattern:
+
+ Locale l1 = new Locale.Builder()
+ .setLanguage("en")
+ .setRegion("US")
+ .build(); 
+
+Se scrivi un Language uppercase erronemante il builder nel setLanguage si preoccupa di correggerlo quindi solo nel caso del builder non è errato anche se non 
+è una best practice farlo perche rendi il codice meno leggibile.
+
+
+ Locale locale = new Locale("fr");
+ Locale.setDefault(locale); 
+ Puoi settare solo per il tuo programma e temporaneamente il locale ad un altro. Lo userà l'esaminatore per dichiarare che locale sta usando nel codice del esame. 
+ Set<String> keys = rb.keySet();  // ritorna il set delle chiavi  
+
+Notice that the filenames are the name of our resource bundle followed by an underscore followed by the target locale.  
+------------------- USING A RESOURCE BUNDLE ----------------------
+
+A resource bundle contains the local specific objects to be used by a program. It is like a map with keys and values. 
+The resource bundle can be in a property file or in a Java class. A property file is a file in a specific format with key/value pairs.
+Up until now, we’ve kept all of the strings from our program in the classes that use them.
+Localization requires externalizing them to elsewhere. This is typically a property file, but it could be a resource bundle class.  
+ 
+
+Zoo_en.properties
+ hello=Hello
+ open=The zoo is open.
+
+Zoo_fr.properties
+ hello=Bonjour
+ open=Le zoo est ouvert
+ 
+Locale localeUs = new Locale("en", "US");
+ResourceBundle rb = ResourceBundle.getBundle("Zoo", localeUs);
+System.out.println(rb.getString("hello"));
+
+I file di properties possono essere scritti cosi: 
+animal=dolphin
+animal:dolphin
+animal dolphin
+
+# one comment
+! another comment
+# NB:Spaces before or after the separator character are ignored.!
+# NB:Spaces at the beginning of a line are ignored.
+# NB:Spaces at the end of a line are not ignored.
+# NB:You can use normal Java escape characters like \t and \n
+# NB:End a line with a backslash if you want to break the line for readability.
+long = ab\
+cd
+se lo printo la chiave long mi viene -> abcd 
+--------------------------- PROPERTIES ---------------------------------- 
+ 
+Java supports a class named Properties , itt is just like Maps but without all tne methods that map have. 
+Properties props = new Properties();
+props.put("key","valllue");
+
+ora Property ha due metodi: 
+1. props.getProperty("notReallyAProperty")  o props.getProperty("notReallyAProperty","defaultValue")
+    che ti da la possibilita di designare un default nel caso non trovasse la property 
+2. props.get("notReallyAProperty")    
+    fa esattamente la stessa cosa ma se non trova la chiave tra le property torna null
+ 
+ 
+--------------------------- JAVA CLASS RESOURCE BUNDLE --------------------------
+Java class resource bundles allow any Java type as the value. Keys are strings regardless.
+
+La classe che rappresenterà la mia resourse boundle estenderà ListResourceBundle e si chiamerà con la stessa logica Zoo_en 
+1: import java.util.*;
+2: public class Zoo_en extends ListResourceBundle {
+3:     protected Object[][] getContents() {
+4:         return new Object[][] {
+5:             { "hello", "Hello" },
+6:             { "open", "The zoo is open" } };
+7: } }
+
+1: package resourcebundles;
+2: import java.util.*;
+3: public class Tax_en_US extends ListResourceBundle {
+4:     protected Object[][] getContents() {
+5:         return new Object[][] { { "tax", new UsTaxCode() } };
+6:     }
+7:     public static void main(String[] args) {
+8:         ResourceBundle rb = ResourceBundle.getBundle(
+9:         "resourcebundles.Tax", Locale.US);             //package.NomeClasse, Locale
+10:        System.out.println(rb.getObject("tax"));       //rb.getObject() perche non è una stringa
+11: }}
 
 VARIE 
 String s1 = "Canada"; String s2 = new String(s1); 
