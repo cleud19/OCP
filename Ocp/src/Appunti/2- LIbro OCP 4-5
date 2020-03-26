@@ -380,9 +380,7 @@ Se scrivi un Language uppercase erronemante il builder nel setLanguage si preocc
  Locale locale = new Locale("fr");
  Locale.setDefault(locale); 
  Puoi settare solo per il tuo programma e temporaneamente il locale ad un altro. Lo userà l'esaminatore per dichiarare che locale sta usando nel codice del esame. 
- Set<String> keys = rb.keySet();  // ritorna il set delle chiavi  
 
-Notice that the filenames are the name of our resource bundle followed by an underscore followed by the target locale.  
 ------------------- USING A RESOURCE BUNDLE ----------------------
 
 A resource bundle contains the local specific objects to be used by a program. It is like a map with keys and values. 
@@ -418,6 +416,10 @@ animal dolphin
 long = ab\
 cd
 se lo printo la chiave long mi viene -> abcd 
+
+ Set<String> keys = rb.keySet();  // ritorna il set delle chiavi  
+
+Notice that the filenames are the name of our resource bundle followed by an underscore followed by the target locale.  
 --------------------------- PROPERTIES ---------------------------------- 
  
 Java supports a class named Properties , itt is just like Maps but without all tne methods that map have. 
@@ -491,7 +493,7 @@ Se carico il primo bundle 1 Zoo_fr_FR.java allora java andrà a cercarmi le vhiav
  
  
 PARSE 
-The NumberFormat class defi nes a parse method for parsing a String into a number using a specific locale. 
+The NumberFormat class defines a parse method for parsing a String into a number using a specific locale. 
 You can assume that exceptions are properly handled. If you see parsing logic inside a method, make sure that ParseException or Exception is
 handled or declared.
 
