@@ -283,27 +283,53 @@ e diciamo che non ci sarà difficile impararlo.
 CAPITOLO 5
 
 ------tentativo 1
-------errate xx giuste x
+------errate 5 giuste 15
 
-1.   
-2.
-3.
-4.
-5.
-6.
-7.
-8.
-9.
-10.
-11.
-12.
-13.
-14.
-15.
-16.
-17.
-18.
-19.
-20.
+1.AB	->AB   
+2.CD	->CDE  X
+3.CD	->CD
+4.B		->B
+5.D		->D
+6.DF	->DF
+7.D		->D
+8.F		->F
+9.B		->B
+10.E	->E
+11.B	->B
+12.AE	->AE
+13.D	->B    X
+14.D	->ACD  X
+15.B	->BC   X
+16.ABF	->ABF
+17.E	->E
+18.B	->D    X
+19.ABC	->ABC
+20.AE	->E
+
+
+
+------tentativo 2
+------errate 0 giuste 20
+
+1.AB	->AB
+2.CDE	->CDE
+3.CD	->CD
+4.B		->B
+5.D		->D
+6.DF	->DF
+7.D		->D
+8.F		->F
+9.B		->B
+10.E	->E
+11.B	->B
+12.AE	->AE
+13.B	->B
+14.ACD	->ACD
+15.BC	->BC
+16.ABF	->ABF
+17.E	->E
+18.D	->D
+19.ABC	->ABC
+20.E	->E
 
 

@@ -3,6 +3,7 @@ package it.cla.test.alvolo;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -21,6 +22,12 @@ public class Main {
 		//robo();
 		//robo2();
 		//streamError();
+		durationTest();
+	}
+
+	private static void durationTest() {
+		String s = Duration.of(60, ChronoUnit.SECONDS).toString();
+		System.out.println(s);
 	}
 
 	private static void streamError() {

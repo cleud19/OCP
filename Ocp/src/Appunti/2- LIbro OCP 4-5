@@ -524,6 +524,10 @@ System.out.println(date.format(shortDateTime));
 shortF.format(dateTime)); // 1/20/20 11:12 AM FormatStyle.SHORT
 mediumF.format(dateTime)); // Jan 20, 2020 11:12:34 AM FormatStyle.MEDIUM
 
+LocalDate date = LocalDate.parse(
+"2018–04–30", DateTimeFormatter.ISO_LOCAL_DATE);
+
+
 Possiamo creare anche il nostro formatter: 
 DateTimeFormatter f = DateTimeFormatter.ofPattern("MMMM dd, yyyy, hh:mm");
 
