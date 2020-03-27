@@ -162,3 +162,155 @@ You can disable assertions using the -disableassertions (or -da ) fl ag for a sp
 ex:  java -ea:com.wiley.demos... -da:com.wiley.demos.TestColors my.programs.Main 
 
 Attento all'esame al codice che presenta assertion ma non è enabled perche in quel caso java le ignora.
+
+############################### CAPITOLO 7 ##################################
+I system threads sono in generale i thread della JVM tipo il Garbage Collector ha un suo thread. Quando si dice che noi non dovremmo mai 
+chatchare Errors è perche vengono lanciati dai system threads e per esempio anche se fossimo in OOM e venisse lanciato un Error e noi lo 
+catchassimo non servirebbe a nulla perche non potremmo fare molto senza memoria. 
+
+Alternatively, a user-defi ned thread is one created by the application developer to accomplish a specific task.
+
+A CONTEXT SWITCH is the process of storing a thread’s current state and later restoring the state of the thread to continue execution
+
+Finally, a thread can interrupt or supersede another thread if it has a higher thread priority than the other thread. A thread priority is a numeric value associated with a thread
+that is taken into consideration by the thread scheduler when determining which threads should currently be executing.
+
+Thread.MIN_PRIORITY 1
+Thread.NORM_PRIORITY 5
+Thread.MAX_PRIORITY 10
+
+
+----------  RUNNABLE --------------
+@FunctionalInterface public interface Runnable {
+    void run();
+}
+------------- THREAD ---------------
+
+Remember that order of thread execution is not often guaranteed. The exam commonly presents questions in which multiple tasks are started at
+the same time, and you must determine the result. 
+Abbiamo due modi per usare i threads: 
+
+1. Implementaimo Runnable e chiamiamo il metodo .start() che farà partire il Thread che eseguirà il corpo del metodo run()
+public class PrintData implements Runnable {
+   public void run() {
+      for(int i=0; i<3; i++)
+      System.out.println("Printing record: "+i); 
+   }
+   public static void main(String[] args) {
+      (new Thread(new PrintData())).start();   //fa partire il nuovo thread
+   }
+}
+
+2. Estendiamo la classe thread e sovrascriviamo il metodo run, poi chiamiamo start() che creerà un nuovo thread che eseguirà il corpo di run()
+public class ReadInventoryThread extends Thread {
+    public void run() {
+       System.out.println("Printing zoo inventory");
+    }
+    public static void main(String[] args) {
+       (new ReadInventoryThread()).start();
+    }
+}
+
+Poi li chiamo cosi:
+public static void main(String[] args) {
+   System.out.println("begin");
+   (new ReadInventoryThread()).start();
+   (new Thread(new PrintData())).start();
+   (new ReadInventoryThread()).start();
+ }  
+All'esame stai attento che i vari .start() vengano chiamati perche è possibile che ti freghino non chimandoli ma chiamando 
+i .run() non creando cosi dei thread ma delle esecuzioni del codice sequenziali. 
+
+Thread.sleep(1000); // 1 SECOND     it may throw A InterruptedException!!
+
+---------------------------- EXECUTORSERVICE ---------------------------
+
+----------------------SINGLE-THREAD EXECUTOR --------------------
+Since EXECUTORSERVICE is an interface. The Concurrency API includes the Executors factory class that can be used to create instances
+of the ExecutorService object.
+ExecutorService service = Executors.newSingleThreadExecutor();
+
+La logica la inseriamo dentro un try catch. Dove nel try innizializziamo in nostro ExecutorService service e eseguiamo azioni
+diverse su questo singolo thread traimite il metodo .execute()  
+   service.execute(() -> System.out.println("Printing zoo inventory"));
+nel finally: 
+   if(service != null) service.shutdown();
+
+--------------------Shutting Down a Thread Executor------------------
+Once you have finished using a thread executor, it is important that you call the shutdown() method. A thread executor creates a non-daemon thread on the first task that
+is executed, so failing to call shutdown() will result in your application never terminating.
+
+Quando creo un executor il suo stato è  ATTIVO 
+- Accepts New Tasks
+- Executes Tasks
+- isShutdown() = false
+- isTerminated() = false
+
+Quando chiamo il metodo shutdown() il suo stato è SHUTTING DOWN
+- Rejects New Tasks
+- Executes Tasks
+- isShutdown() = true
+- isTerminated() = false
+Qui l'executor non inizia altri task ma quelli che ha iniziato li porta a termine.
+
+Quando tutti i task sono finiti il suop stato è 
+- Rejects New Tasks (Throwing a  RejectedExecutionException)
+- No Tasks Running
+- isShutdown() = true
+- isTerminated() = true
+For the exam, you should be aware that shutdown() does not actually stop any tasks that have already been submitted to the thread executor. 
+ 
+The ExecutorService provides a method called shutdownNow(), which attempts to stop all running tasks and discards any that have not been started yet.
+Note that shutdownNow() attempts to stop all running tasks. 
+
+---------------  SUBMITTING TASKS  ---------------------------
+The EXECUTE() method takes a Runnable lambda expression or instance and completes the task asynchronously. 
+
+1 void execute(Runnable command) 
+Executes a Runnable task at some point in the future
+2 Future<?> submit(Runnable task) 
+Executes a Runnable task at some point in the future and returns a Future representing the task
+3 <T> Future<T> submit(Callable<T> task) 
+Executes a Callable task at some point in the future and returns a Future representing the pending results of the task
+4 <T> List<Future<T>> invokeAll( Collection<? extends Callable<T>> tasks) throws InterruptedException
+Executes the given tasks, synchronously returning the results of all tasks as a Collection of Future objects, in the same order they were in the original collection
+5 <T> T invokeAny( Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException
+Executes the given tasks, synchronously returning the result of one of finished tasks,cancelling any unfinished tasks
+
+------------ SUBMITTING TASK COLLECTIONS  -------------------------
+ invokeAll() and invokeAny()
+Both of these methods take a Collection object containing a list of tasks to execute.
+
+The invokeAll() method executes all tasks in a provided collection and returns a List of ordered Future objects, with one Future object corresponding to each submitted task,
+in the order they were in the original collection. Even though Future.isDone() returns true for each element in the returned List,
+a task could have completed normally or thrown an exception.
+
+The invokeAny() method executes a collection of tasks and returns the result of one of the tasks that successfully completes execution, cancelling all unfinished tasks. 
+While the first task to finish is often returned, this behavior is not guaranteed, as any completed task can be returned by this method.
+
+Finally, the invokeAll() method will wait indefinitely until all tasks are complete, while the invokeAny() method will wait indefinitely until at least one task completes.
+
+------------- FUTURE --------------------------------------------
+Future<?> future = service.submit(() -> System.out.println("Hello Zoo"));
+
+1. boolean isDone()
+Returns true if the task was completed, threw an exception, or was cancelled.
+
+2. boolean isCancelled() 
+Returns true if the task was cancelled before it completely normally.
+
+3. boolean cancel() 
+Attempts to cancel execution of the task.
+
+4. V get() 
+Retrieves the result of a task, waiting endlessly if it is not yet available.
+
+V get(long timeout, TimeUnit unit)
+Retrieves the result of a task, waiting the specified amount of time. If the result is not ready by the time the timeout is reached, a checked TimeoutException will be thrown.
+
+
+-----------------  CALLABLE   ----------------------
+
+@FunctionalInterface public interface Callable<V> {
+ 	V call() throws Exception;
+}
