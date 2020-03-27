@@ -332,4 +332,57 @@ CAPITOLO 5
 19.ABC	->ABC
 20.E	->E
 
+CAPITOLO 6
 
+------tentativo 1
+------errate 9 giuste 11
+
+1.C		->C   
+2.BC	->BC
+3.EA	->E    X
+4.AB	->AB
+5.C		->C
+6.C		->G    X
+7.C		->C
+8.BC	->BC
+9.A		->AD   X
+10.AD	->AE   X
+11.ABE	->ABDE X
+12.ACDE ->ADE  X
+13.A	->A
+14.A	->F    X
+15.BE 	->BE	
+16.C	->C
+17.AB	->AB
+18.BDF	->B    X
+19.ABCE	->D    X
+20.E	->E
+
+
+
+
+CAPITOLO 6
+
+------tentativo 2
+------errate 0 giuste 20
+
+1.C 	->C
+2.BC	->BC
+3.E		->E
+4.AB	->AB
+5.C		->C
+6.G		->G
+7.C		->C
+8.BC	->BC
+9.AD	->AD
+10.AE	->AE
+11.ABDE	->ABDE
+12.ADE	->ADE
+13.A	->A
+14.F	->F
+15.BE	->BE
+16.C	->C
+17.AB	->AB
+18.B	->B
+19.D	->D
+20.E	->E
