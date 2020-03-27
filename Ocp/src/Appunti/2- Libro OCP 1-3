@@ -1,6 +1,5 @@
 Appunti Libro OCP 
 
-DOMANDE INIZIALI  Suoerate in File Apppostito 
 
 ############################## CAPITOLO 1 ##########################################
 
@@ -55,7 +54,7 @@ public class Fish {
 }
 
 non si puo fare il cast di due oggetti che non sono relazionati tra di loro in nessun modo , non compila
-INMUTYABILE CLASS
+INMUTABILE CLASS
 
 1.per settare le proprieta usa sempre il costruttore, se una delle proprieta è u oggetto copialo instanziane uno uguale 
 ma non asegnare il parametro dato al costruttore direttamente alla tua proprietà o dall'esterno chi ti ha passato il 
@@ -68,7 +67,7 @@ parametro avrà ancora un puntatore al oggetto che corrisponde alla tua proprietà
  
  
  ############################## CAPITOLO 3 ##########################################
- CPOLLECTIONS
+ COLLECTIONS
  
         String[] array = { "gerbil", "mouse" };      // [gerbil, mouse] 
   5:    List<String> list = Arrays.asList(array);    // returns fixed size list 

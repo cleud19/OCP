@@ -51,7 +51,114 @@ exception because it will be unreachable code.
 
 Java will not allow you to declare a catch block for a checked exception type that cannot potentially be thrown by the try clause body.
 --------- USING MULTI-CATCH  -------------------------------- 
+catch(Exception1 e | Exception2 e | Exception3 e) // DOES NOT COMPILE
+catch(Exception1 e1 | Exception2 e2 | Exception3 e3) // DOES NOT COMPILE
+catch(Exception1 | Exception2 | Exception3 e)
+
+La variabile dell'errore deve essere specificata una volta sola.
+
+ catch (FileNotFoundException | IOException e) { } // DOES NOT COMPILE
+ Perche  FileNotFoundException  è una sottoclasse di  IOException
+ 
+catch(RuntimeException e) {
+ e = new RuntimeException();   // non è un errore nel catch normale ma nel multi-catch il codice non compilA.
+}
+
+------------------ TRY-WITH-RESOURCES --------------------
+
+try (BufferedReader r = Files.newBufferedReader(path1);
+ BufferedWriter w = Files.newBufferedWriter(path2)) {
+ // protected code
+}
+Le risporse specidicate nel try verranno chiuse automaticamente alla fine.
 
 
 
+try (BufferedReader r = Files.newBufferedReader(path1);
+ BufferedWriter w = Files.newBufferedWriter(path2)) {
+ //protected code
+} catch (IOException e) {
+ // exeption handler
+} finally {
+ // finally block
+}
 
+Posso aggiungere anche nel TRY-WITH-RESOURCES un catch e un finally ma sono opzionali.
+Nei miei catch e finally opzionali le risorse saranno gia chiuse.
+
+Nel try non posso inserire cosa voglio io ma solo classi che implementano l'interfaccia java.lang.AutoCloseable implementando il metodo:
+public void close() throws Exception;
+Avendo l'interfaccia dichiarato direttamente Exception allora io quando l'implemento posso implementare qualsiasi sottoclasse di Exception. 
+
+
+Ricordarti che le checked exception vanno gestite quindi se io scrivo una classe che implementa AutoCloseable e implemento una variante di 
+close() che fa thrown di una checked exception come Exception allora in qualche modo nel TRY-WITH-RESOURCES sono obbligato a gestirla.
+
+
+--------------- SUPPRESSED EXCEPTIONS ---------------
+public class JammedTurkeyCage implements AutoCloseable {
+   public void close() throws IllegalStateException {
+       throw new IllegalStateException("Cage door does not close");
+    } 
+    
+Quindi ho il mio AutoClosable JAMMEDTURKEYCAGE che mi lancia una UncheckedException
+
+15: try (JammedTurkeyCage t = new JammedTurkeyCage()) {
+16:     throw new IllegalStateException("turkeys ran off");
+17: } catch (IllegalStateException e) {
+18:     System.out.println("caught: " + e.getMessage());
+19:     for (Throwable t: e.getSuppressed())
+20:          System.out.println(t.getMessage());
+21: }
+Allora Quella che viene lanciata per prima è quella alla riga 16 e viene chiamata primary exception. Dopo aver lanciato quella 
+java chiude la connessione ma chiamando close() lancia una seconda eccezzione oramai chiamata  suppressed exception. 
+Output: 
+caught: turkeys ran off
+Cage door does not close
+
+-----------
+22: try (JammedTurkeyCage t = new JammedTurkeyCage()) {
+23:     throw new RuntimeException("turkeys ran off");
+24: } catch (IllegalStateException e) {
+25:     System.out.println("caught: " + e.getMessage());
+26: }
+Se faccio cosi invcece la mia eccezzione della riga 23 non viene catchata e se ne occupera il metodo prima che mi stamperà entrambe.
+
+27: try (JammedTurkeyCage t1 = new JammedTurkeyCage();
+28:     JammedTurkeyCage t2 = new JammedTurkeyCage()) {
+29:           System.out.println("turkeys entered cages");
+30: } catch (IllegalStateException e) {
+31:     System.out.println("caught: " + e.getMessage());
+32:     for (Throwable t: e.getSuppressed())
+33:           System.out.println(t.getMessage());
+34: }
+On line 29, the turkeys enter the cages without exception. Then Java tries to close both cages automatically. t2 is closed first, since Java closes resources in the reverse order from
+which it created them. This throws an exception. Since it is the first exception to occur, it becomes the primary exception. Then t1 is closed. Since an exception has already been
+thrown, this one becomes a suppressed exception. The output is
+
+turkeys entered cages
+caught: Cage door does not close
+Cage door does not close
+
+
+Infine se alla fine di tutto dentro un finally lancio ancora un ezccezione predo tutte le altre perche java fa schifo. 
+
+
+-------------------- ASSERTIONS ---------------------------------
+An assertion is a Boolean expression that you place at a point in your code where you expect something to be true. 
+
+Syntax:  assert boolean_expression;     assert boolean_expression: error_message;
+If assertions are enabled and the boolean expression is false , then our assertion is invalid and a java.lang.AssertionError is thrown.
+
+By default, assert statements are ignored by the JVM at runtime. To enable assertions, use
+the -enableassertions or -ea flag on the command line    
+
+1 java -ea:com.wiley.demos... my.programs.Main
+The three dots means any class in the specifi ed package or subpackages. You can also enable assertions for a specific class:
+2 java -ea:com.wiley.demos.TestColors my.programs.Main
+
+You can disable assertions using the -disableassertions (or -da ) fl ag for a specific class or package that was previously enabled. 
+
+ex:  java -ea:com.wiley.demos... -da:com.wiley.demos.TestColors my.programs.Main 
+
+Attento all'esame al codice che presenta assertion ma non è enabled perche in quel caso java le ignora.
