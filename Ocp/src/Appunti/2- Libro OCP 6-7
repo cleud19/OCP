@@ -44,7 +44,7 @@ java.lang.IllegalStateException
 java.lang.UnsupportedOperationException -  Attempting to run an invalid operation in collections and concurrency.
 
 -------- EXAM TRICK ---------------
- Remember to pay attention that throw and throws arenít reversed in the code that you see on the exam. 
+ Remember to pay attention that throw and throws aren‚Äôt reversed in the code that you see on the exam. 
  
 It is illegal to declare a subclass exception in a catch block that is lower down in the list than a superclass
 exception because it will be unreachable code.
@@ -58,10 +58,10 @@ catch(Exception1 | Exception2 | Exception3 e)
 La variabile dell'errore deve essere specificata una volta sola.
 
  catch (FileNotFoundException | IOException e) { } // DOES NOT COMPILE
- Perche  FileNotFoundException  Ë una sottoclasse di  IOException
+ Perche  FileNotFoundException  √® una sottoclasse di  IOException
  
 catch(RuntimeException e) {
- e = new RuntimeException();   // non Ë un errore nel catch normale ma nel multi-catch il codice non compilA.
+ e = new RuntimeException();   // non √® un errore nel catch normale ma nel multi-catch il codice non compilA.
 }
 
 ------------------ TRY-WITH-RESOURCES --------------------
@@ -110,7 +110,7 @@ Quindi ho il mio AutoClosable JAMMEDTURKEYCAGE che mi lancia una UncheckedExcept
 19:     for (Throwable t: e.getSuppressed())
 20:          System.out.println(t.getMessage());
 21: }
-Allora Quella che viene lanciata per prima Ë quella alla riga 16 e viene chiamata primary exception. Dopo aver lanciato quella 
+Allora Quella che viene lanciata per prima √® quella alla riga 16 e viene chiamata primary exception. Dopo aver lanciato quella 
 java chiude la connessione ma chiamando close() lancia una seconda eccezzione oramai chiamata  suppressed exception. 
 Output: 
 caught: turkeys ran off
@@ -122,7 +122,7 @@ Cage door does not close
 24: } catch (IllegalStateException e) {
 25:     System.out.println("caught: " + e.getMessage());
 26: }
-Se faccio cosi invcece la mia eccezzione della riga 23 non viene catchata e se ne occupera il metodo prima che mi stamper‡ entrambe.
+Se faccio cosi invcece la mia eccezzione della riga 23 non viene catchata e se ne occupera il metodo prima che mi stamper√† entrambe.
 
 27: try (JammedTurkeyCage t1 = new JammedTurkeyCage();
 28:     JammedTurkeyCage t2 = new JammedTurkeyCage()) {
@@ -161,16 +161,16 @@ You can disable assertions using the -disableassertions (or -da ) fl ag for a sp
 
 ex:  java -ea:com.wiley.demos... -da:com.wiley.demos.TestColors my.programs.Main 
 
-Attento all'esame al codice che presenta assertion ma non Ë enabled perche in quel caso java le ignora.
+Attento all'esame al codice che presenta assertion ma non √® enabled perche in quel caso java le ignora.
 
 ############################### CAPITOLO 7 ##################################
 I system threads sono in generale i thread della JVM tipo il Garbage Collector ha un suo thread. Quando si dice che noi non dovremmo mai 
-chatchare Errors Ë perche vengono lanciati dai system threads e per esempio anche se fossimo in OOM e venisse lanciato un Error e noi lo 
+chatchare Errors √® perche vengono lanciati dai system threads e per esempio anche se fossimo in OOM e venisse lanciato un Error e noi lo 
 catchassimo non servirebbe a nulla perche non potremmo fare molto senza memoria. 
 
 Alternatively, a user-defi ned thread is one created by the application developer to accomplish a specific task.
 
-A CONTEXT SWITCH is the process of storing a threadís current state and later restoring the state of the thread to continue execution
+A CONTEXT SWITCH is the process of storing a thread‚Äôs current state and later restoring the state of the thread to continue execution
 
 Finally, a thread can interrupt or supersede another thread if it has a higher thread priority than the other thread. A thread priority is a numeric value associated with a thread
 that is taken into consideration by the thread scheduler when determining which threads should currently be executing.
@@ -190,7 +190,7 @@ Remember that order of thread execution is not often guaranteed. The exam common
 the same time, and you must determine the result. 
 Abbiamo due modi per usare i threads: 
 
-1. Implementaimo Runnable e chiamiamo il metodo .start() che far‡ partire il Thread che eseguir‡ il corpo del metodo run()
+1. Implementaimo Runnable e chiamiamo il metodo .start() che far√† partire il Thread che eseguir√† il corpo del metodo run()
 public class PrintData implements Runnable {
    public void run() {
       for(int i=0; i<3; i++)
@@ -201,7 +201,7 @@ public class PrintData implements Runnable {
    }
 }
 
-2. Estendiamo la classe thread e sovrascriviamo il metodo run, poi chiamiamo start() che creer‡ un nuovo thread che eseguir‡ il corpo di run()
+2. Estendiamo la classe thread e sovrascriviamo il metodo run, poi chiamiamo start() che creer√† un nuovo thread che eseguir√† il corpo di run()
 public class ReadInventoryThread extends Thread {
     public void run() {
        System.out.println("Printing zoo inventory");
@@ -218,7 +218,7 @@ public static void main(String[] args) {
    (new Thread(new PrintData())).start();
    (new ReadInventoryThread()).start();
  }  
-All'esame stai attento che i vari .start() vengano chiamati perche Ë possibile che ti freghino non chimandoli ma chiamando 
+All'esame stai attento che i vari .start() vengano chiamati perche √® possibile che ti freghino non chimandoli ma chiamando 
 i .run() non creando cosi dei thread ma delle esecuzioni del codice sequenziali. 
 
 Thread.sleep(1000); // 1 SECOND     it may throw A InterruptedException!!
@@ -240,20 +240,20 @@ nel finally:
 Once you have finished using a thread executor, it is important that you call the shutdown() method. A thread executor creates a non-daemon thread on the first task that
 is executed, so failing to call shutdown() will result in your application never terminating.
 
-Quando creo un executor il suo stato Ë  ATTIVO 
+Quando creo un executor il suo stato √®  ATTIVO 
 - Accepts New Tasks
 - Executes Tasks
 - isShutdown() = false
 - isTerminated() = false
 
-Quando chiamo il metodo shutdown() il suo stato Ë SHUTTING DOWN
+Quando chiamo il metodo shutdown() il suo stato √® SHUTTING DOWN
 - Rejects New Tasks
 - Executes Tasks
 - isShutdown() = true
 - isTerminated() = false
 Qui l'executor non inizia altri task ma quelli che ha iniziato li porta a termine.
 
-Quando tutti i task sono finiti il suop stato Ë 
+Quando tutti i task sono finiti il suop stato √® 
 - Rejects New Tasks (Throwing a  RejectedExecutionException)
 - No Tasks Running
 - isShutdown() = true
@@ -323,7 +323,7 @@ La chiamata 2 essendo interpretata come un runnable non avendo il tipo di ritorn
  
 Since Callable supports a return type when used with ExecutorService, it is often preferred over Runnable when using the Concurrency API.
 
-Future<Integer> result = service.submit(() -> 30+11); // Ë un callable perche ha un ritorno e posso leggerlo
+Future<Integer> result = service.submit(() -> 30+11); // √® un callable perche ha un ritorno e posso leggerlo
 System.out.println(result.get());
 
 ---------------- WAITING FOR ALL TASKS TO FINISH ------------------
@@ -341,7 +341,7 @@ if(service != null) {
 ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
 Note that we could implicitly cast an instance of ScheduledExecutorService to ExecutorService, although doing so would remove access to the scheduled methods that we want to use.
-Questo perche ScheduledExecutorService Ë una sottointerfaccia di ExecutorService.
+Questo perche ScheduledExecutorService √® una sottointerfaccia di ExecutorService.
 
 1 schedule(Callable<V> callable,long delay, TimeUnit unit)    ritorna un  ScheduledFuture<V> 
 Creates and executes a Callable task after the given delay
@@ -379,7 +379,7 @@ Creates a single-threaded executor that can schedule commands to run after a giv
 
 3 newCachedThreadPool() --> ExecutorService 
 Creates a thread pool that creates new threads as needed, but will reuse previously constructed threads when they are available.
-L'uso di questo Ë sconsigliato per thread le cui esecuzuini impiegano molto tempo perche potrebbe crearne troppi nel tempo. 
+L'uso di questo √® sconsigliato per thread le cui esecuzuini impiegano molto tempo perche potrebbe crearne troppi nel tempo. 
 
 4 newFixedThreadPool(int nThreads) --> ExecutorService 
 Creates a thread pool that reuses a fixed number of threads operating off a shared unbounded queue.
@@ -404,8 +404,8 @@ AtomicLongArray      A long array in which elements may be updated atomically
 AtomicReference      A generic object reference that may be updated atomically
 AtomicReferenceArray An array of generic object references in which elements may beupdated atomically
 
-Classi dove la lettura del valore e la modifica del valore Ë un unica azione atomica  e finche io non ho finito di scrivere il valore quall'altro non puo nemmeno leggerlo.
-Su queste classi dovrÚ operare con dei metodi eccone alcuni da conoscere: 
+Classi dove la lettura del valore e la modifica del valore √® un unica azione atomica  e finche io non ho finito di scrivere il valore quall'altro non puo nemmeno leggerlo.
+Su queste classi dovr√≤ operare con dei metodi eccone alcuni da conoscere: 
 1 get() Retrieve the current value
 2 set() Set the given value, equivalent to the assignment = operator
 3 getAndSet() Atomically sets the new value and returns the old value
@@ -437,7 +437,7 @@ public class SheepManager {
 Vediamo cosi che avremo printatti tutti i numeri da 1 a 10 , mentre nel caso di prima era possibile avere 10 numeri da 1 a 8 con due 1. Questo perche due thread leggevano contemporanemante 0
 aggiornavano contemporaneamente a 1 e stampavano entrambi 1. 
 
-Solo che ora l'azione di incremento e lettura Ë atomica. Ma l'azione di stampa no, quindi potrebbe stampare prima il 2 e poi 1. Perche il thread che stampa 2 potrebbe essere avvantaggiato dallo scheduler in
+Solo che ora l'azione di incremento e lettura √® atomica. Ma l'azione di stampa no, quindi potrebbe stampare prima il 2 e poi 1. Perche il thread che stampa 2 potrebbe essere avvantaggiato dallo scheduler in
 qualche modo per qualche strano motivo. 
 
 ------------SYNCHRONIZED----------------------
@@ -455,9 +455,9 @@ Possiamo usare anche questa sintassi
  private synchronized void incrementAndReport() {
      System.out.print((++sheepCount)+" ");
  } 
-Che introduce il modifier synchronized che rende sincronizzato il metodo e l'oggetto su cui andr‡ a sincronizzare rendendolo un monitor Ë automaticamente this. 
+Che introduce il modifier synchronized che rende sincronizzato il metodo e l'oggetto su cui andr√† a sincronizzare rendendolo un monitor √® automaticamente this. 
 
-Possiamo aggiungere il modifier synchronized anche metodi statici , in quel caso l'oggetto usato come monitor non Ë l'istanza della classe essendo un metoto statico ma l'oggetto classe in se. 
+Possiamo aggiungere il modifier synchronized anche metodi statici , in quel caso l'oggetto usato come monitor non √® l'istanza della classe essendo un metoto statico ma l'oggetto classe in se. 
 esempio:
 1:
 public static void printDaysWork() {
@@ -472,7 +472,7 @@ public static synchronized void printDaysWork() {
 
 ---------------------------------- USING CONCURRENT COLLECTIONS -----------------------
 public class ZooManager {
-    private Map<String,Object> foodData = new ConcurrentHashMap<String,Object>();  // in questo esempio Ë bastato solo questo
+    private Map<String,Object> foodData = new ConcurrentHashMap<String,Object>();  // in questo esempio √® bastato solo questo
 
     public void put(String key, String value) {
        foodData.put(key, value);
@@ -489,7 +489,7 @@ Map<String, Object> foodData = new HashMap<String, Object>();
 foodData.put("penguin", 1);
 foodData.put("flamingo", 2);
 for(String key: foodData.keySet()){ foodData.remove(key);}
-Questo codice lancia ConcurrentModificationException perche foodData.heySet() al secondo giro non Ë aggiornato con il nuovo stato di foodData. 
+Questo codice lancia ConcurrentModificationException perche foodData.heySet() al secondo giro non √® aggiornato con il nuovo stato di foodData. 
 Per risolverlo basta inizializzare foodData come un  ConcurrentHashMap<String, Object>();
 
 If all of the threads are accessing an established immutable or read-only collection, a concurrent collection class is not required
@@ -544,7 +544,7 @@ Since BlockingDeque extends Queue, Deque, and BlockingQueue, anche i metodi cita
 ------------------- SKIPLIST COLLECTIONS --------------------
 
 The SkipList classes, ConcurrentSkipListSet and ConcurrentSkipListMap, are concurrent versions of their sorted counterparts, TreeSet and TreeMap, respectively.
-When you see SkipList or SkipSet on the exam, just think ìsortedî concurrent collections and the rest should follow naturally.
+When you see SkipList or SkipSet on the exam, just think ‚Äúsorted‚Äù concurrent collections and the rest should follow naturally.
 Like other queue examples, it is recommended that you assign these objects to interface references, such as SortedMap or NavigableSet.
 
 ------------------- COPYONWRITE COLLECTIONS ------------------
@@ -587,10 +587,205 @@ processing, as shown in the following code:
 
 Be aware that parallel() is an intermediate operation that operates on the original stream. 
 - parallelStream()
-Il secondo modo Ë chiamare parallelStream su una Collection 
+Il secondo modo √® chiamare parallelStream su una Collection 
  Stream<Integer> parallelStream2 = Arrays.asList(1,2,3,4,5,6).parallelStream();
  	
  	
 	Arrays.asList(1,2,3,4,5,6)
 	 .parallelStream()
 	 .forEach(s -> System.out.print(s+" "));  //4 1 6 5 2 3
+	 
+	Arrays.asList(1,2,3,4,5,6)
+	 .parallelStream()
+	 .forEachOrdered(s -> System.out.print(s+" ")); //1 2 3 4 5 6
+Naturalmente con il secondo modo perdi un po di performance. 
+
+------------------------------ PARALLEL REDUCTIONS -------------------------------------
+System.out.print(Arrays.asList(1,2,3,4,5,6).parallelStream().findAny().get());
+
+The result is that the output could be 4, 1, or really any value in the stream. You can see that with parallel streams, the results of findAny() are no longer predictable.
+Questo perche la JVM fa partire piu thread ma ti ritorna il risultato del primo che finisce, e non √® detto che il primo a finire sia quello che elabora il valore 1.
+
+Any stream operation that is based on order, including findFirst(), limit(), or skip(), may actually perform more slowly in a parallel environment. This is a result of a
+parallel processing task being forced to coordinate all of its threads in a synchronized-like fashion.
+On the plus side, the results of ordered operations on a parallel stream will be consistent with a serial stream. For example, calling skip(5).limit(2).findFirst() will return the
+same result on ordered serial and parallel streams.
+Quindi effettuando operazioni basate sull'ordine come findFirst(), limit(), or skip() il risultato √® esseere lo stesso dello stream()
+
+
+
+----------------- COMBINING RESULTS WITH REDUCE() ---------------------------
+System.out.println(Arrays.asList('w', 'o', 'l', 'f')
+ .stream()
+ .reduce("",(c,s1) -> c + s1,
+ (s2,s3) -> s2 + s3)); 
+ 
+ The naming of the variables in this stream example is not accidental. The variable c is interpreted as a char , whereas s1 , s2 , and s3 are String
+values. Recall that in the three-argument version of reduce() , the accumulator is a BiFunction , while the combiner is BinaryOperator .
+
+ On parallel streams, the reduce() method works by applying the reduction to pairs of elements within the stream to create intermediate values and then combining those 
+ intermediate values to produce a final result.  
+ 
+ 
+  Requirements for reduce() Arguments
+ ‚ñ† The identity must be defined such that for all elements in the stream u , combiner.apply(identity, u) is equal to u .
+ ‚ñ† The accumulator operator op must be associative and stateless such that (a op b) op c is equal to a op (b op c) .
+ ‚ñ† The combiner operator must also be associative and stateless and compatible with the identity, such that for all u and t combiner.apply(u,accumulator.apply(identity,t)) is equal to accumulator.apply(u,t) .
+ 
+ If you follow these principles when building your reduce() arguments, then the operations can be performed using a parallel stream and the results will be ordered as they
+would be with a serial stream. Note that these principles still apply to the identity and accumulator when using the one- or two-argument version of reduce() on parallel streams.
+ 
+ System.out.println(Arrays.asList("w","o","l","f")
+ .parallelStream()
+ .reduce("X",String::concat));
+In fact, it can output XwXoXlXf. 
+infatti non segue il primo requirement. 
+
+
+------------------- COMBING RESULTS WITH COLLECT() --------------------------
+Like reduce(), the Streams API includes a three-argument version of collect() that takes accumulator and combiner operators, along with a supplier operator instead of an identity.
+
+Stream<String> stream = Stream.of("w", "o", "l", "f").parallel();
+Set<String> set = stream.collect(Collectors.toSet());
+System.out.println(set); // [f, w, l, o] 
+
+Requirements for Parallel Reduction with collect()
+‚ñ† The stream is parallel.
+‚ñ† The parameter of the collect operation has the Collector.Characteristics.CONCURRENT characteristic.
+‚ñ† Either the stream is unordered, or the collector has the characteristic Collector.Characteristics.UNORDERED.
+
+While Collectors. toSet() does have the UNORDERED characteristic, it does not have the CONCURRENT characteristic; therefore the previous collector example will not be 
+performed as a concurrent reduction.
+
+Collectors.toConcurrentMap() 
+Collectors.groupingByConcurrent()
+
+Stream<String> ohMy = Stream.of("lions", "tigers", "bears").parallel();
+ConcurrentMap<Integer, String> map = ohMy.collect(
+ Collectors.toConcurrentMap(String::length, k -> k, (s1, s2) -> s1 + "," + s2));
+System.out.println(map); // {5=lions,bears, 6=tigers}
+System.out.println(map.getClass()); // java.util.concurrent.ConcurrentHashMap
+
+Stream<String> ohMy = Stream.of("lions", "tigers", "bears").parallel();
+ConcurrentMap<Integer, List<String>> map = ohMy.collect(
+ Collectors.groupingByConcurrent(String::length));
+System.out.println(map); // {5=[lions, bears], 6=[tigers]}
+
+-------------------- CYCLICBARRIER   -------------------
+The CyclicBarrier takes in its constructors a limit value, indicating the number of threads to wait for.
+As each thread finishes, it calls the await()on the cyclic barrier. Once the specified number of threads have called await(), the barrier is released and all threads can continue.
+
+Basta creare un istanza:
+CyclicBarrier c1 = new CyclicBarrier(4);
+
+passarla al thread 
+service.submit(() -> manager.performTask(c1,c2));
+
+nella sua logica il thread fa robe poi si mette in attesa degli altri prima di andare avanti 
+removeAnimals();
+ c1.await();
+ cleanPen();
+
+ ---------------------- FORK/JOIN FRAMEWORK -----------------
+ Si basa sul scrivere una classe che estende RecursiveAction o RecursiveTask (both of which implement the ForkJoinTask interface)
+ ENtreambe sono classi astratte che mi obbligano a definire un metodo: 
+  RecursiveAction:  void compute() 
+  RecursiveTask: T compute()
+ Qurste classi nel loro compure si baso sulla recursione per reistanziare altri oggetti e tramite i parametri del costruttori distriibuire meno lavaro ai thread. 
+ 
+Esempio metodo compute di una classe che estende      ----RECURSIVEACTION.----- 
+  
+protected void compute() {
+ 	if(end-start <= 3)
+ 		for(int i=start; i<end; i++) {
+ 			weights[i] = (double)new Random().nextInt(100);
+			System.out.println("Animal Weighed: "+i);
+    	}
+ 	else {
+ 		int middle = start+((end-start)/2);
+ 		System.out.println("[start="+start+",middle="+middle+",end="+end+"]");
+ 		invokeAll(new WeighAnimalAction(weights,start,middle),
+ 			      new WeighAnimalAction(weights,middle,end));
+ 	}
+}
+
+Qui se la classe viene istanziata con dei parametrila cui differenza √® maggiore di 3 allora vengono istanziate altre due classi dello stesso tipo 
+e il lavoro viene suddiviso a loro tramite invokeAll.
+
+La classe e il metodo compute vengono fatti partire cosi 
+
+ForkJoinTask<?> task = new WeighAnimalAction(weights,0,weights.length);
+ForkJoinPool pool pool = new ForkJoinPool();
+pool.invoke(task);
+
+La stessa classe di prima ora estende                 ----- RECURSIVETASK -----------
+il compute avr√† ora un tipo di ritorno
+public class WeighAnimalTask extends RecursiveTask<Double> 
+
+
+protected Double compute() {
+	if(end-start <= 3) {
+		double sum = 0;
+		for(int i=start; i<end; i++) {
+			weights[i] = (double)new Random().nextInt(100);
+			System.out.println("Animal Weighed: "+i);
+			sum += weights[i];
+		}
+		return sum;  //vediamo che ora ha un tipo di ritorno
+	} else {
+		int middle = start+((end-start)/2);
+		System.out.println("[start="+start+",middle="+middle+",end="+end+"]");
+		RecursiveTask<Double> otherTask = new WeighAnimalTask(weights,start,middle);
+		otherTask.fork(); //faccio partire un ramo 
+		return new WeighAnimalTask(weights,middle,end).compute() + otherTask.join(); //torno la somma dei due sottorami della ricorsione.
+ 	}
+}
+
+While our base case is mostly unchanged, except for returning a sum value, the recursive case is quite different. Since the invokeAll() method doesn‚Äôt return a value, we instead
+issue a fork() and join() command to retrieve the recursive data. The fork() method instructs the fork/join framework to complete the task in a separate thread, while the
+join() method causes the current thread to wait for the results.
+
+e lo chiamo cosi:
+ ForkJoinTask<Double> task = new WeighAnimalTask(weights,0,weights.length);
+ ForkJoinPool pool pool = new ForkJoinPool();
+ Double sum = pool.invoke(task);
+ System.out.println("Sum: "+sum);
+
+ RecursiveTask<Double> otherTask = new WeighAnimalTask(weights,start,middle);
+ Double otherResult = otherTask.fork().join();
+ return new WeighAnimalTask(weights,middle,end).compute() + otherResult;
+
+In this example, the current thread calls join(), causing it to wait for the [start,middle] subtask to finish before starting on the [middle,end] subtask. In this manner, the results are
+actually performed in a single-threaded manner. For the exam, make sure that fork() is called before the current thread begins a subtask and that join() is called after it finishes
+retrieving the results, in order for them to be done in parallel.
+
+
+-------------- TIPS FOR REVIEWING A FORK/JOIN CLASS ----------------
+‚ñ† The class should extend RecursiveAction or RecursiveTask.
+‚ñ† If the class extends RecursiveAction, then it should override a protected compute() method that takes no arguments and returns void. 
+‚ñ† If the class extends RecursiveTask, then it should override a protected compute() method that takes no arguments and returns a generic type listed in the class definition.
+‚ñ† The invokeAll() method takes two instances of the fork/join class and does not return a result.
+‚ñ† The fork() method causes a new task to be submitted to the pool and is similar to the thread executor submit() method.
+‚ñ† The join() method is called after the fork() method and causes the current thread to wait for the results of a subtask.
+‚ñ† Unlike fork(), calling compute() within a compute() method causes the task to wait for the results of the subtask.
+‚ñ† The fork() method should be called before the current thread performs a compute() operation, with join() called to read the results afterward.
+‚ñ† Since compute() takes no arguments, the constructor of the class is often used to pass instructions to the task.
+
+-----------------   LIVENESS    ----------------------------------------
+Liveness problems, then, are those in which the application becomes unresponsive or in some kind of ‚Äústuck‚Äù state. For the exam, there are three types of liveness issues with
+which you should be familiar: deadlock, starvation, and livelock.
+
+----------------------- DEADLOCK   -------------------------------------
+Deadlock occurs when two or more threads are blocked forever, each waiting on the other. 
+----------------------- STARVATION   -------------------------------------
+Starvation occurs when a single thread is perpetually denied access to a shared resource or lock.
+----------------------- LIVELOCK   -------------------------------------
+Livelock occurs when two or more threads are conceptually blocked forever, although they are each still active and trying to complete their task. Livelock is a special case of resource
+starvation in which two or more threads actively try to acquire a set of locks, are unable to do so, and restart part of the process.
+
+----------------------------RACE CONDITIONS --------------------------------------------------
+Si manifesta quando due thread cercano di fare la stessa cosa contemporanemente.  In generale permetterlo ad entrambi √® la cosa peggiore e porta a invalid data.
+Respringere entrambi √® ok. Far passare solo uno e bloccare l'altro √® perfetto. Monitor e lock con syncrhonized is the way. 
+
+For the exam, you should understand that race conditions lead to invalid data if they are not properly handled. Even the solution where both participants fail to proceed is preferable
+to one in which invalid data is permitted to enter the system. 
