@@ -6,11 +6,15 @@ import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -22,7 +26,27 @@ public class Main {
 		//robo();
 		//robo2();
 		//streamError();
-		durationTest();
+		//durationTest();
+		dequeTest();
+	}
+
+	private static void dequeTest() {
+		Queue<Integer> queue = new ConcurrentLinkedQueue<>();
+		queue.offer(10);
+		queue.offer(4);
+		System.out.println(queue.toString());
+		System.out.println("controllo primo elemento queue: "+queue.peek());
+		System.out.println("elimino primo elemento queue: "+queue.poll());
+		System.out.println("controllo primo elemento queue : "+queue.peek());
+		System.out.println();
+		Deque<Integer> deque = new ConcurrentLinkedDeque<>();
+		deque.offer(10);
+		deque.push(4);
+		System.out.println(deque.toString());
+		System.out.println("controllo primo elemento deque: "+deque.peek());
+		System.out.println("elimino primo elemento deque: "+deque.pop());
+		System.out.println("controllo primo elemento deque: "+deque.peek());
+		
 	}
 
 	private static void durationTest() {
