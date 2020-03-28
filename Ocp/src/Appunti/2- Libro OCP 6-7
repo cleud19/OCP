@@ -539,4 +539,58 @@ Retrieves and removes an item from the front of the queue, waiting the specified
 Retrieves and removes an item from the tail of the queue, waiting the specified time, returning null if the time elapses before the item is available
 
 NB can each throw a checked InterruptedException. 
+Since BlockingDeque extends Queue, Deque, and BlockingQueue, anche i metodi citati sopra di semplic poll e offer funzionano sulla deque. 
 
+------------------- SKIPLIST COLLECTIONS --------------------
+
+The SkipList classes, ConcurrentSkipListSet and ConcurrentSkipListMap, are concurrent versions of their sorted counterparts, TreeSet and TreeMap, respectively.
+When you see SkipList or SkipSet on the exam, just think “sorted” concurrent collections and the rest should follow naturally.
+Like other queue examples, it is recommended that you assign these objects to interface references, such as SortedMap or NavigableSet.
+
+------------------- COPYONWRITE COLLECTIONS ------------------
+Quando modifico in qualsiasi modo queste collection java mi crea una copia della collection con le modifiche invece di modificare direttamente la collection.
+Cosi se qualcuno stava iterando la collection in quel momento le mie modifiche non gli procureranno un errore.
+
+List<Integer> list = new CopyOnWriteArrayList<>(Arrays.asList(4,3,52));  
+    for(Integer item: list) {
+        System.out.print(item+" ");
+        list.add(9);
+    }
+System.out.println();
+System.out.println("Size: "+list.size());
+
+ 4 3 52
+ Size: 6 
+Se la lista non fosse stato di tipo CopyOnWriteArrayList avrei avuto un ConcurrentModificationException.
+
+
+----------------------OBTAINING SYNCHRONIZED COLLECTIONS ----------------
+the Concurrency API also includes methods for obtaining synchronized versions of existing non-concurrent collection objects
+synchronizedCollection(Collection<T> c)
+synchronizedList(List<T> list)
+synchronizedMap(Map<K,V> m)
+synchronizedNavigableMap(NavigableMap<K,V> m)
+synchronizedNavigableSet(NavigableSet<T> s)
+synchronizedSet(Set<T> s)
+synchronizedSortedMap(SortedMap<K,V> m)
+synchronizedSortedSet(SortedSet<T> s)
+
+While this methods synchronize access to the data elements, such as the get() and set() methods, they do not synchronize access on any iterators that you
+may create from the synchronized collection. Therefore, it is imperative that you use a synchronization block if you need to iterate over any of the returned collections.
+
+-------------------------------- PARALLEL STREAM -------------------------------
+- parallel()
+The first way to create a parallel stream is from an existing stream. You just call parallel() on an existing stream to convert it to one that supports multi-threaded
+processing, as shown in the following code:
+ Stream<Integer> stream = Arrays.asList(1,2,3,4,5,6).stream();
+ Stream<Integer> parallelStream = stream.parallel();
+
+Be aware that parallel() is an intermediate operation that operates on the original stream. 
+- parallelStream()
+Il secondo modo è chiamare parallelStream su una Collection 
+ Stream<Integer> parallelStream2 = Arrays.asList(1,2,3,4,5,6).parallelStream();
+ 	
+ 	
+	Arrays.asList(1,2,3,4,5,6)
+	 .parallelStream()
+	 .forEach(s -> System.out.print(s+" "));  //4 1 6 5 2 3
