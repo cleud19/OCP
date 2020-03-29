@@ -386,3 +386,35 @@ CAPITOLO 6
 18.B	->B
 19.D	->D
 20.E	->E
+
+
+
+
+
+CAPITOLO 7
+
+------tentativo 1
+------errate xx giuste xx
+
+1.DF	->DF
+2.ACDF	->ACDF
+3.C		->BC    X
+4.C		->C
+5.D		->D
+6.B		->B
+7.A		->A
+8.G		->G
+9.ACE	->ACE   compute() here is public , although you can override it with public without issue since this is a more accessible modifier. 
+10.B	->C     X
+11.AF	->AF
+12.E	->E
+13.A	->AG    x  .flatMap(s -> s) TORNA STREAM NORMALE ANCHE SE USATO SU DUE PARALLEL STREAMS
+14.F	->D     X  CONTROLLA CHE METODI LANCIANO InterruptedException
+15.CDEF ->CEG   X (DA CONTROOLARE PERCHE)
+16.F
+17.C
+18.AD
+19.ADF
+20.AD
+21.A
+22.C

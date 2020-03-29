@@ -1,4 +1,4 @@
-############################### CAPITOLO 6 ##################################
+########################################################################################### CAPITOLO 6 ##############################################################################################
 
 java.lang.Throwable
 ha due sottoclassi: java.lang.Exception e java.lang.Error
@@ -163,12 +163,13 @@ ex:  java -ea:com.wiley.demos... -da:com.wiley.demos.TestColors my.programs.Main
 
 Attento all'esame al codice che presenta assertion ma non è enabled perche in quel caso java le ignora.
 
-############################### CAPITOLO 7 ##################################
+########################################################################################### CAPITOLO 7 ##############################################################################################
+
 I system threads sono in generale i thread della JVM tipo il Garbage Collector ha un suo thread. Quando si dice che noi non dovremmo mai 
 chatchare Errors è perche vengono lanciati dai system threads e per esempio anche se fossimo in OOM e venisse lanciato un Error e noi lo 
 catchassimo non servirebbe a nulla perche non potremmo fare molto senza memoria. 
 
-Alternatively, a user-defi ned thread is one created by the application developer to accomplish a specific task.
+Alternatively, a user-defined thread is one created by the application developer to accomplish a specific task.
 
 A CONTEXT SWITCH is the process of storing a thread’s current state and later restoring the state of the thread to continue execution
 
@@ -528,7 +529,7 @@ try {
 } catch (InterruptedException e) {
  // Handle interruption
 }
----------BLOCKINGQUEUE WAITING METHODS -------------
+---------BLOCKINGDEQUEUE WAITING METHODS -------------
 - offerFirst(E e, long timeout, TimeUnit unit)
 Adds an item to the front of the queue, waiting a specified time, returning false if time elapses before space is available
 - offerLast(E e, long timeout, TimeUnit unit)

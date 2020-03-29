@@ -27,7 +27,13 @@ public class Main {
 		//robo2();
 		//streamError();
 		//durationTest();
-		dequeTest();
+		//dequeTest();
+		diviso0Test();
+	}
+
+	private static void diviso0Test() {
+		System.out.println(4/0);
+		
 	}
 
 	private static void dequeTest() {
