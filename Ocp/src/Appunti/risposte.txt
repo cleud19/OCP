@@ -394,7 +394,7 @@ CAPITOLO 6
 CAPITOLO 7
 
 ------tentativo 1
-------errate xx giuste xx
+------errate 11 giuste 11
 
 1.DF	->DF
 2.ACDF	->ACDF
@@ -416,5 +416,37 @@ CAPITOLO 7
 18.AD	->F     X
 19.ADF	->AF    X
 20.AD	->AD
-21.A	->ACDE  X (VEDERE PERCHE)
-22.C	->F     X (VEDERE PERCHE)
+21.A	->ACDE  X 
+22.C	->F     X 
+
+
+
+
+
+CAPITOLO 7
+
+------tentativo 2
+------errate xx giuste xx
+
+1.DF	->DF
+2.ACDF	->ACDF
+3.B		->BC    X
+4.C		->C
+5.D		->D     
+6.B		->B
+7.A		->A
+8.G		->G
+9.ACE	->ACE
+10.C	->C
+11.AF	->AF
+12.E	->E
+13.AG	->AG
+14.F	->D     X    CONTROLLA CHE METODI LANCIANO InterruptedException
+15.CEG	->CEG
+16.FH	->FH
+17.B	->B
+18.F	->F
+19.AF	->AF
+20.AD	->AD
+21.ACDE	->ACDE
+22.F	->F
