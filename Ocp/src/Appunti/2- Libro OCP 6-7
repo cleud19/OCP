@@ -518,7 +518,7 @@ Adds item to the queue waiting the specified time, returning false if time elaps
  - poll(long timeout, TimeUnit unit)
 Retrieves and removes an item from the queue, waiting the specified time, returning null if the time elapses before the item is available.
 
-NB can each throw a checked InterruptedException. 
+NB can each throw a checked InterruptedException.  Attento è un trucco durante l'esame usarli senza specificare l'eccezione.
 
 try {
     BlockingQueue<Integer> blockingQueue = new LinkedBlockingQueue<>();
@@ -681,6 +681,8 @@ CyclicBarrier c1 = new CyclicBarrier(4);
 
 passarla al thread 
 service.submit(() -> manager.performTask(c1,c2));
+
+public int await() throws InterruptedException,  BrokenBarrierException
 
 nella sua logica il thread fa robe poi si mette in attesa degli altri prima di andare avanti 
 removeAnimals();
