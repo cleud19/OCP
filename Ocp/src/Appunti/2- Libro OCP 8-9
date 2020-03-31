@@ -8,7 +8,7 @@ Alternatively, the relative path of a file or directory is the path from the cur
 
 /home/smith/data/zoo.txt    ABSOLUTE PATH
  
-The following is a relative path to the same file, assuming the user’s current directory was set to /home/smith.
+The following is a relative path to the same file, assuming the userâ€™s current directory was set to /home/smith.
 
 data/zoo.txt                RELATIVE PATH
 Unixbased systems use  / for paths, whereas Windows-based systems use the backslash \ character. 
@@ -23,8 +23,8 @@ public class FileSample {
 }
 
 File parent = new File("/home/smith");
-File child = new File(parent,"data/zoo.txt");   // se parent è null java lo ignora e utilizza solo il secondo
-é equivalente  quello di prima.
+File child = new File(parent,"data/zoo.txt");   // se parent Ã¨ null java lo ignora e utilizza solo il secondo
+Ã© equivalente  quello di prima.
 
 ------------------ COMMONLY USED JAVA.IO.FILE METHODS -------------------------------------------------
 1 exists() Returns true if the file or directory exists.
@@ -38,13 +38,13 @@ File child = new File(parent,"data/zoo.txt");   // se parent è null java lo ign
 9 renameTo(File) Renames the file denoted by this path.
 10 mkdir() Creates the directory named by this path.
 11 mkdirs() Creates the directory named by this path including any nonexistent parent directories.
-12 getParent() Returns the abstract pathname of this abstract pathname’s parent or null if this pathname does not name a parent directory.
+12 getParent() Returns the abstract pathname of this abstract pathnameâ€™s parent or null if this pathname does not name a parent directory.
 13 listFiles() Returns a File[] array denoting the files in the directory.
 
 ----------------- INTRODUCING STREAMS ----------------------------------------------------------------------
 Note that the I/O streams that we discuss in this chapter are data streams and completely unrelated to the new Stream API that you saw.
 
-a STRAM is a list of data elements presented sequentially. Each type of stream segments data into a “wave” or “block” in a particular way.
+a STRAM is a list of data elements presented sequentially. Each type of stream segments data into a â€œwaveâ€� or â€œblockâ€� in a particular way.
 Nearly all are built on top of reading or writing an individual byte or an array of bytes at a time. The reasoning behind more high-order streams is for convenience as well as performance.
 
 ---------------------------- BYTE STREAMS VS. CHARACTER STREAMS ----------------------------------------------
@@ -89,17 +89,17 @@ Buffered classes read or write data in groups, rather than a single byte or char
 new BufferedInputStream(new FileReader("zoo-data.txt")); // DOES NOT COMPILE
 new BufferedWriter(new FileOutputStream("zoo-data.txt")); // DOES NOT COMPILE
 new ObjectInputStream(new FileOutputStream("zoo-data.txt")); // DOES NOT COMPILE
-new BufferedInputStream(new InputStream()); // DOES NOT COMPILE Perche InputStream è una classe abstract. 
+new BufferedInputStream(new InputStream()); // DOES NOT COMPILE Perche InputStream Ã¨ una classe abstract. 
 Attento all'esame cercheranno di fregarti combinando tipi diversi di classi non compatibili.
 
 
 
-■ A class with the word InputStream or OutputStream in its name is used for reading or writing binary data, respectively.
-■ A class with the word Reader or Writer in its name is used for reading or writing character or string data, respectively.
-■ Most, but not all, input classes have a corresponding output class.
-■ A low-level stream connects directly with the source of the data.
-■ A high-level stream is built on top of another stream using wrapping.
-■ A class with Buffered in its name reads or writes data in groups of bytes or characters and often improves performance in sequential file systems.
+â–  A class with the word InputStream or OutputStream in its name is used for reading or writing binary data, respectively.
+â–  A class with the word Reader or Writer in its name is used for reading or writing character or string data, respectively.
+â–  Most, but not all, input classes have a corresponding output class.
+â–  A low-level stream connects directly with the source of the data.
+â–  A high-level stream is built on top of another stream using wrapping.
+â–  A class with Buffered in its name reads or writes data in groups of bytes or characters and often improves performance in sequential file systems.
 
 
 
@@ -127,6 +127,99 @@ Since streams are considered resources, it is imperative that they be closed aft
 
 ----------------FLUSHING THE STREAM ---------------------------------
 Quando scriviamo dei dati su un OutputStream questo non vuol dire che i dati vengono direttamente scritti sul file. Spesso vengono salvati in una memoria di chace (cambia in base al SO). 
-E se il sistema termina in modo inaspettato quello che avevamo scritto sull'ouputStream non arriva mai al file perche rimarrà nella cache.
+E se il sistema termina in modo inaspettato quello che avevamo scritto sull'ouputStream non arriva mai al file perche rimarrÃ  nella cache.
 To address this, Java provides a flush() method, which requests that all accumulated data be written immediately to disk.  Unless the data that you are writing
 is extremely critical, the flush() method should only be used intermittently.
+----------------MARKING THE STREAM ----------------------------------
+
+Chiamare markSupported() sullo stream per vedere se torna true e quindi vedere se è supportato meno il mark.
+mark(int) delimiti per quanti bytes vuoi mantenere il sengo.Quando vuoi tornare indietro chiami  reset() e torni a dove hai messo il segno.In pratica da dove metti il mark quei dati li metti in memoria
+cosi da poterli leggere di nuovo una volta chimato reset()
+InputStream is = ...
+System.out.print ((char)is.read()); A
+if(is.markSupported()) {
+	is.mark(100);
+	System.out.print((char)is.read()); B
+	System.out.print((char)is.read()); C
+	is.reset();
+}
+System.out.print((char)is.read()); B
+System.out.print((char)is.read()); C
+System.out.print((char)is.read()); D
+
+------------------SKIPPING OVER DATA-------------------------------
+The InputStream and Reader classes also include a skip(long) method, which as you might expect skips over a certain number of bytes. It returns a long value, which indicates
+the number of bytes that were actually skipped. 
+
+InputStream is = ...  (TIGERS)
+System.out.print ((char)is.read()); T
+is.skip(2) IG 
+is.read();  E  //vediamo che in questo caso un read non gestito è come lo skip solo che è lento sempre meglio lo skip per molti byte
+System.out.print((char)is.read()); R
+System.out.print((char)is.read()); S
+
+-------------------------THE FILEINPUTSTREAM AND FILEOUTPUTSTREAM CLASSES------------------------------------
+They are used to read bytes from a file or write bytes to a file, respectively. These classes include constructors that take a File object or String, representing a path to the file.
+The data in a FileInputStream object is commonly accessed by successive calls to the read() method until a value of -1 is returned, indicating that the end of the stream.
+The FileInputStream class also contains overloaded versions of the read() method, which take a pointer to a byte array where the data is written. The method returns an
+integer value indicating how many bytes can be read into the byte array. It is also used by Buffered classes to improve performance.
+A FileOutputStream object is accessed by writing successive bytes using the write(int) method. Like the FileInputStream class, the FileOutputStream also contains overloaded
+versions of the write() method that allow a byte array to be passed and can be used by Buffered classes.  
+
+try (InputStream in = new FileInputStream(source);    
+	 OutputStream out = new FileOutputStream(destination)) {  //try-with-resurce
+	 int b;
+	 while((b = in.read()) != -1) {
+	 out.write(b);
+ } 
+ 
+------------------------THE BUFFEREDINPUTSTREAM AND BUFFEREDOUTPUTSTREAM CLASSES --------------------------------
+Per migliorare il vecchio esempio ora basta fare un wrapping delle vecchie classi con queste.
+Instead of reading the data one byte at a time, we use the underlying read(byte[]) method of BUFFEREDINPUTSTREAM, which returns the number of bytes read into the provided byte array.
+The length value returned tells us how many of the bytes in the array were actually read from the file. The remaining bytes of the array will be filled with leftover
+data from the previous read that should be discarded.
+The data is written into the BUFFEREDOUTPUTSTREAM using the write(byte[],int,int) method, which takes as input a byte array, an offset, and a length value, respectively. The
+offset value is the number of values to skip before writing characters, and it is often set to 0. The length value is the number of characters from the byte array to write.
+public class CopyBufferFileSample {
+ 	public static void copy(File source, File destination) throws IOException {
+ 	try (
+ 		InputStream in = new BufferedInputStream(new FileInputStream(source));
+ 		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination))
+ 		){
+ 			byte[] buffer = new byte[1024];
+ 			int lengthRead;
+ 			while ((lengthRead = in.read(buffer)) > 0) {
+ 				out.write(buffer,0,lengthRead);
+ 				out.flush();
+ 			}
+ 		}
+ 	}
+}
+-------------------------------THE FILEREADER AND FILEWRITER CLASSES -------------------------------------------------
+Entrambi come le loro varianti per i byte hanno i metodi read() and write()ma leggono valori char. Come prima il tipo di ritorno è un int e avremo -1 raggiunta la fine del file. 
+The Writer class, which FileWriter inherits from, offers a write(String) method that allows a String object to be written directly to the stream.
+-----------------------------THE BUFFEREDREADER AND BUFFEREDWRITER CLASSES--------------------------------------------
+abbiamo metodi come readLine() and write(String)
+
+BUFFEREDREADER
+public static List<String> readFile(File source) throws IOException {
+	List<String> data = new ArrayList<String>();
+ 	try (BufferedReader reader = new BufferedReader(new FileReader(source))) {
+ 		String s;
+ 		while((s = reader.readLine()) != null) {  //da notare che abbiamo una reference s con la nostra stringa mentre la leggiamo e controlliamo se è != null stavolta
+ 			data.add(s);   //salviamo i dati denttro una list<String> prima di scriverla su un file cosi magari modifichiamo qualcosa	
+ 		}
+ 	}
+	return data;
+}
+BUFFEREDWRITER
+public static void writeFile(List<String> data, File destination) throws IOException {
+	try (BufferedWriter writer = new BufferedWriter(new FileWriter(destination))) {
+		for(String s: data) {
+			writer.write(s);   //posso scrivere direttamente tutta la riga
+			writer.newLine();  //inserisco gli accapo visto che il mio codice splittava le righe per gli accap0o
+		}
+	}
+}
+Da notare che noi tutto il file lo stiamo salvando dentro sta variabile, se fosse troppo grande basterebbe sostituire il tutto con i FileReader e FileWriter cosi da non salvare nulla. 
+			
