@@ -8,7 +8,7 @@ Alternatively, the relative path of a file or directory is the path from the cur
 
 /home/smith/data/zoo.txt    ABSOLUTE PATH
  
-The following is a relative path to the same file, assuming the user�s current directory was set to /home/smith.
+The following is a relative path to the same file, assuming the user’s current directory was set to /home/smith.
 
 data/zoo.txt                RELATIVE PATH
 Unixbased systems use  / for paths, whereas Windows-based systems use the backslash \ character. 
@@ -23,8 +23,8 @@ public class FileSample {
 }
 
 File parent = new File("/home/smith");
-File child = new File(parent,"data/zoo.txt");   // se parent � null java lo ignora e utilizza solo il secondo
-� equivalente  quello di prima.
+File child = new File(parent,"data/zoo.txt");   // se parent è null java lo ignora e utilizza solo il secondo
+é equivalente  quello di prima.
 
 ------------------ COMMONLY USED JAVA.IO.FILE METHODS -------------------------------------------------
 1 exists() Returns true if the file or directory exists.
@@ -38,8 +38,95 @@ File child = new File(parent,"data/zoo.txt");   // se parent � null java lo igno
 9 renameTo(File) Renames the file denoted by this path.
 10 mkdir() Creates the directory named by this path.
 11 mkdirs() Creates the directory named by this path including any nonexistent parent directories.
-12 getParent() Returns the abstract pathname of this abstract pathname�s parent or null if this pathname does not name a parent directory.
+12 getParent() Returns the abstract pathname of this abstract pathname’s parent or null if this pathname does not name a parent directory.
 13 listFiles() Returns a File[] array denoting the files in the directory.
 
 ----------------- INTRODUCING STREAMS ----------------------------------------------------------------------
 Note that the I/O streams that we discuss in this chapter are data streams and completely unrelated to the new Stream API that you saw.
+
+a STRAM is a list of data elements presented sequentially. Each type of stream segments data into a “wave” or “block” in a particular way.
+Nearly all are built on top of reading or writing an individual byte or an array of bytes at a time. The reasoning behind more high-order streams is for convenience as well as performance.
+
+---------------------------- BYTE STREAMS VS. CHARACTER STREAMS ----------------------------------------------
+Fra i vari Stram noteremo quelli che nel nome hnano STREAM e quelli che hanno READER/WRITER, ecco le differenze:
+1. The stream classes are used for inputting and outputting all types of binary or byte data.
+2. The reader and writer classes are used for inputting and outputting only character and String data.
+It is important to remember that even though readers/writers do not contain the word Stream in their class name, they are still in fact streams!
+
+The java.io API is structured such that all of the stream classes have the word InputStream or OutputStream in their name, while all Reader/Writer classes have either Reader or Writer in their name.
+Attento ai nomi dei vari Stream ti aiuteranno a capirne la logica senza conoscerli necessariamente. 
+
+Tutte le classi che Di solito hanno InputStreamQualcosa hano anche OutputStreamQualcosa quindi anche le ReaderQualcosa avranno uun WriterQualcosa. 
+A questa regola fanno ecezione: 
+1 PrintWriter has no accompanying PrintReader class. 
+2 PrintStream class has no corresponding InputStream class.
+
+
+
+try (
+ BufferedReader bufferedReader = new BufferedReader(
+ new FileReader("zoo-data.txt"))) {
+ System.out.println(bufferedReader.readLine());
+}
+
+In this example, FileReader is the low-level stream reader, whereas BufferedReader is the high-level stream that takes a FileReader as input. Many operations on the high-level stream
+pass through as operations to the underlying low-level stream, such as read() or close().
+Other operations override or add new functionality to the low-level stream methods. The highlevel stream adds new methods, such as readLine(), as well as performance enhancements for
+reading and filtering the low-level data. 
+
+try (ObjectInputStream objectStream = new ObjectInputStream(
+ new BufferedInputStream(
+ new FileInputStream("zoo-data.txt")))) {
+ System.out.println(objectStream.readObject());
+}
+
+Buffered classes read or write data in groups, rather than a single byte or character at a time.
+ ------------------------------ STREAM BASE CLASSES --------------------------------------------------------------------------
+ Classi Astratte:  InputStream, OutputStream, Reader, and Writer
+ Per convenienza java ha mantenuto il nome di queste classi nelle sottoclassi come suffisso. For example, ObjectInputStream ends with InputStream, meaning it has InputStream as an inherited parent class.
+ Most stream classes in java.io follow this pattern, PrintStream, which is an OutputStream, does not.
+ 
+new BufferedInputStream(new FileReader("zoo-data.txt")); // DOES NOT COMPILE
+new BufferedWriter(new FileOutputStream("zoo-data.txt")); // DOES NOT COMPILE
+new ObjectInputStream(new FileOutputStream("zoo-data.txt")); // DOES NOT COMPILE
+new BufferedInputStream(new InputStream()); // DOES NOT COMPILE Perche InputStream è una classe abstract. 
+Attento all'esame cercheranno di fregarti combinando tipi diversi di classi non compatibili.
+
+
+
+■ A class with the word InputStream or OutputStream in its name is used for reading or writing binary data, respectively.
+■ A class with the word Reader or Writer in its name is used for reading or writing character or string data, respectively.
+■ Most, but not all, input classes have a corresponding output class.
+■ A low-level stream connects directly with the source of the data.
+■ A high-level stream is built on top of another stream using wrapping.
+■ A class with Buffered in its name reads or writes data in groups of bytes or characters and often improves performance in sequential file systems.
+
+
+
+Class Name        Low/High   Level Description
+InputStream         N/A      The abstract class all InputStream classes inherit from
+OutputStream        N/A      The abstract class all OutputStream classes inherit from
+Reader              N/A      The abstract class all Reader classes inherit from
+Writer              N/A      The abstract class all Writer classes inherit from
+FileInputStream     Low      Reads file data as bytes
+FileOutputStream    Low      Writes file data as bytes
+FileReader          Low      Reads file data as characters
+FileWriter          Low      Writes file data as characters
+BufferedReader      High     Reads character data from an existing Reader in a buffered manner, which improves efficiency and performance
+BufferedWriter      High     Writes character data to an existing Writer in a buffered manner, which improves efficiency and performance
+ObjectInputStream   High     Deserializes primitive Java data types and graphs of Java objects from an existing InputStream
+ObjectOutputStream  High     Serializes primitive Java data types and graphs of Java objects to an existing OutputStream
+InputStreamReader   High     Reads character data from an existing InputStream
+OutputStreamWriter  High     Writes character data to an existing OutputStream
+PrintStream         High     Writes formatted representations of Java objects to a binary stream
+PrintWriter         High     Writes formatted representations of Java objects to a text-based output stream
+
+
+----------------CLOSING THE STREAM --------------------------------
+Since streams are considered resources, it is imperative that they be closed after they are used lest they lead to resource leaks.
+
+----------------FLUSHING THE STREAM ---------------------------------
+Quando scriviamo dei dati su un OutputStream questo non vuol dire che i dati vengono direttamente scritti sul file. Spesso vengono salvati in una memoria di chace (cambia in base al SO). 
+E se il sistema termina in modo inaspettato quello che avevamo scritto sull'ouputStream non arriva mai al file perche rimarrà nella cache.
+To address this, Java provides a flush() method, which requests that all accumulated data be written immediately to disk.  Unless the data that you are writing
+is extremely critical, the flush() method should only be used intermittently.
