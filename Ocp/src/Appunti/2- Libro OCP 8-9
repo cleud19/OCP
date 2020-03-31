@@ -222,4 +222,48 @@ public static void writeFile(List<String> data, File destination) throws IOExcep
 	}
 }
 Da notare che noi tutto il file lo stiamo salvando dentro sta variabile, se fosse troppo grande basterebbe sostituire il tutto con i FileReader e FileWriter cosi da non salvare nulla. 
-			
+
+----------------------------
+Charset usAsciiCharset = Charset.forName("US-ASCII"); 
+------------------------THE SERIALIZABLE INTERFACE-----------------------------------
+In order to serialize objects using the java.io API, the class they belong to must implement the java.io.Serializable interface. The Serializable interface is a tagging or marker
+interface, which means that it does not have any methods associated with it.
+A process attempting to serialize an object will throw a NotSerializableException if the class or one of its contained classes does not properly implement the Serializable interface.
+Puoi utilizzare il modificatore TRANSIENT al reference dell'oggetto cosi quel oggetto non verrà serializzato. 
+Da notare che anche tutte le variabili statiche di una classe non verranno serializzate non facendo parte dell'istanza.
+private static final long serialVersionUID = 1L;// è buon uso aggiungerlo alla classe
+If an older version of the class is encountered during deserialization, an exception may be thrown. 	
+
+----------------OBJECTINPUTSTREAM AND OBJECTOUTPUTSTREAM--------------
+The ObjectOutputStream class includes a method to serialize the object to the stream called void writeObject(Object).
+The ObjectInputStream class includes a deserialization method that returns an object called readObject().
+
+public static List<Animal> getAnimals(File dataFile) throws IOException, ClassNotFoundException {
+ List<Animal> animals = new ArrayList<Animal>();
+ try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(dataFile)))) {
+ 	while(true) {
+ 		Object object = in.readObject();    //puo lanciaere quelle due eccezioni 
+ 		if(object instanceof Animal)
+ 			animals.add((Animal)object);
+ 	}	
+ } catch (EOFException e) {
+ // File end reached  !!! non faccio nulla 
+ }
+ return animals;
+}
+
+public static void createAnimalsFile(List<Animal> animals, File dataFile)throws IOException {
+ try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(dataFile)))) {
+ 	for(Animal animal: animals)
+ 		out.writeObject(animal);   //puo lanciare una IOException
+ 	}
+ }
+ 
+We catch an EOFException, which marks the program encountering the end of the file. Notice that we don’t do anything with the exception other than finish the method
+We conclude our discussion of the Object stream classes by noting that they do support reading and writing null objects. Therefore, it is important to check for null values when
+reading from a serialized data stream. In our sample application, we rely on the property of the instanceof operator always to return false for null values to skip explicitly needing
+to check for null values.
+
+----------------------- Understanding Object Creation --------------------------
+Java quando deserializza va a vedere il primo costruttore non serialize che estende il nostro oggetto saltanto tutti i costruttori delle classi serializable che incontra.
+Furthermore, any static variables or default initializations are ignored.
