@@ -264,6 +264,163 @@ We conclude our discussion of the Object stream classes by noting that they do s
 reading from a serialized data stream. In our sample application, we rely on the property of the instanceof operator always to return false for null values to skip explicitly needing
 to check for null values.
 
------------------------ Understanding Object Creation --------------------------
+----------------------- UNDERSTANDING OBJECT CREATION --------------------------
 Java quando deserializza va a vedere il primo costruttore non serialize che estende il nostro oggetto saltanto tutti i costruttori delle classi serializable che incontra.
 Furthermore, any static variables or default initializations are ignored.
+
+--------------------------THE PRINTSTREAM AND PRINTWRITER CLASSES----------------------
+PRINTSTREAM ---> class operates on OutputStream instances and writes data as bytes
+PRINTWRITER ---> class operates on Writer instances writes data as characters.
+PrintWriter class even has a constructor that takes an OutputStream as input, allowing you to wrap a PrintWriter class around an OutputStream.
+For the exam, you should be aware that System.out and System.err are actually PrintStream objects.
+Entrambe ereditano dai rispettivi Writer e OutputStream il metodo write() che però lancia un IOException che è una checked e va quindi gestita. 
+Ci sono però altri metodi in queste classi che non lanciano checked exception e sono: 
+
+1. PRINT()
+è pieno di overload con tutti i primitivi di java e anche Object String ecc
+in generale questo metodo chiama String.valueOf() del parametro che gli passi e poi fa il write().The  valueOf() applied to an object calls the object’s toString() method or returns null if the object is not set.
+ 
+ PrintWriter out = new PrintWriter("zoo.log");
+ out.print(5); // PrintWriter method
+ out.write(String.valueOf(5)); // Writer method
+ 
+ out.print(2.0); // PrintWriter method
+ out.write(String.valueOf(2.0)); // Writer method
+ 
+ Animal animal = new Animal();
+ out.print(animal); // PrintWriter method
+ out.write(animal==null ? "null": animal.toString()); // Writer method 
+ Quindi potremmo farlo anche tutto col write() del Printwriter ma abbiamo la convenience di un metodo che ci trasforma tutto in stringa per noi. 
+ 
+2.  PRINTLN()
+Virtually identical to the print() methods, except that they insert a line break after the String value is written. 
+The classes also include a version of println() that takes no arguments, which terminates the current line by writing a line separator.
+
+3. FORMAT() AND PRINTF()
+Like the String.format() methods discussed in Chapter 5 , the format() method in PrintStream and PrintWriter takes a String , an optional locale, and a set of arguments, and it writes a formatted String to the stream based on the input.
+In other words, it is a convenience method for formatting directly to the stream. 
+e print f è esattamente la stesa cosa infatti internamente chiama format()
+
+import java.io.*;
+public class PrintWriterSample {
+ public static void main(String[] args) throws IOException {
+ 	File source = new File("zoo.log");
+ 	try (PrintWriter out = new PrintWriter(
+ 		new BufferedWriter(new FileWriter(source)))) {
+ 		out.print("Today's weather is: ");
+ 		out.println("Sunny");
+ 		out.print("Today's temperature at the zoo is: ");
+ 		out.print(1/3.0);
+ 		out.println('C');
+ 		out.format("It has rained 10.12 inches this year");
+ 		out.println();
+ 		out.printf("It may rain 21.2 more inches this year");
+ 	}
+ }
+}
+
+Today's weather is: Sunny
+Today's temperature at the zoo is: 0.3333333333333333C
+It has rained 10.12 inches this year
+It may rain 21.2 more inches this year
+
+----------------- INTERACTING WITH USERS  ---------------------------
+import java.io.Console;
+public class ConsoleSample {
+ 	public static void main(String[] args) {
+ 		Console console = System.console();
+ 		if(console != null) {
+ 			String userInput = console.readLine();
+ 			console.writer().println ("You entered the following: "+userInput);
+ 		}
+ 	}
+}
+
+--------------------READER() AND WRITER()---------------------
+The Console class provides access to an instance of Reader and PrintWriter using the methods reader() and writer(), respectively.
+-------------------FORMAT() AND PRINTF()-----------------------
+Per scrivere puoi usare il PrintWriter writer() come detto prima oppure usare il metodo format(String,Object...) direttamente.
+Da notale che il Console definisce solo un tipo di format() e non è quello che puo prendere opzionalmente un Locale in questo modo usa sempre il locale di default per formattare le stringhe inserite. 
+Naturalmente dalla Console puoi sempre tirarti fuori un Writer e chiamare printf o format su quello (ti ricordo che sono identici cambia solo il nome del metodo)
+
+Console console = System.console();
+console.writer().format(new Locale("fr", "CA"),"Hello World"); 
+
+public static void main(String[] args) throws NumberFormatException, IOException {
+	Console console = System.console();
+ 	if(console == null) {
+ 		throw new RuntimeException("Console not available");
+ 	} else {
+ 		console.writer().println("Welcome to Our Zoo!");
+ 		console.format("Our zoo has 391 animals and employs 25 people.");
+ 		console.writer().println();
+ 		console.printf("The zoo spans 128.91 acres.");
+ 	}
+}
+------------------------FLUSH()-----------------------------------
+The flush() method forces any buffered output to be written immediately. 
+----------------------READLINE()------------------------------------
+The basic readLine() method retrieves a single line of text from the user, and the user presses the Enter key to terminate it.
+The Console class also supports an overloaded version of the readLine() method with the signature readLine(String format, Object... args), which displays a formatted prompt to the user prior to accepting text.
+
+public class ConsoleReadInputSample {
+	public static void main(String[] args) throws NumberFormatException, IOException {
+ 		Console console = System.console();
+		if(console == null) {
+ 			throw new RuntimeException("Console not available");
+ 		} else {
+ 			console.writer().print("How excited are you about your trip today? ");
+ 			console.flush();
+ 			String excitementAnswer = console.readLine();
+ 			String name = console.readLine(“Please enter your name: “);
+ 			Integer age = null;
+ 			console.writer().print("What is your age? ");
+ 			console.flush();
+ 			BufferedReader reader = new BufferedReader(console.reader());
+	 		String value = reader.readLine();
+ 			age = Integer.valueOf(value);
+ 			console.writer().println();
+ 			console.format("Your name is "+name);
+ 			console.writer().println();
+ 			console.format("Your age is "+age);
+ 			console.printf("Your excitement level is: "+excitementAnswer);
+ 		}
+ 	}
+}
+
+---------------READPASSWORD()------------------------------------------
+The readPassword() method is similar to the readLine() method, except that echoing is disabled. By disabling echoing, the user does not see the text they are typing, meaning that their password is secure 
+if someone happens to be looking at their screen.
+Also like the readLine() method, the Console class offers an overloaded version of the readPassword() method with the signature readPassword(String format, Object...args) used for displaying a formatted 
+prompt to the user prior to accepting text. Unlike the readLine() method, though, the readPassword() method returns an array of characters instead of a String.
+
+INTERESSANTE --->
+As you may remember from your OCA study material, String values are added to a shared memory pool for performance reasons in Java. This means that if a password that
+a user typed in were to be returned to the process as a String, it might be available in the String pool long after the user entered it.
+If the memory in the application is ever dumped to disk, it means that the password could be recovered by a malicious individual after the user has stopped using the application.
+The advantage of the readPassword() method using a character array should be clear. As soon as the data is read and used, the sensitive password data in the array can be
+“erased” by writing garbage data to the elements of the array. This would remove the password from memory long before it would be removed by garbage collection if a String value were used.
+
+public class PasswordCompareSample {
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		Console console = System.console();
+ 		if(console == null) {
+ 			throw new RuntimeException("Console not available");
+ 		} else {
+ 			char[] password = console.readPassword("Enter your password: ");
+			console.format("Enter your password again: ");
+			console.flush();
+			char[] verify = console.readPassword();
+			boolean match = Arrays.equals(password,verify);
+			// Immediately clear passwords from memory
+			for(int i=0; i<password.length; i++) {
+				password[i]='x';
+			}
+			for(int i=0; i<verify.length; i++) {
+				verify[i]='x';
+			}
+			console.format("Your password was "+(match ? "correct": "incorrect"));
+		}
+	}
+}
+
