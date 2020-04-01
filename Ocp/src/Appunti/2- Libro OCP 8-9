@@ -1,6 +1,6 @@
 ########################################################################################### CAPITOLO 8 ##############################################################################################
 ----------------------------------------- FILE --------------------------------------------
-The File class is used to read information about existing fi les and directories, list the contents of a directory, and create/delete files and directories.
+The File class is used to read information about existing files and directories, list the contents of a directory, and create/delete files and directories.
 The File class cannot read or write data within a file, although it can be passed as a reference to many stream classes to read or write data.
 
 The ABSOLUTE PATH of a file or directory is the full path from the root directory to the file or directory, including all subdirectories that contain the file or directory.
