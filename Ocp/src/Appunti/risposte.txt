@@ -454,25 +454,58 @@ CAPITOLO 7
 CAPITOLO 8
 
 ------tentativo 1
-------errate xx giuste xx
+------errate 11 giuste 11
 
-1.AD
-2.BF
-3.CD
-4.CD
-5.F     
-6.ADE
-7.D
-8.
-9.
-10.
-11.
-12.
-13.
-14.
-15.
-16.
-17.
-18.
-19.
-20.
+1.AD	->AD
+2.BF	->BEF    X
+3.CD	->CD
+4.CD	->C      X
+5.F     ->BDE    X
+6.ADE	->AE     X
+7.D		->D
+8.ABD	->A      X
+9.AD	->A		 X
+10.CF	->CF
+11.ACG	->CEG    X
+12.BC	->BC
+13.AC	->ACE    X
+14.E	->E
+15.A	->A
+16.D	->DF     X
+17.ABDG	->ABDG
+18.BDE	->BDE
+19.BCD	->BCD
+20.CA	->AC
+21.ABC	->AC     X
+22.E	->E
+23.E	->H      X
+
+
+CAPITOLO 8
+
+------tentativo 
+------errate 1 giuste 21
+
+1.AD	->AD
+2.BEF	->BEF
+3.CD	->CD
+4.C		->C
+5.BDE	->BDE
+6.AE	->AE
+7.D		->D
+8.A		->A
+9.A		->A
+10.CF	-><CF
+11.CEG	->CEG
+12.BC	->BC
+13.ACE  ->ACE
+14.E	->E
+15.A	->A
+16.DF	->DF
+17.ABDG	->ABDG
+18.BE	->BDE      X
+19.BCD	->BCD
+20.AC	->AC
+21.AC	->AC
+22.E	->E
+23.H	->H

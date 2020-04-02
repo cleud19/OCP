@@ -1,11 +1,14 @@
 package it.cla.test.alvolo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,7 +31,26 @@ public class Main {
 		//streamError();
 		//durationTest();
 		//dequeTest();
-		diviso0Test();
+		//diviso0Test();
+         date();	
+	}
+
+	private static void date() {
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		
+		
+		try {
+			Date now = new Date();
+			System.out.println(now);
+			System.out.println(df.format(now));
+			System.out.println(df.parse(df.format(now)));
+			
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	private static void diviso0Test() {
