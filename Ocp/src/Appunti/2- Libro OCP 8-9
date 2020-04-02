@@ -8,7 +8,7 @@ Alternatively, the relative path of a file or directory is the path from the cur
 
 /home/smith/data/zoo.txt    ABSOLUTE PATH
  
-The following is a relative path to the same file, assuming the userâ€™s current directory was set to /home/smith.
+The following is a relative path to the same file, assuming the users current directory was set to /home/smith.
 
 data/zoo.txt                RELATIVE PATH
 Unixbased systems use  / for paths, whereas Windows-based systems use the backslash \ character. 
@@ -23,8 +23,8 @@ public class FileSample {
 }
 
 File parent = new File("/home/smith");
-File child = new File(parent,"data/zoo.txt");   // se parent Ã¨ null java lo ignora e utilizza solo il secondo
-Ã© equivalente  quello di prima.
+File child = new File(parent,"data/zoo.txt");   // se parent e' null java lo ignora e utilizza solo il secondo
+e' equivalente  quello di prima.
 
 ------------------ COMMONLY USED JAVA.IO.FILE METHODS -------------------------------------------------
 1 exists() Returns true if the file or directory exists.
@@ -38,13 +38,13 @@ File child = new File(parent,"data/zoo.txt");   // se parent Ã¨ null java lo i
 9 renameTo(File) Renames the file denoted by this path.
 10 mkdir() Creates the directory named by this path.
 11 mkdirs() Creates the directory named by this path including any nonexistent parent directories.
-12 getParent() Returns the abstract pathname of this abstract pathnameâ€™s parent or null if this pathname does not name a parent directory.
+12 getParent() Returns the abstract pathname of this abstract pathnames parent or null if this pathname does not name a parent directory.
 13 listFiles() Returns a File[] array denoting the files in the directory.
 
 ----------------- INTRODUCING STREAMS ----------------------------------------------------------------------
 Note that the I/O streams that we discuss in this chapter are data streams and completely unrelated to the new Stream API that you saw.
 
-a STRAM is a list of data elements presented sequentially. Each type of stream segments data into a â€œwaveâ€� or â€œblockâ€� in a particular way.
+a STRAM is a list of data elements presented sequentially. Each type of stream segments data  into a “wave” or “block” in a particular way.
 Nearly all are built on top of reading or writing an individual byte or an array of bytes at a time. The reasoning behind more high-order streams is for convenience as well as performance.
 
 ---------------------------- BYTE STREAMS VS. CHARACTER STREAMS ----------------------------------------------
@@ -127,7 +127,7 @@ Since streams are considered resources, it is imperative that they be closed aft
 
 ----------------FLUSHING THE STREAM ---------------------------------
 Quando scriviamo dei dati su un OutputStream questo non vuol dire che i dati vengono direttamente scritti sul file. Spesso vengono salvati in una memoria di chace (cambia in base al SO). 
-E se il sistema termina in modo inaspettato quello che avevamo scritto sull'ouputStream non arriva mai al file perche rimarrÃ  nella cache.
+E se il sistema termina in modo inaspettato quello che avevamo scritto sull'ouputStream non arriva mai al file perche rimarrà  nella cache.
 To address this, Java provides a flush() method, which requests that all accumulated data be written immediately to disk.  Unless the data that you are writing
 is extremely critical, the flush() method should only be used intermittently.
 ----------------MARKING THE STREAM ----------------------------------
