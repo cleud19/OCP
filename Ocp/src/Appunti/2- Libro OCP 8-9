@@ -428,7 +428,7 @@ public class PasswordCompareSample {
 ################################################################################ CAPITOLO 9 ####################################################################################
 -------------------- Introducing NIO.2 -------------------------------
 Non-blocking I/O, or NIO for short
-The basic idea is that you load the data from a fi le channel into a temporary buffer that, unlike byte streams, can be read forward and backward without blocking on the underlying resource.
+The basic idea is that you load the data from a file channel into a temporary buffer that, unlike byte streams, can be read forward and backward without blocking on the underlying resource.
 -----------------------INTRODUCING PATH ---------------------------------
 A Path object represents a hierarchical path on the storage system to a file or directory.
 Spstituisce quello che prima per noi era solo File. Entrambi possono riferirsi a una directory o ad un File. 
@@ -661,3 +661,218 @@ It throws a checked IOException at runtime if the file cannot be located.
 The toRealPath() method performs additional steps, such as removing redundant path elements. In other words, it implicitly calls normalize() on the resulting absolute path.
 
 ------------------------ INTERACTING WITH FILES ---------------------------
+Unlike the methods in the Path and Paths class, most of the options within the Files class will throw an exception if the file to which the Path refers does not exist.
+
+ATTENZIONE 
+As you saw with Collection vs. Collections in Chapter 3 and Path vs. Paths earlier in this chapter, Java is fond of singular names for container classes and plural names
+for factory and helper classes. In this situation, though, the NIO.2 Files helper class is in no way related to the File class, as the Files class operates on Path instances, not
+File instances. Keep in mind that File belongs to the legacy java.io API, while Files belongs to the NIO.2 API.
+
+--------------------- EXISTS()----------------------
+The Files.exists(Path) method takes a Path object and returns true if, and only if, it references a file that exists in the file system.
+ 
+--------------------Files.isSameFile(Path,Path)-----------------------------
+The Files.isSameFile(Path,Path) method is useful for determining if two Path objects.Despite the name, the method also determines if two Path objects refer to the same directory.
+Prima va a fare un controllo superficiale tra i due con equals() se sono uguali apposto cosi. Altrimenti va a cercare il verp path dei due e se non trova i file va in errore. 
+
+System.out.println(Files.isSameFile(Paths.get("/user/home/cobra"),Paths.get("/user/home/snake")));  //true perche combra è un symbolink link to snake 
+System.out.println(Files.isSameFile(Paths.get("/user/tree/../monkey"), Paths.get("/user/monkey"))); //true  
+System.out.println(Files.isSameFile(Paths.get("/leaves/./giraffe.exe"), Paths.get("/leaves/giraffe.exe"))); // true  
+System.out.println(Files.isSameFile(Paths.get("/flamingo/tail.data"), Paths.get("/cardinal/tail.data"))) //false
+  
+-----------------createDirectory() and createDirectories()---------------------
+I due metodi che prima chiamavo mkdir e mkdirs. Il primo mi crea un directory e il seconso uguale. Entrambi possono lanciare delle eccezioni. Sopratutto createDirectory() che se non esiste il 
+padre della directory che sto creando va in errore mentre createDirectories() crea tutte le directory anche quelle mancanti. 
+Entrambe hanno un parametro opzionale  FileAttribute<?>  con cui possiamo passare i file da instanziare in quelle directory appena create. 
+
+---------------------- copy() ------------------------------------------
+Files.copy(Path,Path), which copies a file or directory from one location to another.
+The copy() method throws the checked IOException, such as when the file or directory does not exist or cannot be read.
+
+Files.copy(Paths.get("/panda"), Paths.get("/panda-save"));
+By default, copying files and directories will traverse symbolic links, although it will not overwrite a file or directory if it already exists, nor will it copy file attributes.
+These behaviors can be altered by providing the additional options NOFOLLOW_LINKS, REPLACE_EXISTING, and COPY_ATTRIBUTES, respectively, as discussed earlier in the chapter.
+
+ // Copy stream data to file
+ Files.copy(is, Paths.get("c:\\mammals\\wolf.txt"));  // da un is a un file, ha anche un versione overloaded in cui il path lo possiamo scrivere con i singoli elementi.
+ // Copy file data to stream
+ Files.copy(Paths.get("c:\\fish\\clown.xsl"), out)   // non ha una versione overloaded 
+ 
+------------------move()---------------------------------
+The Files.move(Path,Path) method moves or renames a file or directory within the file system. Like the copy() method, the move() method also throws the checked IOException
+in the event that the file or directory could not be found or moved. 
+
+ Files.move(Paths.get("c:\\zoo"), Paths.get("c:\\zoo-new"));  //rename
+ Files.move(Paths.get("c:\\user\\addresses.txt"), Paths.get("c:\\zoo-new\\addresses.txt"));
+
+Posso spostare una directory piena solo se sono sullo stesso drive. 
+
+---------------------- delete() and deleteIfExists() -----------------
+ The FILES.DELETE(PATH) method deletes a file or empty directory within the fi le system. The delete() method throws the checked IOException under a variety of circumstances.
+For example, if the path represents a non-empty directory, the operation will throw the runtime DirectoryNotEmptyException . If the target of the path is a symbol link, then the
+symbolic link will be deleted, not the target of the link. 
+   
+ The boolean DELETEIFEXISTS(PATH) method is identical to the delete(Path) method, except that it will not throw an exception if the file or directory does not exist, but instead it will
+return a boolean value of false . It will still throw an exception if the file or directory does exist but fails, such as in the case of the directory not being empty. 
+-------------------  newBufferedReader() and newBufferedWriter() ------------------------------------
+Files.newBufferedReader(Path,Charset)
+
+ Path path = Paths.get("/animals/gopher.txt");
+ try (BufferedReader reader = Files.newBufferedReader( path, Charset.forName("US-ASCII"))) {...}
+
+Files.newBufferedWriter(Path,Charset)
+
+ Path path = Paths.get("/animals/gorilla.txt");
+ try (BufferedWriter writer = Files.newBufferedWriter(path, Charset.forName("UTF-16"))) {
+ writer.write("Hello World");}
+
+------------------- readAllLines() ----------------------------------------
+The Files.readAllLines() method reads all of the lines of a text file and returns the results as an ordered List of String values.
+Esiste anche la versione col Charset come parametro in piu. Naturalmento puo lanciare una IOException.
+
+final List<String> lines = Files.readAllLines(path);
+Visto che carica tutto in memoria potremmo avere un  OutOfMemoryError. 
+
+---------------------------------------------------UNDERSTANDING FILE ATTRIBUTES----------------------------------------------
+Files.isDirectory(Path c) torna true se c è una directory, per alcuni SO anche il /txt.pdf puo essere una directory. SE gli passo un symbolic link è true se punta ad unaa directory.
+
+Files.isRegularFile(Path c)  true se file, se gli passo symbolic link true se punta ad un file 
+
+Files.isSymbolicLink(Path c ) true se è un symbolic Link a prescindere se quello che sto puntando esiste. 
+DA notare che NON LANCIANO errori se non esistono i path che gli passo. 
+
+Files.isHidden(Paths.get("/walrus.txt"))  puo lanciare ecezione IOEXCEPTION
+
+Files.isReadable(Paths.get("/seal/baby.png")));  // true if  exists and its contents are readable, based on the permission rules of the underlying file system NON lancia 
+Files.isExecutable(Paths.get("/seal/baby.png"))); // true if  is marked executable within the file system   NON lancia 
+
+Files.size(Paths.get("/zoo/c/animals.txt")) LANCIA un IOEXCEPTION , vale per i file se chiamato su directory non si sa
+
+FileTime Files.getLastModifiedTime(Path) //  the FileTime result have toMillis() method that returns the epoch time.
+e Files.setLastModifiedTime(Path,FileTime)  // lanciano entrambe IOException // FileTime.fromMillis(System.currentTimeMillis() puo essere usato come parametro
+
+UserPrincipal Files.getOwner(Path)  throw IOException
+Files.setOwner(Path,UserPrincipal)  throw IOException
+
+ UserPrincipal owner = FileSystems.getDefault().getUserPrincipalLookupService().lookupPrincipalByName("jane"); 
+  Per prenderci l'user di qualcuno ci serve prima l'istanza del fylesystem poi ci istanziamo la classe helper UserPrincipalLookupService e su quella chiamiamo lookupPrincipalByName().
+ UserPrincipal owner = path.getFileSystem().getUserPrincipalLookupService().lookupPrincipalByName("jane");
+  La stessa cosa ma partendo da un istanza di un path.
+  
+------------------------------------------------IMPROVING ACCESS WITH VIEWS-------------------------------------------------------------------
+A view is a group of related attributes for a particular file system type. A file may support multiple views, allowing you to retrieve and update various sets of information about the file.
+Chiamare 20 volte per prendersi 20 atttribbuti dai file ppuo essere  costoso, meglio fare una sola chiamata e prenderseli tutti e formare una view. 
+ Files.readAttributes(), returns a read-only view
+ Files.getFileAttributeView(), eeturns a editable view 
+ Entrambe lanciano IOException, come per esempio quando cerchiamo di leggere attributi di Linux su Windows viene lanciato un UnsupportedOperationException.
+ 
+
+1 Attributes Class -> BasicFileAttributes || View Class ->  BasicFileAttributeView 
+  Basic set of attributes supported by all file systems
+2 Attributes Class -> DosFileAttributes || View Class ->  DosFileAttributeView 
+  Attributes supported by DOS/ Windows-based systems
+3 Attributes Class -> PosixFileAttributes || View Class ->  PosixFileAttributeView 
+Attributes supported by POSIX systems, such as UNIX, Linux, Mac, and so on
+
+Per l'esame dobbiamo solo conoscere la prima riga le altre tanto estendono la prima quindi avranno gli stessi metodi e comportamenti li segnaliamo cosi sai cosa sono. 
+ LEGGERE ATTRIBUTI 
+ Files.readAttributes(Path,Class<A>)
+
+ Path path = Paths.get("/turtles/sea.txt");
+ BasicFileAttributes data = Files.readAttributes(path, BasicFileAttributes.class);
+ System.out.println("Is path a directory? "+data.isDirectory());
+ System.out.println("Is path a regular file? "+data.isRegularFile());
+ System.out.println("Is path a symbolic link? "+data.isSymbolicLink());
+ System.out.println("Creation date/time: "+data.creationTime());
+ System.out.println("Last modified date/time: "+data.lastModifiedTime());
+ System.out.println("Last accessed date/time: "+data.lastAccessTime());
+ 
+ Ci sono metodi che non abbiamo visto e sono 
+ The isOther() che va a controllare se un path non è una directorye nemmeno un file , su altri SO possono essere anche altre cose. 
+ The lastAccessTime() and creationTime() methods return other date/time information about the file.
+ The fileKey() method returns a file system value that represents a unique identifier for the file within the file system or null if it is not supported by the file system.
+ MODIFICARE ATTRIBUTI 
+ Files.getFileAttributeView(Path,Class<V>)
+ 
+ Path path = Paths.get("/turtles/sea.txt");
+ BasicFileAttributeView view = Files.getFileAttributeView(path,BasicFileAttributeView.class);
+ BasicFileAttributes data = view.readAttributes();
+ FileTime lastModifiedTime = FileTime.fromMillis(data.lastModifiedTime().toMillis()+10_000);
+ view.setTimes(lastModifiedTime,null,null);
+ 
+ -> setTimes(FileTime lastModifiedTime, FileTime lastAccessTime, FileTime createTime) in the BasicFileAttributeView class
+  The NIO.2 API allows us to pass null for any date/time value that we do not wish to modify. 
+  
+  
+------------------------------------------------------------------- NEW STREAM METHODS --------------------------------------------------------------
+ The Files.walk(path) method returns a Stream<Path> object that traverses the directory in a depth-first, lazy manner.
+ 
+  Path path = Paths.get("/bigcats");
+  
+	try {
+		Files.walk(path)
+		.filter(p -> p.toString().endsWith(".java"))
+		.forEach(System.out::println);
+	} catch (IOException e) {
+	 	// Handle file I/O exception...
+ 
+ /bigcats/version1/backup/Lion.java
+ /bigcats/version1/Lion.java
+ /bigcats/version1/Tiger.java
+ /bigcats/Lion.java
+ 
+By default, the method iterates up to Integer.MAX_VALUE directories deep, although there is an overloaded version of walk(Path,int) that takes a maximum directory depth integer value as the second parameter.
+In practice, you may want to set a limit to prevent your application from searching too deeply on a large directory structure and taking too much time.
+ NIO.2 offers the FOLLOW_LINKS option as a vararg to the walk() method attentoperò perche se hai un symbolic link sotto di qualche directory che ti riporta alla tua directory ptincipale 
+ e tu hai impostato di seguire i Links allora potresti avere una siuazione ciclica e una exception vberebbe lanciata la  FileSystemLoopException. 
+ 
+ RICERCA
+Files.find(Path,int,BiPredicate) , ricerca quialcosa col bipredicate e devi definire il livello di depth , supporta anche lui il  FOLLOW_LINK. 
+I due parametri del Bipredicate sono: Path and BasicFileAttributes
+
+Path path = Paths.get("/bigcats");
+long dateFilter = 1420070400000l;
+try {
+    Stream<Path> stream = Files.find(path, 10,
+    (p,a) -> p.toString().endsWith(".java") && a.lastModifiedTime().toMillis()>dateFilter); // sto usando il BasicFileAttributes
+    stream.forEach(System.out::println);
+} catch (Exception e) {
+ // Handle file I/O exception...
+}
+
+
+LISTA DI FILE 
+try {
+  Path path = Paths.get("ducks");
+  Files.list(path)  // con questo abbiamo la lista delle cose che ci sono nel path sotto forma di stream per solo 1 livello 
+   .filter(p -> !Files.isDirectory(p))
+   .map(p -> p.toAbsolutePath())
+   .forEach(System.out::println);
+} catch (IOException e) {
+ // Handle file I/O exception...
+}
+Fa insomma quello che faceva File.listFiles() ma con gli stream. 
+
+PRINT DEI CONTENUTI DI UN FILE
+
+Prima avevamo visto d Files.readAllLines()che però se il file è troppo grande riempie la memoria. 
+Stream<String>  Files.lines(Path) 
+Questo metodo fa la  stessa cosa ma in metodo lazy cioe solo parte del file alla volta viene memorizzata.
+
+
+Path path = Paths.get("/fish/sharks.log");
+try {
+ 	System.out.println(Files.lines(path)
+ 	.filter(s -> s.startsWith("WARN "))
+ 	.map(s -> s.substring(5))
+ 	.collect(Collectors.toList()));
+} catch (IOException e) {
+ // Handle file I/O exception...
+}
+
+Per l'esame della nostra classe helper Files dobbiamo conoscere entrambi i metodi readAllLines() e lines() e quale torna uno stream e quale una collection. 
+1Files.readAllLines(Paths.get("birds.txt")).forEach(System.out::println);
+2Files.lines(Paths.get("birds.txt")).forEach(System.out::println);
+Visto che forEach c'è anche per la collection vediamo che entrambe le righe compilano solo che 
+la 1 usa readAllLines torna quindi una Collection e carica tutto il  file birds.txt in memoria 
+2 invece usa lines() torna uno stream e legge il file birds.txt in modo lazy per parti. 
