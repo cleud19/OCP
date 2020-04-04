@@ -1,0 +1,94 @@
+########################################################################################### CAPITOLO 10 ##############################################################################################
+Nel JDK abbiamo 4 importanti interfacce che vengono implementate dal jar di connessione del database. 
+-Driver: Knows how to get a connection to the database
+-Connection: Knows how to communicate with the database
+-Statement: Knows how to run the SQL
+-ResultSet: Knows what was returned by a SELECT query
+
+-----------------Connecting to a Database--------------------------------
+JDBC URL 
+
+
+jdbc:postgresql://localhost/zoo
+jdbc:oracle:thin:@123.123.123.123:1521:zoo
+jdbc:mysql://localhost:3306/zoo?profileSQL=true
+
+l'url è divisa in 3 parti divise da : 
+La prima parte contiene il protocollo :jdbc 
+La seconda parte contiene Il product/vendor name 
+La terza parte contiene i dettagli specifici del db e vediamo che cambiano , vediamo pero che c'è sempre l'indirizzo ip oppure 'localhost (Se ci trovi un numero a caso o solo local è errato)
+
+-------------Getting a Database Connection----------------------
+Ci sono due modi 
+1 DriverManager   usata nell'esame non usarla fuori 
+2 DataSource      non usata nell'eame usala fuori 
+
+public class TestExternal {
+ public static void main(String[] args) throws SQLException {
+ 	Connection conn = DriverManager.getConnection(
+ 	"jdbc:postgresql://localhost:5432/ocp-book",
+ 	"username",
+ 	"password");
+ 	System.out.println(conn);
+ }
+}
+
+public static void main(String[] args) throws SQLException,
+ClassNotFoundException {
+ Class.forName("org.postgresql.Driver"); //possiamo aggiungere anche questa linea volendo ma lancia una classcastexception
+ Connection conn = DriverManager.getConnection(
+ "jdbc:postgresql://localhost:5432/ocp-book",
+ "username",
+ "password");
+}
+
+										JDBC <= 3.0 Driver   JDBC >= 4.0 Driver
+Required to contain java.sql.Driver     			No 		Yes
+Java will use java.sql.Driver file if present 		Yes 	Yes
+Required to use Class.forName 						Yes 	No
+Allowed to use Class.forName 						Yes 	Yes
+
+----------------------------------- Obtaining a Statement -----------------------------------------
+
+1 Statement stmt = conn.createStatement();
+
+2 Statement stmt = conn.createStatement( ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+Ci sono due modi per creare uno Statement il primo è il classico il secondo prende altri due parametri un TYPE e un CONCURRENCY
+Vediamo le varie possibilità
+--------------------- Choosing a ResultSet Type--------------------------
+ By default, a ResultSet is in TYPE_FORWARD_ONLY mode. This is what you need most of the time. You can go through the data once in the order in which it was retrieved
+ ResultSet.TYPE_ SCROLL_INSENSITIVE e ResultSet.TYPE_ SCROLL_SENSITIVE sono gli altri due tipi con i quali posso scorrere i risultati in tutte le direzioni. Con il INSENSITIVE scorrerò i risultati 
+ avuti dalla query, con SENSITIVE avrò i risultati modificati real time. 
+------------------------ ResultSet Concurrency Mode ---------------------------
+By default, a ResultSet is in CONCUR_READ_ONLY mode. Questo è il piu utilizzato anche per che se voglio fare delle modifiche al mio DB avrò le mie query per farlo. 
+CONCUR_UPDATABLE è l'altro con cui posso aggiornare il DB meglio non usarlo. 
+ ------------------------------ Executing a Statement-------------------------------
+ 
+ 1.int executeUpdate()    It returns the number of rows that were inserted, deleted, or changed
+ INSERT UPDATE E DELETE 
+11: Statement stmt = conn.createStatement();
+12: int result = stmt.executeUpdate(
+13: "insert into species values(10, 'Deer', 3)");
+14: System.out.println(result); // 1
+15: result = stmt.executeUpdate(
+16: "update species set name = '' where name = 'None'");
+17: System.out.println(result); // 0
+18: result = stmt.executeUpdate(
+19: "delete from species where id = 10");
+20: System.out.println(result); // 1
+
+ 2. ResultSet executeQuery() 
+ SELECT
+ ResultSet rs = stmt.executeQuery("select * from species");
+ 
+ 3. boolean execute()  
+ Va sia sulle UPDATE che sulle SELECT 
+ Se il tipo di ritorno è true allora è un ResultSet ed era una select altrimenti è un int e ho fatto una Update
+ 
+ if (isResultSet) {
+ 	ResultSet rs = stmt.getResultSet();
+ 	System.out.println("ran a query");
+ } else {
+ 	int result = stmt.getUpdateCount();
+ 	System.out.println("ran an update");
+}
