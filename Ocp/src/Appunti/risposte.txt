@@ -509,3 +509,59 @@ CAPITOLO 8
 21.AC	->AC
 22.E	->E
 23.H	->H
+
+
+CAPITOLO 9
+
+------tentativo 1
+------errate 15/20 giuste 5/20
+
+1.F		->F
+2.C		->BC    X
+3.C		->D		X
+4.C		->C
+5.C		->BCD   X
+6.C		->C
+7.D		->F     X
+8.B		->A     X // ricordati che se passo un absolute path come parametro a resolve allora verrà restituito quello !!
+9.ABC	->BC    X
+10.C	->CE    X  //il move copiera sempre i metadata anche senza  COPY_ATTRIBUTES  settato
+11.F	->A     X
+12.ACF	->AF    X
+13.B	->B
+14.E	->E	
+15.DF	->DEF   X
+16.AEF	->F     X
+17.B	->AG    X
+18.B	->D     X
+19.EA	->ACE   X
+20.D	->B     X
+
+
+
+
+CAPITOLO 9
+
+------tentativo 2 
+------errate xx giuste xx
+
+1.F		->F
+2.BC	->BC
+3.D		->D
+4.C		->C
+5.BCD	->BCD
+6.C	 	->C
+7.F		->F
+8.A		->A
+9.BC	->BC
+10.C	->CE    X
+11.A	->A  (da controllare se copy su path non esistente cosa fa )
+12.ACF	->AF    X   si puo uri senza http:// file://
+13.B	->B
+14.E	->E
+15.DEF	->DEF
+16.F	->F
+17.AG	->AG
+18.D	->D
+19.ACE	->ACE
+20.B	->B
