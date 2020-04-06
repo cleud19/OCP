@@ -13,10 +13,10 @@ jdbc:postgresql://localhost/zoo
 jdbc:oracle:thin:@123.123.123.123:1521:zoo
 jdbc:mysql://localhost:3306/zoo?profileSQL=true
 
-l'url è divisa in 3 parti divise da : 
+l'url ï¿½ divisa in 3 parti divise da : 
 La prima parte contiene il protocollo :jdbc 
 La seconda parte contiene Il product/vendor name 
-La terza parte contiene i dettagli specifici del db e vediamo che cambiano , vediamo pero che c'è sempre l'indirizzo ip oppure 'localhost (Se ci trovi un numero a caso o solo local è errato)
+La terza parte contiene i dettagli specifici del db e vediamo che cambiano , vediamo pero che c'ï¿½ sempre l'indirizzo ip oppure 'localhost (Se ci trovi un numero a caso o solo local ï¿½ errato)
 
 -------------Getting a Database Connection----------------------
 Ci sono due modi 
@@ -53,15 +53,15 @@ Allowed to use Class.forName 						Yes 	Yes
 1 Statement stmt = conn.createStatement();
 
 2 Statement stmt = conn.createStatement( ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-Ci sono due modi per creare uno Statement il primo è il classico il secondo prende altri due parametri un TYPE e un CONCURRENCY
-Vediamo le varie possibilità
+Ci sono due modi per creare uno Statement il primo ï¿½ il classico il secondo prende altri due parametri un TYPE e un CONCURRENCY
+Vediamo le varie possibilitï¿½
 --------------------- Choosing a ResultSet Type--------------------------
  By default, a ResultSet is in TYPE_FORWARD_ONLY mode. This is what you need most of the time. You can go through the data once in the order in which it was retrieved
- ResultSet.TYPE_ SCROLL_INSENSITIVE e ResultSet.TYPE_ SCROLL_SENSITIVE sono gli altri due tipi con i quali posso scorrere i risultati in tutte le direzioni. Con il INSENSITIVE scorrerò i risultati 
- avuti dalla query, con SENSITIVE avrò i risultati modificati real time. 
+ ResultSet.TYPE_ SCROLL_INSENSITIVE e ResultSet.TYPE_ SCROLL_SENSITIVE sono gli altri due tipi con i quali posso scorrere i risultati in tutte le direzioni. Con il INSENSITIVE scorrerï¿½ i risultati 
+ avuti dalla query, con SENSITIVE avrï¿½ i risultati modificati real time. 
 ------------------------ ResultSet Concurrency Mode ---------------------------
-By default, a ResultSet is in CONCUR_READ_ONLY mode. Questo è il piu utilizzato anche per che se voglio fare delle modifiche al mio DB avrò le mie query per farlo. 
-CONCUR_UPDATABLE è l'altro con cui posso aggiornare il DB meglio non usarlo. 
+By default, a ResultSet is in CONCUR_READ_ONLY mode. Questo ï¿½ il piu utilizzato anche per che se voglio fare delle modifiche al mio DB avrï¿½ le mie query per farlo. 
+CONCUR_UPDATABLE ï¿½ l'altro con cui posso aggiornare il DB meglio non usarlo. 
  ------------------------------ Executing a Statement-------------------------------
  
  1.int executeUpdate()    It returns the number of rows that were inserted, deleted, or changed
@@ -83,7 +83,7 @@ CONCUR_UPDATABLE è l'altro con cui posso aggiornare il DB meglio non usarlo.
  
  3. boolean execute()  
  Va sia sulle UPDATE che sulle SELECT 
- Se il tipo di ritorno è true allora è un ResultSet ed era una select altrimenti è un int e ho fatto una Update
+ Se il tipo di ritorno  Ã¨ true allora  Ã¨  un ResultSet ed era una select altrimenti Ã¨ un int e ho fatto una Update.
  
  if (isResultSet) {
  	ResultSet rs = stmt.getResultSet();
@@ -92,3 +92,100 @@ CONCUR_UPDATABLE è l'altro con cui posso aggiornare il DB meglio non usarlo.
  	int result = stmt.getUpdateCount();
  	System.out.println("ran an update");
 }
+--------------------------------------GETTING DATA FROM A RESULTSET------------------------------------------
+20: Map<Integer, String> idToNameMap = new HashMap<>();
+21: ResultSet rs = stmt.executeQuery("select id, name from species");
+22: while(rs.next()) {
+23: 	int id = rs.getInt("id");
+24: 	String name = rs.getString("name");
+25: 	idToNameMap.put(id, name);
+26: }
+27: System.out.println(idToNameMap); // {1=African Elephant, 2=Zebra}
+
+Un modo Ã¨ quello di usare rs.getINt() o rs.getString() con il nome della colonna. 
+
+20: Map<Integer, String> idToNameMap = new HashMap<>();
+21: ResultSet rs = stmt. executeQuery ("select id, name from species");
+22: while(rs.next()) {
+23: 	int id = rs. getInt (1);
+24: 	String name = rs. getString (2);
+25: 	idToNameMap.put(id, name);
+26: }
+27: System.out.println(idToNameMap); // {1=African Elephant, 2=Zebra} 
+Un secondo modo Ã¨ quello di usare invece del nome della colonna gli indici. Attento gli inidci partono da 1 e on da 0. 
+
+Sbagliare un indice o un nome di una colonna lancerÃ  una SQLException. 
+
+Ricordati di ciclare sempre il risultato con un if(rs.next()) o while(rs.next()) perche il puntatore all'inizio punta alla testata della tabella e con un rs.next() scende sotto alla prima riga e se esiste ti da true.
+Naturalmente dobbiamo usare if() solo se abbiamo una sola riga.
+
+
+Method Name    Return Type     Example Database Type
+1 getBoolean   boolean 			  BOOLEAN
+2 getDate      java.sql.Date 	  DATE
+3 getDouble    double    		  DOUBLE
+4 getInt       int 				  INTEGER
+5 getLong      long 			  BIGINT
+6 getObject    Object 	          Any type
+7 getString    String 			  CHAR, VARCHAR
+8 getTime      java.sql.Time 	  TIME
+9 getTimeStamp java.sql.TimeStamp TIMESTAMP
+
+GETDATE
+
+if (rs.next()) {
+ java.sql.Date sqlDate = rs.getDate(1);
+ LocalDate localDate = sqlDate.toLocalDate();
+ System.out.println(localDate); // 2001â€•05â€•06
+}
+
+GETTIME
+
+if (rs.next()) {
+ java.sql.Time sqlTime = rs.getTime(1);
+ LocalTime localTime = sqlTime.toLocalTime();
+ System.out.println(localTime); // 02:15
+}
+
+GETTIMESTAMP
+
+java.sql.Timestamp sqlTimeStamp = rs.getTimestamp(1);
+ LocalDateTime localDateTime = sqlTimeStamp.toLocalDateTime();
+ System.out.println(localDateTime); // 2001â€•05â€•06T02:15
+ 
+ 
+ 
+ 
+------------------------------------------------------ SCROLLING RESULTSET ---------------------------------------------------------------------------------
+Youâ€™ve already learned the next() method. Thereâ€™s also a previous() method, which does the opposite. It moves backward one row and returns true if pointing to a valid row of data.
+There are also methods to start at the beginning and end of the ResultSet. The first() and last() methods return a boolean for whether they were successful at finding a row.
+The beforeFirst() and afterLast() methods have a return type of void, since it is always possible to get to a spot that doesnâ€™t have data.
+ beforeFirst()  sarebbe la testata ------ afterLast() sarebbe la fine 
+ 
+ 
+Statement stmt = conn.createStatement( ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+ResultSet rs = stmt.executeQuery("select id from species where id = -99");
+System.out.println(rs.first()); // false   perceh non ci sono risultati
+System.out.println(rs.last()); // false
+
+Another method that you need to know is absolute(). It takes the row number to which you want to move the cursor as a parameter. A positive number moves the cursor to that numbered row. Zero moves the cursor to a location immediately before the first row.
+A negative number means to start counting from the end of the ResultSet rather than from the beginning. You can see that -1 is the last row
+
+                           ------------
+               --->0       |ID  |FGDFG|  -5<----
+                           ------------
+               --->1       13   |     |  -4<----
+               --->2       42   |     |  -3<----
+               --->3       53   |     |  -2<----
+               --->4       47   |     |  -1<----
+               --->5
+                           
+36: Statement stmt = conn.createStatement(
+37: ResultSet.TYPE_SCROLL_INSENSITIVE,
+38: ResultSet.CONCUR_READ_ONLY);
+39: ResultSet rs = stmt.executeQuery("select id from animal order by id");
+40: System.out.println(rs.absolute(2)); // true
+41: System.out.println(rs.getString("id")); // 2
+
+Finally, there is a relative() method that moves forward or backward the requested number of rows. It returns a boolean if the cursor is pointing to a row with data. 
+Ricorda di controllare quando vedi questi metodi se Ã¨ un resulset scrollabile o meno.
