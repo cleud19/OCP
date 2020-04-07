@@ -5,6 +5,7 @@ Nel JDK abbiamo 4 importanti interfacce che vengono implementate dal jar di conn
 -Statement: Knows how to run the SQL
 -ResultSet: Knows what was returned by a SELECT query
 
+Modern driver JARs contain a file in META-INF/service called java.sql.Driver . This is the name of the implementation class of Driver . Older JARs do not, and they require Class.forName() to load the driver. 
 -----------------Connecting to a Database--------------------------------
 JDBC URL 
 
@@ -13,17 +14,17 @@ jdbc:postgresql://localhost/zoo
 jdbc:oracle:thin:@123.123.123.123:1521:zoo
 jdbc:mysql://localhost:3306/zoo?profileSQL=true
 
-l'url � divisa in 3 parti divise da : 
+l'url e' divisa in 3 parti divise da : 
 La prima parte contiene il protocollo :jdbc 
 La seconda parte contiene Il product/vendor name 
-La terza parte contiene i dettagli specifici del db e vediamo che cambiano , vediamo pero che c'� sempre l'indirizzo ip oppure 'localhost (Se ci trovi un numero a caso o solo local � errato)
+La terza parte contiene i dettagli specifici del db e vediamo che cambiano , vediamo pero che c'e  sempre l'indirizzo ip oppure 'localhost (Se ci trovi un numero a caso o solo local e' errato)
 
 -------------Getting a Database Connection----------------------
 Ci sono due modi 
 1 DriverManager   usata nell'esame non usarla fuori 
 2 DataSource      non usata nell'eame usala fuori 
 
-public class TestExternal {
+public class TestExternal {ygo
  public static void main(String[] args) throws SQLException {
  	Connection conn = DriverManager.getConnection(
  	"jdbc:postgresql://localhost:5432/ocp-book",
@@ -53,14 +54,14 @@ Allowed to use Class.forName 						Yes 	Yes
 1 Statement stmt = conn.createStatement();
 
 2 Statement stmt = conn.createStatement( ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-Ci sono due modi per creare uno Statement il primo � il classico il secondo prende altri due parametri un TYPE e un CONCURRENCY
-Vediamo le varie possibilit�
+Ci sono due modi per creare uno Statement il primo e' il classico il secondo prende altri due parametri un TYPE e un CONCURRENCY
+Vediamo le varie possibilita'
 --------------------- Choosing a ResultSet Type--------------------------
  By default, a ResultSet is in TYPE_FORWARD_ONLY mode. This is what you need most of the time. You can go through the data once in the order in which it was retrieved
- ResultSet.TYPE_ SCROLL_INSENSITIVE e ResultSet.TYPE_ SCROLL_SENSITIVE sono gli altri due tipi con i quali posso scorrere i risultati in tutte le direzioni. Con il INSENSITIVE scorrer� i risultati 
- avuti dalla query, con SENSITIVE avr� i risultati modificati real time. 
+ ResultSet.TYPE_ SCROLL_INSENSITIVE e ResultSet.TYPE_ SCROLL_SENSITIVE sono gli altri due tipi con i quali posso scorrere i risultati in tutte le direzioni. Con il INSENSITIVE scorrero' i risultati 
+ avuti dalla query, con SENSITIVE avro' i risultati modificati real time. 
 ------------------------ ResultSet Concurrency Mode ---------------------------
-By default, a ResultSet is in CONCUR_READ_ONLY mode. Questo � il piu utilizzato anche per che se voglio fare delle modifiche al mio DB avr� le mie query per farlo. 
+By default, a ResultSet is in CONCUR_READ_ONLY mode. Questo  e' il piu utilizzato anche per che se voglio fare delle modifiche al mio DB avro' le mie query per farlo. 
 CONCUR_UPDATABLE � l'altro con cui posso aggiornare il DB meglio non usarlo. 
  ------------------------------ Executing a Statement-------------------------------
  
@@ -189,3 +190,41 @@ A negative number means to start counting from the end of the ResultSet rather t
 
 Finally, there is a relative() method that moves forward or backward the requested number of rows. It returns a boolean if the cursor is pointing to a row with data. 
 Ricorda di controllare quando vedi questi metodi se è un resulset scrollabile o meno.
+
+------------------------------------------------------------- CLOSING DATABASE RESOURCES -----------------------------------------------------------
+public static void main(String[] args) throws SQLException {
+ String url = " jdbc:derby:zoo";
+ try (Connection conn = DriverManager.getConnection(url);
+      Statement stmt = conn.createStatement();
+      ResultSet rs = stmt.executeQuery("select name from animal")) {
+ 		while (rs.next())
+ 		System.out.println(rs.getString(1));
+ 	  }
+ }
+ 
+Vediamo qui che inizializziamo le nostre connessione con il try-with-resources cosi  che vengano chiuse quando abbiamo finito.
+There’s another way to close a ResultSet. JDBC automatically closes a ResultSet when you run another SQL statement from the same Statement.
+14: String url = jdbc:derby:zoo";
+15: try (Connection conn = DriverManager.getConnection(url);
+16: 	Statement stmt = conn.createStatement();
+17: 	ResultSet rs = stmt.executeQuery("select count(*) from animal")) {
+18:
+19: 	if (rs.next()) System.out.println(rs.getInt(1));
+20:
+21: 	ResultSet rs2 = stmt.executeQuery("select count(*) from animal");
+22: 	int num = stmt.executeUpdate(
+23: 	"update animal set name = 'clear' where name = 'other'");
+24: }
+INfatti in questo pezzo di codice ci sono 4 chiusure poiche abbiamo creato un altro resultSet dallo stesso statement. 
+--------------------------------------------------------------DEALING WITH EXCEPTIONS------------------------------------------------------------------------------------------------------------
+String url = " jdbc:derby:zoo";
+try (Connection conn = DriverManager.getConnection(url ");
+	Statement stmt = conn.createStatement();
+	ResultSet rs = stmt.executeQuery("select not_a_column from animal")) {
+	while (rs.next())
+		System.out.println(rs.getString(1));
+} catch (SQLException e) {
+	 System.out.println(e.getMessage());
+	 System.out.println(e.getSQLState());
+	 System.out.println(e.getErrorCode());
+}
