@@ -565,3 +565,60 @@ CAPITOLO 9
 18.D	->D
 19.ACE	->ACE
 20.B	->B
+
+
+
+CAPITOLO 10
+
+------tentativo 1
+------errate 6 giuste 14
+
+1.BF	->BF
+2.CBAE	->BC    X
+3.A		->A
+4.E		->E
+5.C		->C
+6.BE	->BE
+7.CEF	->CEF
+8.E	    ->E
+9.B	    ->B
+10.C	->C
+11.E	->D    X
+12.D	->D
+13.A	->D    X  se crea una nuova query sullo stesso statement si chiude il vecchio resultset quindi se ci faccio un next va in errore
+14.BF	->BF
+15.F	->F
+16.D	->E    X
+17.CD	->CD
+18.D	->A    X   absolute(5) si puo usare anche sul forward_only la risposata è no!! quindi aevi ragione tu
+19.C	->C
+20.C	->F    X   printare una chiamata void non compila
+
+
+
+
+CAPITOLO 10
+
+------tentativo 1
+------errate 6 giuste 14
+
+1.BF    ->BF
+2.CB    ->BC
+3.A     ->A
+4.E     ->E
+5.C     ->C
+6.BE    ->BE
+7.CEF   ->CEF
+8.E     ->E
+9.B     ->B
+10.C    ->C
+11.D    ->D
+12.D    ->D
+13.D    ->D
+14.BF   ->BF
+15.F    ->F
+16.D    ->E    X   Se c'è un FORWARDONLY e io fsccio un previous() o next() va in eccezione a runtime ma compila
+17.CD   ->CD
+18.D    ->D    CIO RAGGIO IO
+19.C    ->C
+20.F    ->F

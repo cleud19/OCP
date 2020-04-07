@@ -19,7 +19,10 @@ La prima parte contiene il protocollo :jdbc
 La seconda parte contiene Il product/vendor name 
 La terza parte contiene i dettagli specifici del db e vediamo che cambiano , vediamo pero che c'e  sempre l'indirizzo ip oppure 'localhost (Se ci trovi un numero a caso o solo local e' errato)
 
--------------Getting a Database Connection----------------------
+A JDBC URL has three parts. The first part is the string jdbc, making choice C correct. The second part is the vendor/product name. The third part is database specific, but it
+includes a database name, making choice B correct as well. The location, such as IP address
+and port, is optional.
+-------------Getting a Database Connection-------------------------------
 Ci sono due modi 
 1 DriverManager   usata nell'esame non usarla fuori 
 2 DataSource      non usata nell'eame usala fuori 
@@ -56,11 +59,11 @@ Allowed to use Class.forName 						Yes 	Yes
 2 Statement stmt = conn.createStatement( ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 Ci sono due modi per creare uno Statement il primo e' il classico il secondo prende altri due parametri un TYPE e un CONCURRENCY
 Vediamo le varie possibilita'
---------------------- Choosing a ResultSet Type--------------------------
+--------------------- Choosing a ResultSet Type-------------------------------------
  By default, a ResultSet is in TYPE_FORWARD_ONLY mode. This is what you need most of the time. You can go through the data once in the order in which it was retrieved
  ResultSet.TYPE_ SCROLL_INSENSITIVE e ResultSet.TYPE_ SCROLL_SENSITIVE sono gli altri due tipi con i quali posso scorrere i risultati in tutte le direzioni. Con il INSENSITIVE scorrero' i risultati 
  avuti dalla query, con SENSITIVE avro' i risultati modificati real time. 
------------------------- ResultSet Concurrency Mode ---------------------------
+------------------------ ResultSet Concurrency Mode --------------------------------
 By default, a ResultSet is in CONCUR_READ_ONLY mode. Questo  e' il piu utilizzato anche per che se voglio fare delle modifiche al mio DB avro' le mie query per farlo. 
 CONCUR_UPDATABLE � l'altro con cui posso aggiornare il DB meglio non usarlo. 
  ------------------------------ Executing a Statement-------------------------------
@@ -103,7 +106,7 @@ CONCUR_UPDATABLE � l'altro con cui posso aggiornare il DB meglio non usarlo.
 26: }
 27: System.out.println(idToNameMap); // {1=African Elephant, 2=Zebra}
 
-Un modo è quello di usare rs.getINt() o rs.getString() con il nome della colonna. 
+Un modo e'� quello di usare rs.getINt() o rs.getString() con il nome della colonna. 
 
 20: Map<Integer, String> idToNameMap = new HashMap<>();
 21: ResultSet rs = stmt. executeQuery ("select id, name from species");
@@ -113,9 +116,9 @@ Un modo è quello di usare rs.getINt() o rs.getString() con il nome della colonn
 25: 	idToNameMap.put(id, name);
 26: }
 27: System.out.println(idToNameMap); // {1=African Elephant, 2=Zebra} 
-Un secondo modo è quello di usare invece del nome della colonna gli indici. Attento gli inidci partono da 1 e on da 0. 
+Un secondo modo e' quello di usare invece del nome della colonna gli indici. Attento gli inidci partono da 1 e on da 0. 
 
-Sbagliare un indice o un nome di una colonna lancerà una SQLException. 
+Sbagliare un indice o un nome di una colonna lancera'� una SQLException. 
 
 Ricordati di ciclare sempre il risultato con un if(rs.next()) o while(rs.next()) perche il puntatore all'inizio punta alla testata della tabella e con un rs.next() scende sotto alla prima riga e se esiste ti da true.
 Naturalmente dobbiamo usare if() solo se abbiamo una sola riga.
@@ -137,7 +140,7 @@ GETDATE
 if (rs.next()) {
  java.sql.Date sqlDate = rs.getDate(1);
  LocalDate localDate = sqlDate.toLocalDate();
- System.out.println(localDate); // 2001―05―06
+ System.out.println(localDate); // 2001/05/06
 }
 
 GETTIME
@@ -152,15 +155,15 @@ GETTIMESTAMP
 
 java.sql.Timestamp sqlTimeStamp = rs.getTimestamp(1);
  LocalDateTime localDateTime = sqlTimeStamp.toLocalDateTime();
- System.out.println(localDateTime); // 2001―05―06T02:15
+ System.out.println(localDateTime); // 2001/05/06T02:15
  
  
  
  
 ------------------------------------------------------ SCROLLING RESULTSET ---------------------------------------------------------------------------------
-You’ve already learned the next() method. There’s also a previous() method, which does the opposite. It moves backward one row and returns true if pointing to a valid row of data.
+You have already learned the next() method. There is also a previous() method, which does the opposite. It moves backward one row and returns true if pointing to a valid row of data.
 There are also methods to start at the beginning and end of the ResultSet. The first() and last() methods return a boolean for whether they were successful at finding a row.
-The beforeFirst() and afterLast() methods have a return type of void, since it is always possible to get to a spot that doesn’t have data.
+The beforeFirst() and afterLast() methods have a return type of void, since it is always possible to get to a spot that doesn't have data.
  beforeFirst()  sarebbe la testata ------ afterLast() sarebbe la fine 
  
  
@@ -189,7 +192,7 @@ A negative number means to start counting from the end of the ResultSet rather t
 41: System.out.println(rs.getString("id")); // 2
 
 Finally, there is a relative() method that moves forward or backward the requested number of rows. It returns a boolean if the cursor is pointing to a row with data. 
-Ricorda di controllare quando vedi questi metodi se è un resulset scrollabile o meno.
+Ricorda di controllare quando vedi questi metodi se e' un resulset scrollabile o meno.
 
 ------------------------------------------------------------- CLOSING DATABASE RESOURCES -----------------------------------------------------------
 public static void main(String[] args) throws SQLException {
@@ -203,7 +206,7 @@ public static void main(String[] args) throws SQLException {
  }
  
 Vediamo qui che inizializziamo le nostre connessione con il try-with-resources cosi  che vengano chiuse quando abbiamo finito.
-There’s another way to close a ResultSet. JDBC automatically closes a ResultSet when you run another SQL statement from the same Statement.
+There is  another way to close a ResultSet. JDBC automatically closes a ResultSet when you run another SQL statement from the same Statement.
 14: String url = jdbc:derby:zoo";
 15: try (Connection conn = DriverManager.getConnection(url);
 16: 	Statement stmt = conn.createStatement();
