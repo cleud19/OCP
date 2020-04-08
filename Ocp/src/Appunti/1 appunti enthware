@@ -1,0 +1,140 @@
+Se creo una classe anonima implementando un interfaccia allora la mia classe anonima estende la classe Object! 
+button.addActionListener( new ActionListener() {  public void actionPerformed(ActionEvent ae) { } }  );
+Ma posso dichiarare una classe anonima istanzoiando una classe esistente e allora la mia classe anonima estende quella classe. è quindi sbagliato dire 
+che le classi anonime estendono tutte la classe Object. 
+class MyListener implements ActionListener { 
+	public void actionPerformed(ActionEvent ae) { 
+		System.out.println("MyListener class"); 
+	} 
+} 
+button.addActionListener( new MyListener() { 
+	public void actionPerformed(ActionEvent ae) { 
+		System.out.println("Anonymous Listener class"); 
+	} 
+});
+---------------------------------------------
+ENUM 
+You need to know the following facts about enums: 
+1. Enum constructor is always private. You cannot make it public or protected. If an enum type has no constructor declarations, then a private constructor that takes no parameters 
+is automatically provided. 
+2. An enum is implicitly final, which means you cannot extend it. 
+3. You cannot extend an enum from another enum or class because an enum implicitly extends java.lang.Enum. But an enum can implement interfaces.
+4. Since enum maintains exactly one instance of its constants, you cannot clone it. You cannot even override the clone method in an enum because java.lang.Enum makes it final. 
+5. Compiler provides an enum with two public static methods automatically -  values() and valueOf(String). The values method returns an array of its constants and valueOf method tries
+ to match the String argument exactly (i.e. case sensitive) with an enum constant and returns that constant if successful otherwise it throws java.lang.IllegalArgumentException.  
+ 
+ The following are a few more important facts about java.lang.Enum which you should know:  
+ 1. It implements java.lang.Comparable (thus, an enum can be added to sorted collections such as SortedSet, TreeSet, and TreeMap). 
+ 2. It has a method ordinal(), which returns the index (starting with 0) of that constant i.e. the position of that constant in its enum declaration. 
+ 3. It has a method name(), which returns the name of this enum constant, exactly as declared in its enum declaration.
+ 
+ --------------------------------------------------------------------
+ public > protected > package (i.e. no modifier) > private
+where public is least restrictive.
+Remember:
+protected is less restrictive than package access. So a method(or field) declared as protected will be accessible from a subclass even if the subclass is not in the same package.
+The same is not true for package access.
+A class can only have either public or no access modifier but a method or field can have all the four.
+Note that static, final, native and synchronized are not considered as access modifiers.
+---------------------------------------------------------------------------
+Una classe anonima puo essere dichiarata dentro un metodo statico!
+abstract class SomeClass {   public abstract void m1(); }
+public class TestClass
+{
+  public static SomeClass getSomeClass()  //note static
+  {
+     return new SomeClass()
+        {
+            public void m1() { }
+        };
+  }
+}
+---------------------------------------------------------------------------
+Note the difference between an Inner class and a static nested class. Inner class means a NON STATIC class defined inside a class. Remember: A nested class is any class whose declaration occurs
+within the body of another class or interface. A top level class is a class that is not a nested class. An inner class is a nested class that is not explicitly or implicitly declared static.
+A class defined inside an interface is implicitly static. For example,
+
+public class A  // outer class
+{
+   static public class B //Static Nested class . It can be used in other places: A.B b = new A.B(); There is no outer instance.
+   {
+   }
+   class C //Inner class. It can only be used like this: A.C c = new A().new C(); Outer instance is needed.
+   {
+   }
+}
+
+
+One can define a class as a static member of any top-level class. Now consider the following contents of a file named I1.java ...
+
+public interface I1
+{
+    public void mA();
+    public interface InnerI1
+    {
+        int k = 10;
+        public void innerA();
+    }
+}
+
+
+Here, interface InnerI1 is implicitly STATIC and so is called as static nested interface. 'k' is a static (& final) member of this interface. If you do 'javap' on I1 it prints: Compiled from I1.java
+public interface I1
+    /* ACC_SUPER bit NOT set */
+{
+    public abstract void mA();
+    public static interface I1. InnerI1
+    /* ACC_SUPER bit NOT set */
+    {
+        public static final int k;
+        public abstract void innerA();
+    }
+}
+
+
+This interface can be referred to in other places like:
+
+class MyClass implements I1.InnerI1
+{
+...
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+EQUALS()
+It is reflexive: for any reference value x, x.equals(x) should return true.
+It is symmetric: for any reference values x and y, x.equals(y) should return true if and only if y.equals(x) returns true.
+It is transitive: for any reference values x, y, and z, if x.equals(y) returns true and y.equals(z) returns true, then x.equals(z) should return true.
+It is consistent: for any reference values x and y, multiple invocations of x.equals(y) consistently return true or consistently return false, provided no information used in equals comparisons on 
+the object is modified.
+
+For any non-null reference value x, x.equals(null) should return false.
+The equals method for class Object implements the most discriminating possible equivalence relation on objects; that is, for any reference values x and y, this method returns true if and only if x 
+and y refer to the same object (x==y has the value true).
+
+Note that it is generally necessary to override the hashCode method whenever this method is overridden, so as to maintain the general contract for the hashCode method, which states that equal 
+objects must have equal hash codes.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+HASHCODE()
+public int hashCode()
+Returns a hash code value for the object. This method is supported for the benefit of hashtables such as those provided by java.util.Hashtable.
+The general contract of hashCode is:
+Whenever it is invoked on the same object more than once during an execution of a Java application, the hashCode method must consistently return the same integer, provided no information used in equals
+comparisons on the object is modified. This integer need not remain consistent from one execution of an application to another execution of the same application.
+If two objects are equal according to the equals(Object) method, then calling the hashCode method on each of the two objects must produce the same integer result.
+It is not required that if two objects are unequal according to the equals(java.lang.Object) method, then calling the hashCode method on each of the two objects must produce distinct integer results.
+However, the programmer should be aware that producing distinct integer results for unequal objects may improve the performance of hashtables.
+As much as is reasonably practical, the hashCode method defined by class Object does return distinct integers for distinct objects. (This is typically implemented by converting the internal address
+of the object into an integer, but this implementation technique is not required by the JavaTM programming language.)
+Returns:
+a hash code value for this object.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TYPE ERASURE
+type erasure  means that a compiled java class does not contain any of the generic information that is present in the java file. In other words, the compiler removes the generic information from a java
+class when it compile it into byte code. For example, List<String> list; and List list; are compiled to the same byte code. Therefore, at run time, it does not matter whether you've used generic 
+classes or not and this allows both kinds of classes to interoperate because they are essentially the same class to the JVM.  Type erasure ensures that no new classes are created for parameterized 
+types; consequently, generics incur no runtime overhead.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+The java.time package contains main API for dates, times, instants, and durations. The classes defined in this package represent the principle date-time concepts, including instants, durations, 
+dates, times, time-zones and periods. 
+All the classes of this package are immutable and thread-safe.
