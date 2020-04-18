@@ -1,0 +1,124 @@
+  Remember that HashMap supports adding null key as well as null values but ConcurrentHashMap does not. Inserting null key or null in a ConcurrentHashMap will throw a NullPointerException.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ .sorted(Comparator.comparing(a->a.getName())).map((i)->i.getName())
+  This option uses Comparator's comparing method that accepts a function that extracts a Comparable sort key, and returns a Comparator that compares by that sort key.+ù
+  Note that this is helpful only if the type of the object returned by the function implements Comparable. Here, it returns a String, which does implement Comparable and so it is ok.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Remember that primitive and object versions of data types (i.e. int and Integer, double and Double, etc.) are not really compatible with each other in java. 
+  They are made compatible through the extra step of auto-boxing/unboxing.  Thus, if you have a stream of primitive ints and if you try to use the object versions of Stream and Function 
+  (i.e. Stream<Integer> and Function<Integer, Integer>, you will incur the cost of boxing and unboxing the elements.  
+  To eliminate this problem, the function package contains primitive specialized versions of streams as well as functional interfaces. 
+  For example, instead of using Stream<Integer>, you should use IntStream. You can now process each element of the stream using IntFunction. 
+  This will avoid auto-boxing/unboxing altogether.  Thus, whenever you want to process streams of primitive elements, you should use the primitive specialized streams 
+  (i.e. IntStream, LongStream, and DoubleStream) and primitive specialized functional interfaces (i.e. IntFunction, IntConsumer, IntSupplier etc.) to achieve better performance.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Collection Interface-> List Set
+  Map Interface
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  AtomicInteger ai = new AtomicInteger(5);
+  int x = ai.incrementAndGet();
+  oppure 
+  int x = ai.addAndGet(1);
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  java -ea:com... -da:com.enthuware... com.enthuware.Main 
+  The above command first enables assertions for all the classes in com as well as for the classes in the subpackages of com. It then disables assertions for classes in package com.enthuware and 
+  its subpackages. 
+  Assertions can be enabled or disabled for specific packages or classes. To specify a class, use the class name. To specify a package, use the package name followed by "..." 
+  java -ea -da:<package>... myPackage.myProgram
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+  ls.stream()
+ .map(x->MyProcessor::new(x)) 
+ .forEach(MyProcessor::process);
+
+  You cannot pass arguments to a constructor or method while referring to method/constructor reference. If the constructor or the method requires an argument, it is passed when the constructor 
+  or the method is actually invoked.
+  names.stream() 
+  .map(x->{    
+    Function<Integer, MyProcessor> f = MyProcessor::new; //referring to MyProcessor's constructor that takes one Integer argument.    
+    return f.apply(x); //passing the actual Integer argument. 
+  }) 
+  .forEach(MyProcessor::process);
+  
+  oppure direttamente 
+  ls.stream()         
+  .map(MyProcessor::new) 
+  .forEach(MyProcessor::process);
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Path p1 = Paths.get("c:\\temp\\test1.txt"); 
+  Path p2  = Paths.get("c:\\temp\\test2.txt") 
+  Quale sposta il file sapendo che test2.txt esiste gia? 
+  
+  Files.move(p1, p2); This will throw a java.nio.file.FileAlreadyExistsException if the file already exists.
+  Files.move(p1, p2, StandardCopyOption.REPLACE_EXISTING);  Fa il suo sporco dovere
+  try(Files.move(p1, p2)){ }  Non posso usare il try with resource sul move
+  Files.copy(p1, p2, StandardCopyOption.REPLACE_EXISTING); Files.delete(p1); Fa il suo sporco dovere  
+  
+  Files.copy method will copy the file test1.txt into test2.txt. If test2.txt doesn't exist, it will be created. However, Files.isSameFile method doesn't check the contents of the file. 
+  It is meant to check if the two path objects resolve to the same file or not. In this case, they are not, and so, it will return false. 
+  
+                       COPY
+  public static Path COPY(Path source, Path target, CopyOption... options)                  throws IOException Copy a file to a target file. 
+  
+  This method copies a file to the target file with the options parameter specifying how the copy is performed. By default, the copy fails if the target file already exists or is a symbolic link, 
+  except if the source and target are the same file, in which case the method completes without copying the file. File attributes are not required to be copied to the target file.
+  If symbolic links are supported, and the file is a symbolic link, then the final target of the link is copied. If the file is a directory then it creates an empty directory in the target 
+  location (entries in the directory are not copied). 
+  
+  					   MOVE
+  public static Path MOVE(Path source,  Path target,    CopyOption... options)                  throws IOException 
+  
+  Move or rename a file to a target file. By default, this method attempts to move the file to the target file, failing if the target file exists except if the source and target are the same file, 
+  in which case this method has no effect. If the file is a symbolic link then the symbolic link itself, not the target of the link, is moved. This method may be invoked to move an empty directory.
+  In some implementations a directory has entries for special files or links that are created when the directory is created. In such implementations a directory is considered empty when only the
+  special entries exist. When invoked to move a directory that is not empty then the directory is moved if it does not require moving the entries in the directory. 
+  For example, renaming a directory on the same FileStore will usually not require moving the entries in the directory. When moving a directory requires that its entries be moved then this method 
+  fails (by throwing an IOException). To move a file tree may involve copying rather than moving directories and this can be done using the copy method in conjunction with the Files.walkFileTree 
+  utility method. 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Period p = Period.between(LocalDate.now(), LocalDate.of(2015, Month.SEPTEMBER, 1));
+  System.out.println(p); 
+  Duration d = Duration.between(LocalDateTime.now(), LocalDateTime.of(2015, Month.SEPTEMBER, 2, 10, 10)); 
+  System.out.println(d);  
+  Assume that the local time on the system at the time this code is run is 2nd Sep 2015 1:00 AM.
+  P-1D PT9H10M
+  Note that if the second date is before the first date, a minus sign is included in the output.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Stai attento quando cerco un ogetto dentro una HashMap che l'oggetto delle hasmap abbia il hashCode() overrided. Altrimenti quando vai a fare il get di un oggetto non lo trova anche se il metodo 
+  equals è coretto. è valido anceh fare un return 1 dentro il hasjcode , è inefficente ma segue la logia che se due oggetti sono ugali avranno lo stesso hasCode
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  ResultSetMetaData gives you the information about the result of executing a query. You can retrieve this object by calling getMetaData() on ResultSet.
+  ResultSetMetaData contains several methods that tell you about the ResultSet. Some important methods are:
+  getColumnCount(), getColumnName(int col), getColumnLabel(int col), and getColumnType(int col). 
+  Remember that the column index starts from 1.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  When deserializing an object, the no-argument constructor each of its super classes that does not implement Serializable interface is invoked. //FALSE
+  ->The no-argument constructor of only the first non-serializable super class is invoked. This constructor may internally invoke any constructor of its super class.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1. ExecutorService interface extends Executor interface. While Executor allows you to execute a Runnable, ExecutorService allows you to execute a Callable.  
+  2. Executors is a utility class that provides several static methods to create instances of ExecutorService. All such methods start with new e.g. newSingleThreadExecutor(). 
+  You should at least remember the following methods:
+  newFixedThreadPool(int noOfThreads), newSingleThreadExecutor(), newCachedThreadPool(), 
+  newSingleThreadScheduledExecutor(), newScheduledThreadPool(int corePoolSize). 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Durations and periods differ in their treatment of daylight savings time when added to ZonedDateTime. A Duration will add an exact number of seconds, thus a duration of one day is always 
+  exactly 24 hours. By contrast, a Period will add a conceptual day, trying to maintain the local time.
+  Quindi attento alle domande col  Daylight Savings Time perche duration e period hanno comportamenti diversi con i zoneddatetime.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Thus, for example, If your Path is "c:\\code\\java\\PathTest.java", 
+  p1.getRoot()  is c:\  ((For Unix based environments, the root is usually / ). 
+  p1.getName(0)  is code 
+  p1.getName(1)  is java 
+  p1.getName(2)  is PathTest.java 
+  p1.getName(3)  will cause IllegalArgumentException to be thrown.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Remember that while compute and computeIfPresent take a BiFunction as an argument, computeIfAbsent takes a Function. (a, b)->new ArrayList<Double>() is valid lambda expression for a 
+ BiFunction but will not be helpful here.  This option will, therefore, not compile.  
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Ricordati se la domanda ti dice che il codice è runnato da command line bhe allora deve esserci il public static void main altrimenti compila ma va in eccezzione. 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Ricorda sempre di controllare che le quando fai il try with resource va controllato che la classe usata nel try sia autoclosable o almeno closable
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Signature of the method comprises the method name, input parameters and their order. The return type is not considered.
+So, the two methods have same signature and this is illegal. You cannot have two methods of same signature in the same class.

@@ -32,7 +32,15 @@ public class Main {
 		//durationTest();
 		//dequeTest();
 		//diviso0Test();
-         date();	
+         //date();	
+		roboFor();
+	}
+
+	private static void roboFor() {
+		int counter = -4;
+		 assert counter < 100 : "Greater than 100";      
+		 for(int i=counter; i>0; i--){System.out.println("entered"); }
+		
 	}
 
 	private static void date() {
