@@ -4,14 +4,14 @@ java.lang.Throwable
 ha due sottoclassi: java.lang.Exception e java.lang.Error
 java.lang.RuntimeException estend Exception 
 
------ UNCHECKED EXCEPTION -----------
+--------------------------- UNCHECKED EXCEPTION ---------------------------------
 Remember that a runtime exception, or UNCHECKED EXCEPTION, may be caught, but it is not required that it be caught. 
 
------ CHECKED EXCEPTION  ----------
+--------------------------- CHECKED EXCEPTION  --------------------------------
 A CHECKED EXCEPTION is any class that extends Exception but is not a runtime exception. Checked exceptions must follow the handle or declare rule where they are either
 caught or thrown to the caller.
 
------- UNCHECKED EXCEPTION OCA  ----------
+---------------------------- UNCHECKED EXCEPTION OCA  --------------------------------
 ArithmeticException Thrown by the JVM when code attempts to divide by zero.
 
 ArrayIndexOutOfBoundsException Thrown by the JVM when code uses an illegal index to access an array.
