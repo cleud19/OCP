@@ -33,7 +33,14 @@ public class Main {
 		//dequeTest();
 		//diviso0Test();
          //date();	
-		roboFor();
+		//roboFor();
+		String uno = "ciao";
+		String due = "ciao";
+		System.out.println(uno == due);
+		uno = new String("ciao");
+		System.out.println(uno == due);
+		due = new String("ciao");
+		System.out.println(uno == due);
 	}
 
 	private static void roboFor() {

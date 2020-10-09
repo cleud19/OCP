@@ -319,7 +319,8 @@ Retrieves the result of a task, waiting the specified amount of time. If the res
 1: service.submit(() -> {Thread.sleep(1000); return null;});
 2: service.submit(() -> {Thread.sleep(1000);});  //not compile
 
-Thread.sleep() lancia una checked exception InterruptedException. Nella chimata 1 ilcodice compila poiche essendo una Callable call permette le eccezioni. 
+Thread.sleep() lancia una checked exception InterruptedException. Nella chimata 1 ilcodice compila poiche essendo una Callable c
+all permette le eccezioni. 
 La chiamata 2 essendo interpretata come un runnable non avendo il tipo di ritorno non compila perche run non accetta eccezioni.
  
 Since Callable supports a return type when used with ExecutorService, it is often preferred over Runnable when using the Concurrency API.
@@ -718,7 +719,7 @@ e il lavoro viene suddiviso a loro tramite invokeAll.
 La classe e il metodo compute vengono fatti partire cosi 
 
 ForkJoinTask<?> task = new WeighAnimalAction(weights,0,weights.length);
-ForkJoinPool pool pool = new ForkJoinPool();
+ForkJoinPool pool  = new ForkJoinPool();
 pool.invoke(task);
 
 La stessa classe di prima ora estende                 ----- RECURSIVETASK -----------

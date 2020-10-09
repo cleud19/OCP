@@ -1,6 +1,5 @@
   Remember that HashMap supports adding null key as well as null values but ConcurrentHashMap does not. Inserting null key or null in a ConcurrentHashMap will throw a NullPointerException.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
  .sorted(Comparator.comparing(a->a.getName())).map((i)->i.getName())
   This option uses Comparator's comparing method that accepts a function that extracts a Comparable sort key, and returns a Comparator that compares by that sort key.+ù
   Note that this is helpful only if the type of the object returned by the function implements Comparable. Here, it returns a String, which does implement Comparable and so it is ok.
@@ -105,6 +104,8 @@
   Durations and periods differ in their treatment of daylight savings time when added to ZonedDateTime. A Duration will add an exact number of seconds, thus a duration of one day is always 
   exactly 24 hours. By contrast, a Period will add a conceptual day, trying to maintain the local time.
   Quindi attento alle domande col  Daylight Savings Time perche duration e period hanno comportamenti diversi con i zoneddatetime.
+  For example, consider adding a period of one day and a duration of one day to 18:00 on the evening before a daylight savings gap. The Period will add the conceptual day and result in a 
+  ZonedDateTime at 18:00 the following day. By contrast, the Duration will add exactly 24 hours, resulting in a ZonedDateTime at 19:00 the following day (assuming a one hour DST gap).
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   Thus, for example, If your Path is "c:\\code\\java\\PathTest.java", 
   p1.getRoot()  is c:\  ((For Unix based environments, the root is usually / ). 
@@ -120,5 +121,20 @@
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  Ricorda sempre di controllare che le quando fai il try with resource va controllato che la classe usata nel try sia autoclosable o almeno closable
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Signature of the method comprises the method name, input parameters and their order. The return type is not considered.
-So, the two methods have same signature and this is illegal. You cannot have two methods of same signature in the same class.
+ Signature of the method comprises the method name, input parameters and their order. The return type is not considered.
+ So, the two methods have same signature and this is illegal. You cannot have two methods of same signature in the same class.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ PreparedStatement offers better performance when the same query is to be run multiple times with different parameter values.
+ PreparedStatement allows several additional SQL types such as BLOB and CLOB.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ con.setAutoCommit(true);
+ on.commit();
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Enums can be compared using ==.ù
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Stream<String> ref = new BufferedReader(new FileReader("c:\\temp\\test.txt")).lines();   OK
+ The lines() method has been added to java.io.BufferedReader in Java 1.8. It returns Stream<String>.
+ 
+ Stream<String> ref = Files.lines("c:\\temp\\test.txt");    NOT OK
+ Files.lines(Path path) method expects a Path object as an argument (not a String). The following would have been valid: Stream<String> ref = Files.lines(Paths.get("c:\\temp\\test.txt"));
+ 

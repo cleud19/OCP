@@ -422,7 +422,7 @@ se lo printo la chiave long mi viene -> abcd
 Notice that the filenames are the name of our resource bundle followed by an underscore followed by the target locale.  
 --------------------------- PROPERTIES ---------------------------------- 
  
-Java supports a class named Properties , itt is just like Maps but without all tne methods that map have. 
+Java supports a class named Properties , itt is just like Maps but without all the methods that map have. 
 Properties props = new Properties();
 props.put("key","valllue");
 

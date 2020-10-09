@@ -1,0 +1,43 @@
+ 
+  while(isr.ready()){}
+  il metodo ready() su un inoutfilestream non fa altro che controllare se ci sono ancora cose da leggere nel file
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  IntStream.range(0, 5);  01234
+  IntStream.rangeClosed(0, 5); 012345
+   
+  is1.average()
+  Ricordati che gli average di tutti i tipi (IntStream,LongStream...) torna sempre un OptionalDouble e che non è mai null al massimo torna un OptionalDouble.empty
+  Quindi attento quando dopo  un average() è concatenato un altro metodo tipo getAsDouble() perche potrebbe lanciare un eccezione
+  
+  OptionalDouble's toString ritorna una Stringa  OptionalDouble[<double value>] 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  In case of primitives, the return type of the overriding method must be the same as that of the overridden method.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1.BufferedWriter only adds the functionality of buffering on top of a Writer. It doesn't directly deal with encoding. Encoding is handled by the underlying Writer object. 
+  2.FileWriter is a concrete subclass of java.io.Writer that writes data to the underlying file in default encoding. If you want to write text in a different encoding, +
+  you will need to create an OutputStreamWriter with that encoding. 
+  For example, 
+  OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream("utf8.txt"), Charset.forName("UTF-8").newEncoder()  );
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  When you create a FileOutputStream without specifying the append mode (which can be true or false), it overwrites the existing file.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Se leggi qualcosa da un Resultset chiuso andrà in errore.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  In generale per tutte le classsi esterne o interne che siano, se la classe non ha un costruttore allora avrà quello creato di default con lo stesso  access modifier della classe 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+  .sorted(() su stream di elementi che non implementano comparable va in eccezzione a runTime di ClassCastException
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  .findAny() anche su uno stream sequentziale non è detrto che ti torni il primo elemento perche è una funzione strana se vuoi il primo usa findFirst()
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Un CallableStatement puo chiamare una stored procedure mentre le PreparedStatement le fa con semplice sql
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Developers can change how a particular class is serialized by implementing two methods inside the class file. These methods are:  
+  
+  private void writeObject(ObjectOutputStream out) throws IOException;  
+  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException;  
+  
+  Notice that both methods are (and must be) declared private, proving that neither method is inherited and overridden or overloaded. 
+  The trick here is that the virtual machine will automatically check to see if either method is declared during the corresponding method call. 
+  The virtual machine can call private methods of your class whenever it wants but no other objects can. Thus, the integrity of the class is maintained and the serialization 
+  protocol can continue to work as normal.
+  
